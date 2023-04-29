@@ -1,0 +1,125 @@
+import org.flywaydb.gradle.task.FlywayCleanTask
+import org.flywaydb.gradle.task.FlywayMigrateTask
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.flywaydb:flyway-mysql:9.8.1'
+        classpath 'mysql:mysql-connector-java:8.0.32'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.0.4'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id "org.flywaydb.flyway" version '9.8.1'
+    id "com.thinkimi.gradle.MybatisGenerator" version '2.4.1'
+    id 'io.freefair.lombok' version '8.0.1'
+}
+
+flyway {
+    url = 'jdbc:mysql://localhost:3306/kiita'
+    user = 'user'
+    password = 'password'
+    locations = ['filesystem:migration']
+    cleanDisabled = false
+}
+
+configurations {
+    mybatisGenerator
+}
+
+mybatisGenerator {
+    verbose = true
+    configFile = "${projectDir}/src/main/resources/mybatis/generatorConfig.xml"
+    mybatisProperties = [
+            'jdbcUrl'        : 'jdbc:mysql://localhost:3306/kiita',
+            'jdbcDriverClass': 'com.mysql.cj.jdbc.Driver',
+            'jdbcUsername'   : 'user',
+            'jdbcPassword'   : 'password'
+    ]
+
+    dependencies {
+        mybatisGenerator 'org.mybatis.generator:mybatis-generator-core:1.4.2'
+        mybatisGenerator 'mysql:mysql-connector-java:8.0.32'
+        mybatisGenerator project(':plugin')
+    }
+}
+// カスタムプラグインを先にビルドしてから実行させる
+mbGenerator.dependsOn(project(':plugin').getTasksByName('build', true))
+
+group = 'com.kenduck'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'mysql:mysql-connector-java:8.0.32'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1'
+    implementation 'org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.4.1'
+    implementation 'org.mybatis.generator:mybatis-generator-core:1.4.2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+
+task mbGeneratorClean(type: Delete) {
+    def generatedDir = "${projectDir}/src/main/java/com/kenduck/common/generated"
+    delete fileTree(generatedDir) {
+        include '**/*.java'
+    }
+}
+
+task migrateAndMbGenerateFromScratch {
+    dependsOn(flywayClean)
+    dependsOn(flywayMigrate)
+    dependsOn(mbGeneratorClean)
+    dependsOn(mbGenerator)
+    tasks.flywayMigrate.mustRunAfter(flywayClean)
+    tasks.mbGenerator.mustRunAfter(flywayMigrate)
+    tasks.mbGenerator.mustRunAfter(mbGeneratorClean)
+}
+
+task migrateUt(type: FlywayMigrateTask) {
+    url = 'jdbc:mysql://localhost:3306/kiita_ut'
+}
+
+task cleanUt(type: FlywayCleanTask) {
+    url = 'jdbc:mysql://localhost:3306/kiita_ut'
+}
+
+task migrateUtFromScratch {
+    dependsOn(migrateUt)
+    dependsOn(cleanUt)
+    tasks.migrateUt.mustRunAfter(cleanUt)
+}
+
+task migrateE2e(type: FlywayMigrateTask) {
+    url = 'jdbc:mysql://localhost:3306/kiita_e2e'
+}
+
+task cleanE2e(type: FlywayCleanTask) {
+    url = 'jdbc:mysql://localhost:3306/kiita_e2e'
+}
+
+task migrateE2eFromScratch {
+    dependsOn(migrateE2e)
+    dependsOn(cleanE2e)
+    tasks.migrateUt.mustRunAfter(cleanE2e)
+}
+
+task migrateAllFromScratch {
+    dependsOn(migrateAndMbGenerateFromScratch)
+    dependsOn(migrateUtFromScratch)
+    dependsOn(migrateE2eFromScratch)
+}

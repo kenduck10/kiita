@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="MySQLTables" targetRuntime="MyBatis3DynamicSql">
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <plugin type="org.mybatis.generator.plugins.MapperAnnotationPlugin"/>
+        <plugin type="com.kenduck.plugin.mybatis.MyBatisPlugin"/>
+        <jdbcConnection driverClass="${jdbcDriverClass}"
+                        connectionURL="${jdbcUrl}"
+                        userId="${jdbcUsername}"
+                        password="${jdbcPassword}">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <property name="useJSR310Types" value="true"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.kenduck.common.generated.models"
+                            targetProject="common/src/main/java">
+        </javaModelGenerator>
+
+        <javaClientGenerator targetPackage="com.kenduck.common.generated.mappers"
+                             targetProject="common/src/main/java">
+        </javaClientGenerator>
+
+        <table schema="kiita" tableName="users" mapperName="GeneratedUserMapper">
+            <property name="dynamicSqlSupportClassName" value="GeneratedUserDynamicSqlSupport"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <domainObjectRenamingRule searchString="Users" replaceString="GeneratedUser"/>
+            <ignoreColumn column="created_at"/>
+            <ignoreColumn column="updated_at"/>
+        </table>
+
+    </context>
+</generatorConfiguration>
