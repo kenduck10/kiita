@@ -1,11 +1,17 @@
+import { Button } from '@mui/material';
+
 type User = {
   userId: number;
   lastName: string;
   firstName: string;
 };
 export default ({ users }: { users: Array<User> }) => {
-  console.log(users);
-  return <h1>home</h1>;
+  return (
+    <div>
+      <Button variant="contained">成功</Button>
+      <h1>home</h1>
+    </div>
+  );
 };
 
 export const getServerSideProps = async () => {
