@@ -1,14 +1,18 @@
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldValues } from 'react-hook-form';
 import { TextField } from '@mui/material';
+import { FieldPath } from 'react-hook-form/dist/types';
 
-export const ControlledTextField = ({
+export const ControlledTextField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+>({
   control,
   name,
   type,
   label,
 }: {
-  control: Control<any>;
-  name: string;
+  control: Control<TFieldValues>;
+  name: TName;
   type: string;
   label: string;
 }) => {
