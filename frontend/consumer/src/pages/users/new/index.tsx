@@ -3,18 +3,20 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
 import { ControlledTextField } from '@/components/elements/ControlledTextField';
+import { FIRST_NAME_YUP_SCHEMA, LAST_NAME_YUP_SCHEMA } from '@/features/user/validations/YupSchema';
 
-type SubmitDataArgument = {
+type SubmitArguments = {
   lastName: string;
   firstName: string;
 };
 
 const errorScheme = yup.object().shape({
-  lastName: yup.string().required('姓の入力は必須です').max(50, '姓は50文字以内で入力してください'),
-  firstName: yup.string().required('名の入力は必須です').max(50, '名は50文字以内で入力してください'),
+  lastName: LAST_NAME_YUP_SCHEMA,
+  firstName: FIRST_NAME_YUP_SCHEMA,
 });
+
 export const NewUser = () => {
-  const { control, handleSubmit } = useForm<SubmitDataArgument>({
+  const { control, handleSubmit } = useForm<SubmitArguments>({
     mode: 'all',
     criteriaMode: 'all',
     shouldFocusError: false,
@@ -24,7 +26,7 @@ export const NewUser = () => {
     },
     resolver: yupResolver(errorScheme),
   });
-  const onSubmit: SubmitHandler<SubmitDataArgument> = (data) =>
+  const onSubmit: SubmitHandler<SubmitArguments> = (data) =>
     console.log(`submitted:${data.lastName}, ${data.firstName}`);
   return (
     <div>
