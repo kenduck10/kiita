@@ -5,7 +5,7 @@ type User = {
   lastName: string;
   firstName: string;
 };
-export default ({ users }: { users: Array<User> }) => {
+export const Home = ({ users }: { users: Array<User> }) => {
   return (
     <TableContainer>
       <Table sx={{ minWidth: 650 }} aria-label="user table">
@@ -38,3 +38,5 @@ export const getServerSideProps = async () => {
     },
   };
 };
+
+export default Home;
