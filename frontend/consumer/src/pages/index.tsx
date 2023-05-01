@@ -51,7 +51,7 @@ export const getServerSideProps = async () => {
     return {
       redirect: {
         permanent: false,
-        destination: '/users/new',
+        destination: '/error',
       },
     };
   }
