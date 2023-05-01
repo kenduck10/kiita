@@ -1,12 +1,10 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import Link from 'next/link';
+import axios, { AxiosResponse } from 'axios';
+import UserSummaries from '@/features/user/models/UserSummaries';
+import { GetUsersResponse } from '@/pages/api/users';
 
-type User = {
-  userId: number;
-  lastName: string;
-  firstName: string;
-};
-export const Home = ({ users }: { users: Array<User> }) => {
+export const Home = ({ userSummaries }: { userSummaries: UserSummaries }) => {
   return (
     <>
       <TableContainer>
@@ -19,11 +17,11 @@ export const Home = ({ users }: { users: Array<User> }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => (
-              <TableRow key={user.userId}>
-                <TableCell>{user.userId}</TableCell>
-                <TableCell align="right">{user.lastName}</TableCell>
-                <TableCell align="right">{user.firstName}</TableCell>
+            {userSummaries.value.map((userSummary) => (
+              <TableRow key={userSummary.id}>
+                <TableCell>{userSummary.id}</TableCell>
+                <TableCell align="right">{userSummary.lastName}</TableCell>
+                <TableCell align="right">{userSummary.firstName}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -35,10 +33,23 @@ export const Home = ({ users }: { users: Array<User> }) => {
 };
 
 export const getServerSideProps = async () => {
-  const response = await (await fetch(`${process.env.KIITA_FRONTEND_API_BASE_URL}users`)).json();
+  const userSummaries = await axios
+    .get(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users`)
+    .then((response: AxiosResponse<GetUsersResponse>) => new UserSummaries(response.data))
+    .catch(() => undefined);
+
+  if (userSummaries === undefined) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/users/new',
+      },
+    };
+  }
+
   return {
     props: {
-      users: response.users,
+      userSummaries: JSON.parse(JSON.stringify(userSummaries)),
     },
   };
 };

@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
 import { ControlledTextField } from '@/components/elements/ControlledTextField';
 import { FIRST_NAME_YUP_SCHEMA, LAST_NAME_YUP_SCHEMA } from '@/features/user/validations/YupSchema';
+import axios from 'axios';
 
 type SubmitArguments = {
   lastName: string;
@@ -26,8 +27,10 @@ export const NewUser = () => {
     },
     resolver: yupResolver(errorScheme),
   });
-  const onSubmit: SubmitHandler<SubmitArguments> = (data) =>
-    console.log(`submitted:${data.lastName}, ${data.firstName}`);
+  const onSubmit: SubmitHandler<SubmitArguments> = async (data) => {
+    await axios.post(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users`, data);
+  };
+
   return (
     <div>
       <ControlledTextField control={control} name={'lastName'} type={'text'} label={'姓'} />
