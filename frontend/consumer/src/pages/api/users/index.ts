@@ -8,11 +8,13 @@ import axios, {AxiosResponse, HttpStatusCode} from 'axios';
 // }
 
 export type GetUsersResponse = {
-  users: Array<{
-    userId: number;
-    lastName: string;
-    firstName: string;
-  }>;
+  users: Array<GetUsersResponseElement>;
+};
+
+export type GetUsersResponseElement = {
+  userId: number;
+  lastName: string;
+  firstName: string;
 };
 
 export const handler = async (request: NextApiRequest, response: NextApiResponse) => {

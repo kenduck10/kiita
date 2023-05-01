@@ -1,8 +1,7 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import Link from 'next/link';
-import axios, { AxiosResponse } from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import UserSummaries from '@/features/user/models/UserSummaries';
-import { GetUsersResponse } from '@/pages/api/users';
 
 export const Home = ({ userSummaries }: { userSummaries: UserSummaries }) => {
   return (
@@ -33,12 +32,22 @@ export const Home = ({ userSummaries }: { userSummaries: UserSummaries }) => {
 };
 
 export const getServerSideProps = async () => {
-  const userSummaries = await axios
+  const userSummariesResponse = await axios
     .get(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users`)
-    .then((response: AxiosResponse<GetUsersResponse>) => new UserSummaries(response.data))
-    .catch(() => undefined);
+    .then((response) => {
+      return {
+        userSummaries: new UserSummaries(response.data),
+        status: response.status,
+      };
+    })
+    .catch((error) => {
+      return {
+        userSummaries: undefined,
+        status: error.status,
+      };
+    });
 
-  if (userSummaries === undefined) {
+  if (userSummariesResponse.status !== HttpStatusCode.Ok) {
     return {
       redirect: {
         permanent: false,
@@ -49,7 +58,7 @@ export const getServerSideProps = async () => {
 
   return {
     props: {
-      userSummaries: JSON.parse(JSON.stringify(userSummaries)),
+      userSummaries: JSON.parse(JSON.stringify(userSummariesResponse.userSummaries)),
     },
   };
 };

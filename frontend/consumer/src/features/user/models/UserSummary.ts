@@ -1,12 +1,14 @@
+import { GetUsersResponseElement } from '@/pages/api/users';
+
 class UserSummary {
   id: number;
   lastName: string;
   firstName: string;
 
-  constructor(id: number, lastName: string, firstName: string) {
-    this.id = id;
-    this.lastName = lastName;
-    this.firstName = firstName;
+  constructor(element: GetUsersResponseElement) {
+    this.id = element.userId;
+    this.lastName = element.lastName;
+    this.firstName = element.firstName;
   }
 }
 

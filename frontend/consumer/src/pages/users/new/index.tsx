@@ -11,7 +11,7 @@ type SubmitArguments = {
   firstName: string;
 };
 
-const errorScheme = yup.object().shape({
+const errorSchema = yup.object().shape({
   lastName: LAST_NAME_YUP_SCHEMA,
   firstName: FIRST_NAME_YUP_SCHEMA,
 });
@@ -25,7 +25,7 @@ export const NewUser = () => {
       lastName: '',
       firstName: '',
     },
-    resolver: yupResolver(errorScheme),
+    resolver: yupResolver(errorSchema),
   });
   const onSubmit: SubmitHandler<SubmitArguments> = async (data) => {
     await axios.post(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users`, data);

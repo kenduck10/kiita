@@ -5,7 +5,7 @@ class UserSummaries {
   value: Array<UserSummary>;
 
   constructor(response: GetUsersResponse) {
-    this.value = response.users.map((user) => new UserSummary(user.userId, user.lastName, user.firstName));
+    this.value = response.users.map((element) => new UserSummary(element));
   }
 }
 
