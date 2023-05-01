@@ -31,7 +31,7 @@ export const Home = ({ users }: { users: Array<User> }) => {
 };
 
 export const getServerSideProps = async () => {
-  const response = await (await fetch(`${process.env.KIITA_API_BASE_URL}users`)).json();
+  const response = await (await fetch(`${process.env.KIITA_FRONTEND_API_BASE_URL}users`)).json();
   return {
     props: {
       users: response.users,
