@@ -7,20 +7,28 @@ export const Home = ({ userSummaries }: { userSummaries: UserSummaries }) => {
   return (
     <>
       <TableContainer>
-        <Table sx={{ minWidth: 650 }} aria-label="user table">
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell align="right">姓</TableCell>
-              <TableCell align="right">名</TableCell>
+        <Table component="div" sx={{ minWidth: 650 }} aria-label="user table">
+          <TableHead component="div">
+            <TableRow component="div">
+              <TableCell component="div">ID</TableCell>
+              <TableCell component="div" align="right">
+                姓
+              </TableCell>
+              <TableCell component="div" align="right">
+                名
+              </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody component="div">
             {userSummaries.value.map((userSummary) => (
-              <TableRow key={userSummary.id}>
-                <TableCell>{userSummary.id}</TableCell>
-                <TableCell align="right">{userSummary.lastName}</TableCell>
-                <TableCell align="right">{userSummary.firstName}</TableCell>
+              <TableRow component={Link} href={`/users/${userSummary.id}`} key={userSummary.id}>
+                <TableCell component="div">{userSummary.id}</TableCell>
+                <TableCell component="div" align="right">
+                  {userSummary.lastName}
+                </TableCell>
+                <TableCell component="div" align="right">
+                  {userSummary.firstName}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
