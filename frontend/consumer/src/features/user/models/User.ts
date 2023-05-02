@@ -1,13 +1,17 @@
+import { GetUserResponse } from '@/pages/api/users/[id]';
+
 class User {
   static readonly LAST_NAME_MAX_LENGTH = 50;
   static readonly FIRST_NAME_MAX_LENGTH = 50;
 
+  id: number;
   lastName: string;
   firstName: string;
 
-  constructor(lastName: string, firstName: string) {
-    this.lastName = lastName;
-    this.firstName = firstName;
+  constructor(id: number, response: GetUserResponse) {
+    this.id = id;
+    this.lastName = response.lastName;
+    this.firstName = response.firstName;
   }
 }
 
