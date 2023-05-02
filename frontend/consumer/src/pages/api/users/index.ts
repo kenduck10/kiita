@@ -1,11 +1,11 @@
-import {NextApiRequest, NextApiResponse} from 'next';
-import axios, {AxiosResponse, HttpStatusCode} from 'axios';
+import { NextApiRequest, NextApiResponse } from 'next';
+import axios, { AxiosResponse, HttpStatusCode } from 'axios';
 
-// type CreateUserResponse = {
-//   userId: number;
-//   lastName: string;
-//   firstLane: string;
-// }
+type CreateUserResponse = {
+  userId: number;
+  lastName: string;
+  firstLane: string;
+};
 
 export type GetUsersResponse = {
   users: Array<GetUsersResponseElement>;
@@ -25,10 +25,23 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
   }
 
   if (request.method === 'POST') {
-    const result = await axios.post(BASE_URL, request.body);
-    console.log(result);
-    return response.status(HttpStatusCode.Created);
+    const result = await axios
+      .post(BASE_URL, request.body)
+      .then((response: AxiosResponse<{ createdUserResponse: CreateUserResponse; statusCode: number }>) => {
+        return {
+          createdUserResponse: response.data,
+          statusCode: HttpStatusCode.Created,
+        };
+      })
+      .catch((error) => {
+        return {
+          createdUserResponse: undefined,
+          statusCode: error.response.status,
+        };
+      });
+    return response.status(result.statusCode).json(result.createdUserResponse);
   }
+
   return response.status(400);
 };
 
