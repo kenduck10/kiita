@@ -26,6 +26,22 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
       });
     return response.status(HttpStatusCode.Ok).json(result.getUserResponse);
   }
+
+  if (request.method === 'DELETE') {
+    const result = await axios
+      .delete(BASE_URL)
+      .then(() => {
+        return {
+          statusCode: HttpStatusCode.Ok,
+        };
+      })
+      .catch((error) => {
+        return {
+          statusCode: error.response.status,
+        };
+      });
+    return response.status(result.statusCode).json(null);
+  }
 };
 
 export default handler;

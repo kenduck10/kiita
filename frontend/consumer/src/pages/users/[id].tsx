@@ -1,13 +1,34 @@
 import axios, { HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
 import User from '@/features/user/models/User';
+import { Alert, Button } from '@mui/material';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 export const UserDetail = ({ user }: { user: User }) => {
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState('');
+  const onClickDeleteButton = async () => {
+    await axios
+      .delete(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`)
+      .then(() => router.push('/'))
+      .catch((error) => {
+        if (error.response.status === HttpStatusCode.NotFound) {
+          setErrorMessage('ユーザーは既に削除されています');
+          return;
+        }
+        router.push('/error');
+      });
+  };
   return (
     <>
+      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       <p>{user.id}</p>
       <p>{user.lastName}</p>
       <p>{user.firstName}</p>
+      <Button variant="contained" color="error" onClick={onClickDeleteButton}>
+        削除
+      </Button>
     </>
   );
 };
