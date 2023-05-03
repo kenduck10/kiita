@@ -1,9 +1,9 @@
 import { GetUsersResponseElement } from '@/pages/api/users';
 
 class UserSummary {
-  id: number;
-  lastName: string;
-  firstName: string;
+  readonly id: number;
+  readonly lastName: string;
+  readonly firstName: string;
 
   constructor(element: GetUsersResponseElement) {
     this.id = element.userId;
