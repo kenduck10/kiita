@@ -14,7 +14,7 @@ export const UserDetail = ({ user }: { user: User }) => {
       .then(() => router.push('/'))
       .catch((error) => {
         if (error.response.status === HttpStatusCode.NotFound) {
-          setErrorMessage('ユーザーは既に削除されています');
+          setErrorMessage('このユーザーは既に削除されています');
           return;
         }
         router.push('/error');
