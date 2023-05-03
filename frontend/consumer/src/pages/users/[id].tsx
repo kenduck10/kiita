@@ -8,6 +8,8 @@ import { useState } from 'react';
 export const UserDetail = ({ user }: { user: User }) => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
+
+  const onClickEditButton = () => router.push(`/users/edit/${user.id}`);
   const onClickDeleteButton = async () => {
     await axios
       .delete(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`)
@@ -26,6 +28,9 @@ export const UserDetail = ({ user }: { user: User }) => {
       <p>{user.id}</p>
       <p>{user.lastName}</p>
       <p>{user.firstName}</p>
+      <Button variant="contained" color="primary" onClick={onClickEditButton}>
+        編集
+      </Button>
       <Button variant="contained" color="error" onClick={onClickDeleteButton}>
         削除
       </Button>

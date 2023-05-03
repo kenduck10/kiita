@@ -18,9 +18,9 @@ const errorSchema = yup.object().shape({
   firstName: FIRST_NAME_YUP_SCHEMA,
 });
 
-export const NewUser = () => {
+export const UserNew = () => {
   const router = useRouter();
-  const [submitErrorMessage, setSubmitErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { control, handleSubmit } = useForm<SubmitArguments>({
     mode: 'all',
@@ -33,13 +33,13 @@ export const NewUser = () => {
     resolver: yupResolver(errorSchema),
   });
   const onSubmit: SubmitHandler<SubmitArguments> = async (data) => {
-    setSubmitErrorMessage('');
+    setErrorMessage('');
     await axios
       .post(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users`, data)
       .then(() => router.push('/'))
       .catch((error) => {
         if (error.response.status === HttpStatusCode.BadRequest) {
-          setSubmitErrorMessage('入力内容に誤りがあります');
+          setErrorMessage('入力内容に誤りがあります');
           return;
         }
         router.push('/error');
@@ -48,7 +48,7 @@ export const NewUser = () => {
 
   return (
     <div>
-      {submitErrorMessage && <Alert severity="error">{submitErrorMessage}</Alert>}
+      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       <ControlledTextField control={control} name={'lastName'} type={'text'} label={'姓'} />
       <ControlledTextField control={control} name={'firstName'} type={'text'} label={'名'} />
       <Button variant="contained" onClick={handleSubmit(onSubmit)}>
@@ -58,4 +58,4 @@ export const NewUser = () => {
   );
 };
 
-export default NewUser;
+export default UserNew;
