@@ -10,13 +10,11 @@ export const ControlledTextField = <
   name,
   type,
   label,
-  defaultValue,
 }: {
   control: Control<TFieldValues>;
   name: TName;
   type: string;
   label: string;
-  defaultValue?: string;
 }) => {
   return (
     <Controller
@@ -29,7 +27,6 @@ export const ControlledTextField = <
           label={label}
           error={fieldState.invalid}
           helperText={fieldState.error?.message}
-          value={defaultValue}
         />
       )}
     />

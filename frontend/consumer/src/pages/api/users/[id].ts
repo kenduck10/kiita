@@ -42,6 +42,22 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
       });
     return response.status(result.statusCode).json(null);
   }
+
+  if (request.method === 'PUT') {
+    const result = await axios
+      .put(BASE_URL, request.body)
+      .then(() => {
+        return {
+          statusCode: HttpStatusCode.Ok,
+        };
+      })
+      .catch((error) => {
+        return {
+          statusCode: error.response.status,
+        };
+      });
+    return response.status(result.statusCode).json(null);
+  }
 };
 
 export default handler;

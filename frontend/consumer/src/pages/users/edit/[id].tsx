@@ -29,44 +29,36 @@ export const UserEdit = ({ user }: { user: User }) => {
     criteriaMode: 'all',
     shouldFocusError: false,
     defaultValues: {
-      lastName: '',
-      firstName: '',
+      lastName: user.lastName,
+      firstName: user.firstName,
     },
     resolver: yupResolver(errorSchema),
   });
 
   const onSubmit: SubmitHandler<SubmitArguments> = async (data) => {
     setErrorMessage('');
-    console.log(data);
-    // await axios
-    //     .post(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users`, data)
-    //     .then(() => router.push('/'))
-    //     .catch((error) => {
-    //       if (error.response.status === HttpStatusCode.BadRequest) {
-    //         setErrorMessage('入力内容に誤りがあります');
-    //         return;
-    //       }
-    //       router.push('/error');
-    //     });
+    await axios
+      .put(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`, data)
+      .then(() => router.push(`/users/${user.id}`))
+      .catch((error) => {
+        if (error.response.status === HttpStatusCode.BadRequest) {
+          setErrorMessage('入力内容に誤りがあります');
+          return;
+        }
+
+        if (error.response.status === HttpStatusCode.NotFound) {
+          setErrorMessage('このユーザーは削除済です');
+          return;
+        }
+        router.push('/error');
+      });
   };
 
   return (
     <div>
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-      <ControlledTextField
-        control={control}
-        name={'lastName'}
-        type={'text'}
-        label={'姓'}
-        defaultValue={user.lastName}
-      />
-      <ControlledTextField
-        control={control}
-        name={'firstName'}
-        type={'text'}
-        label={'名'}
-        defaultValue={user.firstName}
-      />
+      <ControlledTextField control={control} name={'lastName'} type={'text'} label={'姓'} />
+      <ControlledTextField control={control} name={'firstName'} type={'text'} label={'名'} />
       <Button variant="contained" onClick={handleSubmit(onSubmit)}>
         保存
       </Button>
