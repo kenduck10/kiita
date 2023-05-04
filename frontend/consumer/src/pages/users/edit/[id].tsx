@@ -47,7 +47,7 @@ export const UserEdit = ({ user }: { user: User }) => {
         }
 
         if (error.response.status === HttpStatusCode.NotFound) {
-          setErrorMessage('このユーザーは削除済です');
+          setErrorMessage('このユーザーは既に削除されています');
           return;
         }
         router.push('/error');

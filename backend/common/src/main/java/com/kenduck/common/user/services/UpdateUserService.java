@@ -1,6 +1,7 @@
 package com.kenduck.common.user.services;
 
 import com.kenduck.common.user.dtos.UpdateUser;
+import com.kenduck.common.user.exceptions.UserNotFoundException;
 import com.kenduck.common.user.mappers.UserMapper;
 import com.kenduck.common.user.models.User;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,10 @@ public class UpdateUserService {
 
     @Transactional
     public void updateUser(UpdateUser updateUser) {
+        int userId = updateUser.getUserId();
+        userMapper.selectById(userId).orElseThrow(
+                () -> new UserNotFoundException(userId, "target user is not found")
+        );
         User user = new User(updateUser);
         userMapper.updateByPrimaryKey(user);
     }
