@@ -32,6 +32,7 @@ export const UserNew = () => {
     },
     resolver: yupResolver(errorSchema),
   });
+  const onClickToHome = () => router.push(`/`);
   const onSubmit: SubmitHandler<SubmitArguments> = async (data) => {
     setErrorMessage('');
     await axios
@@ -53,6 +54,9 @@ export const UserNew = () => {
       <ControlledTextField control={control} name={'firstName'} type={'text'} label={'名'} />
       <Button variant="contained" onClick={handleSubmit(onSubmit)}>
         追加する
+      </Button>
+      <Button variant="contained" color="secondary" onClick={onClickToHome}>
+        ホーム
       </Button>
     </div>
   );

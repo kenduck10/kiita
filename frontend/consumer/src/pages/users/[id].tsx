@@ -22,6 +22,7 @@ export const UserDetail = ({ user }: { user: User }) => {
         router.push('/error');
       });
   };
+  const onClickToHome = () => router.push(`/`);
   return (
     <>
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
@@ -33,6 +34,9 @@ export const UserDetail = ({ user }: { user: User }) => {
       </Button>
       <Button variant="contained" color="error" onClick={onClickDeleteButton}>
         削除
+      </Button>
+      <Button variant="contained" color="secondary" onClick={onClickToHome}>
+        ホーム
       </Button>
     </>
   );
