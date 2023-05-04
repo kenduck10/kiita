@@ -35,7 +35,7 @@ export const UserEdit = ({ user }: { user: User }) => {
     resolver: yupResolver(errorSchema),
   });
 
-  const onSubmit: SubmitHandler<SubmitArguments> = async (data) => {
+  const onClickSave: SubmitHandler<SubmitArguments> = async (data) => {
     setErrorMessage('');
     await axios
       .put(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`, data)
@@ -54,13 +54,18 @@ export const UserEdit = ({ user }: { user: User }) => {
       });
   };
 
+  const onClickCancel = () => router.back();
+
   return (
     <div>
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       <ControlledTextField control={control} name={'lastName'} type={'text'} label={'姓'} />
       <ControlledTextField control={control} name={'firstName'} type={'text'} label={'名'} />
-      <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+      <Button variant="contained" color="primary" onClick={handleSubmit(onClickSave)}>
         保存
+      </Button>
+      <Button variant="contained" color="secondary" onClick={handleSubmit(onClickCancel)}>
+        キャンセル
       </Button>
     </div>
   );
