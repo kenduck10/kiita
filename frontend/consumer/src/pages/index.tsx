@@ -2,8 +2,15 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 import Link from 'next/link';
 import axios, { HttpStatusCode } from 'axios';
 import UserSummaries from '@/features/user/models/UserSummaries';
+import { NextPageWithLayout } from '@/pages/_app';
+// import { Layout } from '@/components/layouts/Layout';
+import Layout from '@/components/layouts/Layout';
 
-export const Home = ({ userSummaries }: { userSummaries: UserSummaries }) => {
+export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
+  userSummaries,
+}: {
+  userSummaries: UserSummaries;
+}) => {
   return (
     <>
       <TableContainer>
@@ -71,4 +78,7 @@ export const getServerSideProps = async () => {
   };
 };
 
+Home.getLayout = (page) => {
+  return <Layout>{page}</Layout>;
+};
 export default Home;
