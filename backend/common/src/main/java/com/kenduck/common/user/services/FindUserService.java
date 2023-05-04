@@ -19,7 +19,7 @@ public class FindUserService {
 
     @Transactional(readOnly = true)
     public FoundUser findUserById(int userId) {
-        User user = userMapper.selectById(userId).get();
+        User user = userMapper.selectByPrimaryKey(userId).get();
         return new FoundUser(user);
     }
 

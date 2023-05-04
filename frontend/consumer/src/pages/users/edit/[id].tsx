@@ -4,17 +4,48 @@ import User from '@/features/user/models/User';
 import { Alert, Button } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import * as yup from 'yup';
+import { FIRST_NAME_YUP_SCHEMA, LAST_NAME_YUP_SCHEMA } from '@/features/user/validations/YupSchema';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ControlledTextField } from '@/components/elements/ControlledTextField';
 
-export const UserDetail = ({ user }: { user: User }) => {
+type SubmitArguments = {
+  lastName: string;
+  firstName: string;
+};
+
+const errorSchema = yup.object().shape({
+  lastName: LAST_NAME_YUP_SCHEMA,
+  firstName: FIRST_NAME_YUP_SCHEMA,
+});
+
+export const UserEdit = ({ user }: { user: User }) => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
 
-  const onClickEditButton = () => router.push(`/users/edit/${user.id}`);
-  const onClickDeleteButton = async () => {
+  const { control, handleSubmit } = useForm<SubmitArguments>({
+    mode: 'all',
+    criteriaMode: 'all',
+    shouldFocusError: false,
+    defaultValues: {
+      lastName: user.lastName,
+      firstName: user.firstName,
+    },
+    resolver: yupResolver(errorSchema),
+  });
+
+  const onSubmit: SubmitHandler<SubmitArguments> = async (data) => {
+    setErrorMessage('');
     await axios
-      .delete(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`)
-      .then(() => router.push('/'))
+      .put(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`, data)
+      .then(() => router.push(`/users/${user.id}`))
       .catch((error) => {
+        if (error.response.status === HttpStatusCode.BadRequest) {
+          setErrorMessage('入力内容に誤りがあります');
+          return;
+        }
+
         if (error.response.status === HttpStatusCode.NotFound) {
           setErrorMessage('このユーザーは既に削除されています');
           return;
@@ -22,19 +53,16 @@ export const UserDetail = ({ user }: { user: User }) => {
         router.push('/error');
       });
   };
+
   return (
-    <>
+    <div>
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-      <p>{user.id}</p>
-      <p>{user.lastName}</p>
-      <p>{user.firstName}</p>
-      <Button variant="contained" color="primary" onClick={onClickEditButton}>
-        編集
+      <ControlledTextField control={control} name={'lastName'} type={'text'} label={'姓'} />
+      <ControlledTextField control={control} name={'firstName'} type={'text'} label={'名'} />
+      <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+        保存
       </Button>
-      <Button variant="contained" color="error" onClick={onClickDeleteButton}>
-        削除
-      </Button>
-    </>
+    </div>
   );
 };
 
@@ -79,4 +107,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default UserDetail;
+export default UserEdit;
