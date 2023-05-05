@@ -3,7 +3,6 @@ import Link from 'next/link';
 import axios, { HttpStatusCode } from 'axios';
 import UserSummaries from '@/features/user/models/UserSummaries';
 import { NextPageWithLayout } from '@/pages/_app';
-// import { Layout } from '@/components/layouts/Layout';
 import Layout from '@/components/layouts/Layout';
 
 export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
@@ -78,7 +77,7 @@ export const getServerSideProps = async () => {
   };
 };
 
-Home.getLayout = (page) => {
+Home.getLayout = (page, router) => {
   return <Layout>{page}</Layout>;
 };
 export default Home;

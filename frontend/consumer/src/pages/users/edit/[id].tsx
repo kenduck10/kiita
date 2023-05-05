@@ -9,6 +9,7 @@ import { FIRST_NAME_YUP_SCHEMA, LAST_NAME_YUP_SCHEMA } from '@/features/user/val
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextField } from '@/components/elements/ControlledTextField';
+import { useSubmit } from '@/hooks/useSubmit';
 
 type SubmitArguments = {
   lastName: string;
@@ -23,6 +24,7 @@ const errorSchema = yup.object().shape({
 export const UserEdit = ({ user }: { user: User }) => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
+  const { isSubmitting, startSubmit } = useSubmit();
 
   const { control, handleSubmit } = useForm<SubmitArguments>({
     mode: 'all',
@@ -36,6 +38,7 @@ export const UserEdit = ({ user }: { user: User }) => {
   });
 
   const onClickSave: SubmitHandler<SubmitArguments> = async (data) => {
+    startSubmit();
     setErrorMessage('');
     await axios
       .put(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`, data)
@@ -59,8 +62,8 @@ export const UserEdit = ({ user }: { user: User }) => {
   return (
     <div>
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-      <ControlledTextField control={control} name={'lastName'} type={'text'} label={'姓'} />
-      <ControlledTextField control={control} name={'firstName'} type={'text'} label={'名'} />
+      <ControlledTextField control={control} name={'lastName'} type={'text'} label={'姓'} disabled={isSubmitting} />
+      <ControlledTextField control={control} name={'firstName'} type={'text'} label={'名'} disabled={isSubmitting} />
       <Button variant="contained" color="primary" onClick={handleSubmit(onClickSave)}>
         保存
       </Button>

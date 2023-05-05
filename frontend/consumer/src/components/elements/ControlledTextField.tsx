@@ -10,11 +10,13 @@ export const ControlledTextField = <
   name,
   type,
   label,
+  disabled,
 }: {
   control: Control<TFieldValues>;
   name: TName;
   type: string;
   label: string;
+  disabled?: boolean;
 }) => {
   return (
     <Controller
@@ -27,6 +29,7 @@ export const ControlledTextField = <
           label={label}
           error={fieldState.invalid}
           helperText={fieldState.error?.message}
+          disabled={disabled ?? false}
         />
       )}
     />
