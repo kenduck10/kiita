@@ -18,26 +18,34 @@ export const UserNewConfirm = () => {
   const onClickAdd = async () => {
     await axios
       .post(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users`, createUser)
-      .then(() => {
+      .then(async () => {
+        await router.push('/');
         resetCreateUser();
-        router.push('/');
       })
-      .catch((error) => {
+      .catch(async (error) => {
         if (error.response.status === HttpStatusCode.BadRequest) {
           setCreateUserErrorMessage('入力内容に誤りがあります');
-          router.push('/users/new');
+          await router.push('/users/new');
           return;
         }
-        router.push('/error');
+        await router.push('/error');
       });
   };
+
+  const onClickModify = async () => {
+    await router.push('/users/new');
+  };
+
   return (
     createUser && (
       <div>
-        <p suppressHydrationWarning>{createUser.lastName}</p>
-        <p suppressHydrationWarning>{createUser.firstName}</p>
+        <p>{createUser.lastName}</p>
+        <p>{createUser.firstName}</p>
         <Button variant="contained" onClick={onClickAdd}>
-          追加
+          追加する
+        </Button>
+        <Button variant="contained" onClick={onClickModify}>
+          修正する
         </Button>
       </div>
     )

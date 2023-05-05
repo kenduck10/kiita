@@ -5,7 +5,7 @@ import { ControlledTextField } from '@/components/elements/ControlledTextField';
 import { FIRST_NAME_YUP_SCHEMA, LAST_NAME_YUP_SCHEMA } from '@/features/user/validations/YupSchema';
 import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { createUserErrorMessageState, createUserState } from '@/stores/user';
 
 type SubmitArguments = {
@@ -21,7 +21,8 @@ const errorSchema = yup.object().shape({
 export const UserNew = () => {
   const router = useRouter();
   const [createUser, setCreateUser] = useRecoilState(createUserState);
-  const errorMessage = useRecoilValue(createUserErrorMessageState);
+  const createUserErrorMessage = useRecoilValue(createUserErrorMessageState);
+  const resetCreateUserErrorMessage = useResetRecoilState(createUserErrorMessageState);
 
   const { control, handleSubmit } = useForm<SubmitArguments>({
     mode: 'all',
@@ -33,16 +34,20 @@ export const UserNew = () => {
     },
     resolver: yupResolver(errorSchema),
   });
-  const onClickToHome = () => router.push(`/`);
+  const onClickToHome = async () => {
+    await router.push(`/`);
+    resetCreateUserErrorMessage();
+  };
   const confirmPageUrl = '/users/new/confirm';
-  const onClickToConfirm: SubmitHandler<SubmitArguments> = (data) => {
+  const onClickToConfirm: SubmitHandler<SubmitArguments> = async (data) => {
     setCreateUser({ lastName: data.lastName, firstName: data.firstName });
-    router.push({ pathname: confirmPageUrl, query: data }, confirmPageUrl);
+    await router.push({ pathname: confirmPageUrl, query: data }, confirmPageUrl);
+    resetCreateUserErrorMessage();
   };
 
   return (
     <div>
-      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+      {createUserErrorMessage && <Alert severity="error">{createUserErrorMessage}</Alert>}
       <ControlledTextField control={control} name={'lastName'} type={'text'} label={'姓'} />
       <ControlledTextField control={control} name={'firstName'} type={'text'} label={'名'} />
       <Button variant="contained" onClick={handleSubmit(onClickToConfirm)}>
