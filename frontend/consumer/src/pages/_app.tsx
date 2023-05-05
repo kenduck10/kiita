@@ -16,7 +16,7 @@ type AppPropsWithLayout = AppProps & {
 };
 
 export const MyApp = ({ Component, pageProps, router }: AppPropsWithLayout) => {
-  const getLayout = Component.getLayout ?? ((page, router) => <Layout router={router}>{page}</Layout>);
+  const getLayout = Component.getLayout ?? ((page, router) => <Layout>{page}</Layout>);
   return (
     <RecoilRoot>
       <RecoilReset router={router}>

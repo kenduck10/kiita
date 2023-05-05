@@ -1,7 +1,7 @@
 import axios, { HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
 import User from '@/features/user/models/User';
-import { Alert, Button } from '@mui/material';
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useSubmit } from '@/hooks/useSubmit';
@@ -12,12 +12,17 @@ export const UserDetail = ({ user }: { user: User }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const { isLoading, startLoad } = useLoad();
   const { isSubmitting, startSubmit } = useSubmit();
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
 
   const onClickEditButton = () => {
     startLoad();
     router.push(`/users/edit/${user.id}`);
   };
   const onClickDeleteButton = async () => {
+    setIsOpenDeleteDialog(true);
+  };
+
+  const onClickDeleteAgreement = async () => {
     startSubmit();
     await axios
       .delete(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`)
@@ -25,11 +30,17 @@ export const UserDetail = ({ user }: { user: User }) => {
       .catch((error) => {
         if (error.response.status === HttpStatusCode.NotFound) {
           setErrorMessage('このユーザーは既に削除されています');
+          setIsOpenDeleteDialog(false);
           return;
         }
         router.push('/error');
       });
   };
+
+  const onClickDeleteCancel = () => {
+    setIsOpenDeleteDialog(false);
+  };
+
   const onClickToHome = async () => {
     startLoad();
     await router.push(`/`);
@@ -51,6 +62,16 @@ export const UserDetail = ({ user }: { user: User }) => {
       <Button variant="contained" color="secondary" onClick={onClickToHome} disabled={isDisabled}>
         ホーム
       </Button>
+      <Dialog open={isOpenDeleteDialog} onClose={() => setIsOpenDeleteDialog(false)}>
+        <DialogTitle>{'本当に削除しますか？'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>一旦削除したユーザーは元に戻すことができません</DialogContentText>
+          <DialogActions>
+            <Button onClick={onClickDeleteCancel}>キャンセル</Button>
+            <Button onClick={onClickDeleteAgreement}>削除</Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
