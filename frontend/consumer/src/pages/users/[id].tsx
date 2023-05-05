@@ -4,13 +4,21 @@ import User from '@/features/user/models/User';
 import { Alert, Button } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useSubmit } from '@/hooks/useSubmit';
+import { useLoad } from '@/hooks/useLoad';
 
 export const UserDetail = ({ user }: { user: User }) => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
+  const { isLoading, startLoad } = useLoad();
+  const { isSubmitting, startSubmit } = useSubmit();
 
-  const onClickEditButton = () => router.push(`/users/edit/${user.id}`);
+  const onClickEditButton = () => {
+    startLoad();
+    router.push(`/users/edit/${user.id}`);
+  };
   const onClickDeleteButton = async () => {
+    startSubmit();
     await axios
       .delete(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`)
       .then(() => router.push('/'))
@@ -22,20 +30,25 @@ export const UserDetail = ({ user }: { user: User }) => {
         router.push('/error');
       });
   };
-  const onClickToHome = () => router.push(`/`);
+  const onClickToHome = async () => {
+    startLoad();
+    await router.push(`/`);
+  };
+
+  const isDisabled = isSubmitting || isLoading;
   return (
     <>
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       <p>{user.id}</p>
       <p>{user.lastName}</p>
       <p>{user.firstName}</p>
-      <Button variant="contained" color="primary" onClick={onClickEditButton}>
+      <Button variant="contained" color="primary" onClick={onClickEditButton} disabled={isDisabled}>
         編集
       </Button>
-      <Button variant="contained" color="error" onClick={onClickDeleteButton}>
+      <Button variant="contained" color="error" onClick={onClickDeleteButton} disabled={isDisabled}>
         削除
       </Button>
-      <Button variant="contained" color="secondary" onClick={onClickToHome}>
+      <Button variant="contained" color="secondary" onClick={onClickToHome} disabled={isDisabled}>
         ホーム
       </Button>
     </>

@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { createUserErrorMessageState, createUserState } from '@/stores/user';
+import { useLoad } from '@/hooks/useLoad';
 
 type SubmitArguments = {
   lastName: string;
@@ -23,6 +24,7 @@ export const UserNew = () => {
   const [createUser, setCreateUser] = useRecoilState(createUserState);
   const createUserErrorMessage = useRecoilValue(createUserErrorMessageState);
   const resetCreateUserErrorMessage = useResetRecoilState(createUserErrorMessageState);
+  const { isLoading, startLoad } = useLoad();
 
   const { control, handleSubmit } = useForm<SubmitArguments>({
     mode: 'all',
@@ -35,11 +37,14 @@ export const UserNew = () => {
     resolver: yupResolver(errorSchema),
   });
   const onClickToHome = async () => {
+    startLoad();
     await router.push(`/`);
     resetCreateUserErrorMessage();
   };
+
   const confirmPageUrl = '/users/new/confirm';
   const onClickToConfirm: SubmitHandler<SubmitArguments> = async (data) => {
+    startLoad();
     setCreateUser({ lastName: data.lastName, firstName: data.firstName });
     await router.push({ pathname: confirmPageUrl, query: data }, confirmPageUrl);
     resetCreateUserErrorMessage();
@@ -48,12 +53,12 @@ export const UserNew = () => {
   return (
     <div>
       {createUserErrorMessage && <Alert severity="error">{createUserErrorMessage}</Alert>}
-      <ControlledTextField control={control} name={'lastName'} type={'text'} label={'姓'} />
-      <ControlledTextField control={control} name={'firstName'} type={'text'} label={'名'} />
-      <Button variant="contained" onClick={handleSubmit(onClickToConfirm)}>
+      <ControlledTextField control={control} name={'lastName'} type={'text'} label={'姓'} disabled={isLoading} />
+      <ControlledTextField control={control} name={'firstName'} type={'text'} label={'名'} disabled={isLoading} />
+      <Button variant="contained" onClick={handleSubmit(onClickToConfirm)} disabled={isLoading}>
         確認画面へ進む
       </Button>
-      <Button variant="contained" color="secondary" onClick={onClickToHome}>
+      <Button variant="contained" color="secondary" onClick={onClickToHome} disabled={isLoading}>
         ホームへ戻る
       </Button>
     </div>
