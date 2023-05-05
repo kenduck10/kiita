@@ -3,10 +3,10 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Alert, Button } from '@mui/material';
 import { ControlledTextField } from '@/components/elements/ControlledTextField';
 import { FIRST_NAME_YUP_SCHEMA, LAST_NAME_YUP_SCHEMA } from '@/features/user/validations/YupSchema';
-import axios, { HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { createUserErrorMessageState, createUserState } from '@/stores/user';
 
 type SubmitArguments = {
   lastName: string;
@@ -20,43 +20,41 @@ const errorSchema = yup.object().shape({
 
 export const UserNew = () => {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState('');
+  const [createUser, setCreateUser] = useRecoilState(createUserState);
+  const createUserErrorMessage = useRecoilValue(createUserErrorMessageState);
+  const resetCreateUserErrorMessage = useResetRecoilState(createUserErrorMessageState);
 
   const { control, handleSubmit } = useForm<SubmitArguments>({
     mode: 'all',
     criteriaMode: 'all',
     shouldFocusError: false,
     defaultValues: {
-      lastName: '',
-      firstName: '',
+      lastName: createUser.lastName,
+      firstName: createUser.firstName,
     },
     resolver: yupResolver(errorSchema),
   });
-  const onClickToHome = () => router.push(`/`);
-  const onSubmit: SubmitHandler<SubmitArguments> = async (data) => {
-    setErrorMessage('');
-    await axios
-      .post(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users`, data)
-      .then(() => router.push('/'))
-      .catch((error) => {
-        if (error.response.status === HttpStatusCode.BadRequest) {
-          setErrorMessage('入力内容に誤りがあります');
-          return;
-        }
-        router.push('/error');
-      });
+  const onClickToHome = async () => {
+    await router.push(`/`);
+    resetCreateUserErrorMessage();
+  };
+  const confirmPageUrl = '/users/new/confirm';
+  const onClickToConfirm: SubmitHandler<SubmitArguments> = async (data) => {
+    setCreateUser({ lastName: data.lastName, firstName: data.firstName });
+    await router.push({ pathname: confirmPageUrl, query: data }, confirmPageUrl);
+    resetCreateUserErrorMessage();
   };
 
   return (
     <div>
-      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+      {createUserErrorMessage && <Alert severity="error">{createUserErrorMessage}</Alert>}
       <ControlledTextField control={control} name={'lastName'} type={'text'} label={'姓'} />
       <ControlledTextField control={control} name={'firstName'} type={'text'} label={'名'} />
-      <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-        追加する
+      <Button variant="contained" onClick={handleSubmit(onClickToConfirm)}>
+        確認画面へ進む
       </Button>
       <Button variant="contained" color="secondary" onClick={onClickToHome}>
-        ホーム
+        ホームへ戻る
       </Button>
     </div>
   );
