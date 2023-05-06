@@ -1,4 +1,4 @@
-import axios, { HttpStatusCode } from 'axios';
+import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
 import User from '@/features/user/models/User';
 import { Alert, Button } from '@mui/material';
@@ -24,7 +24,7 @@ const errorSchema = yup.object().shape({
 export const UserEdit = ({ user }: { user: User }) => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
-  const { isSubmitting, startSubmit } = useSubmit();
+  const { isSubmitting, startSubmit, stopSubmit } = useSubmit();
 
   const { control, handleSubmit } = useForm<SubmitArguments>({
     mode: 'all',
@@ -43,18 +43,24 @@ export const UserEdit = ({ user }: { user: User }) => {
     await axios
       .put(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`, data)
       .then(() => router.push(`/users/${user.id}`))
-      .catch((error) => {
-        if (error.response.status === HttpStatusCode.BadRequest) {
-          setErrorMessage('入力内容に誤りがあります');
+      .catch(async (error: AxiosError) => {
+        const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.NotFound];
+        const actualStatus = error.response?.status;
+        if (!actualStatus || !expectedStatuses.includes(actualStatus)) {
+          await router.push('/error');
           return;
         }
 
-        if (error.response.status === HttpStatusCode.NotFound) {
+        if (actualStatus === HttpStatusCode.BadRequest) {
+          setErrorMessage('入力内容に誤りがあります');
+          return;
+        }
+        if (actualStatus === HttpStatusCode.NotFound) {
           setErrorMessage('このユーザーは既に削除されています');
           return;
         }
-        router.push('/error');
-      });
+      })
+      .finally(() => stopSubmit());
   };
 
   const onClickCancel = () => router.back();
