@@ -46,12 +46,13 @@ export const UserEdit = ({ user }: { user: User }) => {
 
   const onClickSave: SubmitHandler<SubmitArguments> = async (data) => {
     startSubmit();
-    setErrorMessage('');
     await axios
       .put(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`, data)
-      .then(() => router.push(`/users/${user.id}`))
+      .then(async () => {
+        await router.push(`/users/${user.id}`);
+      })
       .catch(async (error: AxiosError) => {
-        const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.NotFound];
+        const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.NotFound, HttpStatusCode.Conflict];
         const actualStatus = error.response?.status;
         if (!actualStatus || !expectedStatuses.includes(actualStatus)) {
           await router.push('/error');
@@ -64,6 +65,10 @@ export const UserEdit = ({ user }: { user: User }) => {
         }
         if (actualStatus === HttpStatusCode.NotFound) {
           setErrorMessage('このユーザーは既に削除されています');
+          return;
+        }
+        if (actualStatus === HttpStatusCode.Conflict) {
+          setErrorMessage('指定のメールアドレスは既に利用されています');
           return;
         }
       })

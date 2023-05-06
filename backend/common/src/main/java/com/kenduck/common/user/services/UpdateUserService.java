@@ -26,7 +26,9 @@ public class UpdateUserService {
         String mailAddress = updateUser.getMailAddress();
         userMapper.selectByMailAddress(mailAddress)
                 .ifPresent((user) -> {
-                    throw new DuplicatedMailAddressException(mailAddress, "user mail address needs to be unique.");
+                    if (!user.getId().equals(userId)) {
+                        throw new DuplicatedMailAddressException(mailAddress, "user mail address needs to be unique.");
+                    }
                 });
         User user = new User(updateUser);
         userMapper.updateByPrimaryKey(user);
