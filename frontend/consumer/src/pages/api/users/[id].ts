@@ -4,6 +4,7 @@ import axios, { HttpStatusCode } from 'axios';
 export type GetUserResponse = {
   lastName: string;
   firstName: string;
+  mailAddress: string;
 };
 
 export const handler = async (request: NextApiRequest, response: NextApiResponse) => {

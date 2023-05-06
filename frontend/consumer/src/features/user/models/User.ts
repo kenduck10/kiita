@@ -7,11 +7,13 @@ class User {
   readonly id: number;
   readonly lastName: string;
   readonly firstName: string;
+  readonly mailAddress: string;
 
   constructor(id: number, response: GetUserResponse) {
     this.id = id;
     this.lastName = response.lastName;
     this.firstName = response.firstName;
+    this.mailAddress = response.mailAddress;
   }
 }
 
