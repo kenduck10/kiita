@@ -53,6 +53,7 @@ export const UserDetail = ({ user }: { user: User }) => {
       <p>{user.id}</p>
       <p>{user.lastName}</p>
       <p>{user.firstName}</p>
+      <p>{user.mailAddress}</p>
       <Button variant="contained" color="primary" onClick={onClickEditButton} disabled={isDisabled}>
         編集
       </Button>

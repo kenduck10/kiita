@@ -11,10 +11,12 @@ public class CreatedUser {
     private final int userId;
     private final String lastName;
     private final String firstName;
+    private final String mailAddress;
 
     public CreatedUser(User user) {
-        this.userId= user.getId();
+        this.userId = user.getId();
         this.lastName = user.getLastName();
         this.firstName = user.getFirstName();
+        this.mailAddress = user.getMailAddress();
     }
 }

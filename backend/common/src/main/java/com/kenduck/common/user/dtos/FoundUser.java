@@ -12,8 +12,11 @@ public class FoundUser {
 
     private final String firstName;
 
+    private final String mailAddress;
+
     public FoundUser(User user) {
         this.lastName = user.getLastName();
         this.firstName = user.getFirstName();
+        this.mailAddress = user.getMailAddress();
     }
 }

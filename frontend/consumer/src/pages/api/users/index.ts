@@ -5,6 +5,7 @@ type CreateUserResponse = {
   userId: number;
   lastName: string;
   firstLane: string;
+  mailAddress: string;
 };
 
 export type GetUsersResponse = {
@@ -15,6 +16,7 @@ export type GetUsersResponseElement = {
   userId: number;
   lastName: string;
   firstName: string;
+  mailAddress: string;
 };
 
 export const handler = async (request: NextApiRequest, response: NextApiResponse) => {

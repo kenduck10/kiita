@@ -9,3 +9,8 @@ export const FIRST_NAME_YUP_SCHEMA = yup
   .string()
   .required('名の入力は必須です')
   .max(User.FIRST_NAME_MAX_LENGTH, `名は${User.FIRST_NAME_MAX_LENGTH}文字以内で入力してください`);
+
+export const MAIL_ADDRESS_YUP_SCHEMA = yup
+  .string()
+  .required('メールアドレスの入力は必須です')
+  .email('メールアドレスの形式が不正です');

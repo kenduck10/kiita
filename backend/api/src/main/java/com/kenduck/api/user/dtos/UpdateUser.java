@@ -7,7 +7,8 @@ public class UpdateUser extends com.kenduck.common.user.dtos.UpdateUser {
         super(
                 userId,
                 request.getLastName(),
-                request.getFirstName()
+                request.getFirstName(),
+                request.getMailAddress()
         );
     }
 }

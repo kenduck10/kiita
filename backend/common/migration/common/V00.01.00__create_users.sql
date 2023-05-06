@@ -1,6 +1,6 @@
 CREATE TABLE users
 (
-    ID         INT AUTO_INCREMENT                                              NOT NULL PRIMARY KEY,
+    id         INT AUTO_INCREMENT                                              NOT NULL PRIMARY KEY,
     last_name  VARCHAR(50)                                                     NOT NULL,
     first_name VARCHAR(50)                                                     NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP                             NOT NULL,

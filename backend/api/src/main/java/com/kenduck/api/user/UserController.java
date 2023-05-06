@@ -1,12 +1,12 @@
 package com.kenduck.api.user;
 
-import com.kenduck.api.employee.responses.FindUserSummariesResponse;
 import com.kenduck.api.user.dtos.CreateUser;
 import com.kenduck.api.user.dtos.UpdateUser;
 import com.kenduck.api.user.requests.CreateUserRequest;
 import com.kenduck.api.user.requests.UpdateUserRequest;
 import com.kenduck.api.user.responses.CreateUserResponse;
 import com.kenduck.api.user.responses.FindUserResponse;
+import com.kenduck.api.user.responses.FindUserSummariesResponse;
 import com.kenduck.common.user.dtos.CreatedUser;
 import com.kenduck.common.user.dtos.FoundUser;
 import com.kenduck.common.user.dtos.FoundUserSummaries;

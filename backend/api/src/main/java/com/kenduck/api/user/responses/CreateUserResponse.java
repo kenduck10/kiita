@@ -12,9 +12,12 @@ public class CreateUserResponse {
 
     private final String firstName;
 
+    private final String mailAddress;
+
     public CreateUserResponse(CreatedUser createdUser) {
         this.userId = createdUser.getUserId();
         this.lastName = createdUser.getLastName();
         this.firstName = createdUser.getFirstName();
+        this.mailAddress = createdUser.getMailAddress();
     }
 }

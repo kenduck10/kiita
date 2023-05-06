@@ -23,6 +23,9 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
               <TableCell component="div" align="right">
                 名
               </TableCell>
+              <TableCell component="div" align="right">
+                メールアドレス
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody component="div">
@@ -34,6 +37,9 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
                 </TableCell>
                 <TableCell component="div" align="right">
                   {userSummary.firstName}
+                </TableCell>
+                <TableCell component="div" align="right">
+                  {userSummary.mailAddress}
                 </TableCell>
               </TableRow>
             ))}

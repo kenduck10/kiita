@@ -1,5 +1,6 @@
 package com.kenduck.api.user.requests;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -17,4 +18,8 @@ public class UpdateUserRequest {
     @Length(max = MAX_FIRST_NAME_LENGTH)
     @NotBlank
     private String firstName;
+
+    @NotBlank
+    @Email
+    private String mailAddress;
 }
