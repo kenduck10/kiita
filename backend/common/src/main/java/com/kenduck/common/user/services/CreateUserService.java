@@ -1,5 +1,6 @@
 package com.kenduck.common.user.services;
 
+import com.kenduck.common.email.exceptions.DuplicatedMailAddressException;
 import com.kenduck.common.user.dtos.CreateUser;
 import com.kenduck.common.user.dtos.CreatedUser;
 import com.kenduck.common.user.mappers.UserMapper;
@@ -18,6 +19,11 @@ public class CreateUserService {
 
     @Transactional
     public CreatedUser createUser(CreateUser createUser) {
+        String mailAddress = createUser.getMailAddress();
+        userMapper.selectByMailAddress(mailAddress)
+                .ifPresent((user) -> {
+                    throw new DuplicatedMailAddressException(mailAddress, "user mail address needs to be unique.");
+                });
         User user = new User(createUser);
         userMapper.insert(user);
         return new CreatedUser(user);

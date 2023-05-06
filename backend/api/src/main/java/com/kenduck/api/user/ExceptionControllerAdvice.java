@@ -1,5 +1,6 @@
 package com.kenduck.api.user;
 
+import com.kenduck.common.email.exceptions.DuplicatedMailAddressException;
 import com.kenduck.common.user.exceptions.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,5 +15,10 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     protected ResponseEntity<Object> handleUserNotFound(UserNotFoundException exception, WebRequest request) {
         return handleExceptionInternal(exception, null, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(DuplicatedMailAddressException.class)
+    protected ResponseEntity<Object> handleDuplicatedMailAddress(DuplicatedMailAddressException exception, WebRequest request) {
+        return handleExceptionInternal(exception, null, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 }
