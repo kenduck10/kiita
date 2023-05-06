@@ -1,4 +1,4 @@
-import axios, { HttpStatusCode } from 'axios';
+import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
 import { Button } from '@mui/material';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
@@ -28,13 +28,21 @@ export const UserNewConfirm = () => {
         await router.push('/');
         resetCreateUser();
       })
-      .catch(async (error) => {
-        if (error.response.status === HttpStatusCode.BadRequest) {
-          setCreateUserErrorMessage('入力内容に誤りがあります');
-          await router.push('/users/new');
+      .catch(async (error: AxiosError) => {
+        const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.Conflict];
+        const actualStatus = error.response?.status;
+        if (!actualStatus || !expectedStatuses.includes(actualStatus)) {
+          await router.push('/error');
           return;
         }
-        await router.push('/error');
+
+        if (actualStatus === HttpStatusCode.BadRequest) {
+          setCreateUserErrorMessage('入力内容に誤りがあります');
+        } else if (actualStatus === HttpStatusCode.Conflict) {
+          setCreateUserErrorMessage('指定のメールアドレスは既に利用されています');
+        }
+        await router.push('/users/new');
+        return;
       });
   };
 

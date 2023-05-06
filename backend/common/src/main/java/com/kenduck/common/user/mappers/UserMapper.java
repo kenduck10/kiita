@@ -27,6 +27,12 @@ public interface UserMapper extends GeneratedUserMapper {
         return generatedUserOptional.map(User::new);
     }
 
+    default Optional<User> selectByMailAddress(String mailAddress) {
+        SelectDSLCompleter completer = select ->
+                select.where(GeneratedUserDynamicSqlSupport.mailAddress, isEqualTo(mailAddress));
+        return selectOne(completer).map(User::new);
+    }
+
     default Users selectAll() {
         SelectDSLCompleter completer = select ->
                 select.orderBy(GeneratedUserDynamicSqlSupport.id);
