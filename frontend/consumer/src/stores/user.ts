@@ -7,6 +7,7 @@ export const createUserState = atom({
   default: {
     lastName: '',
     firstName: '',
+    mailAddress: '',
   },
   effects_UNSTABLE: [persistAtom],
 });

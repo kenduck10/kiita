@@ -9,6 +9,7 @@ import { useLoad } from '@/hooks/useLoad';
 type SubmitArguments = {
   lastName: string;
   firstName: string;
+  mailAddress: string;
 };
 
 export const UserNewConfirm = () => {
@@ -49,6 +50,7 @@ export const UserNewConfirm = () => {
       <div>
         <p suppressHydrationWarning>{createUser.lastName}</p>
         <p suppressHydrationWarning>{createUser.firstName}</p>
+        <p suppressHydrationWarning>{createUser.mailAddress}</p>
         <Button variant="contained" onClick={onClickAdd} disabled={isDisabled}>
           追加する
         </Button>

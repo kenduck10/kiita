@@ -5,6 +5,7 @@ type CreateUserResponse = {
   userId: number;
   lastName: string;
   firstLane: string;
+  mailAddress: string;
 };
 
 export type GetUsersResponse = {
