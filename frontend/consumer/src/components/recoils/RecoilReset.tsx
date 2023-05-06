@@ -10,7 +10,6 @@ export const RecoilReset = ({ children, router }: { children: ReactElement; rout
   useEffect(() => {
     resetIsSubmitting();
     resetIsLoading();
-    console.log(router.pathname);
   }, [router.pathname]);
   return <>{children}</>;
 };
