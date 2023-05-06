@@ -6,7 +6,8 @@ public class CreateUser extends com.kenduck.common.user.dtos.CreateUser {
     public CreateUser(CreateUserRequest request) {
         super(
                 request.getLastName(),
-                request.getFirstName()
+                request.getFirstName(),
+                request.getMailAddress()
         );
     }
 }

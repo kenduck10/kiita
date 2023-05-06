@@ -12,4 +12,6 @@ public class CreateUser {
     private final String lastName;
 
     private final String firstName;
+
+    private final String mailAddress;
 }

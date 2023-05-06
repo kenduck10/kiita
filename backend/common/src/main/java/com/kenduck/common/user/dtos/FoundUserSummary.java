@@ -14,9 +14,12 @@ public class FoundUserSummary {
 
     private final String firstName;
 
+    private final String mailAddress;
+
     public FoundUserSummary(User user) {
-        this.userId= user.getId();
+        this.userId = user.getId();
         this.lastName = user.getLastName();
         this.firstName = user.getFirstName();
+        this.mailAddress = user.getMailAddress();
     }
 }

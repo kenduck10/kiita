@@ -1,4 +1,4 @@
-package com.kenduck.api.employee.responses;
+package com.kenduck.api.user.responses;
 
 import com.kenduck.common.user.dtos.FoundUserSummaries;
 import com.kenduck.common.user.dtos.FoundUserSummary;
@@ -28,10 +28,13 @@ public class FindUserSummariesResponse {
 
         private final String firstName;
 
+        private final String mailAddress;
+
         private User(FoundUserSummary foundUserSummary) {
             this.userId = foundUserSummary.getUserId();
             this.lastName = foundUserSummary.getLastName();
             this.firstName = foundUserSummary.getFirstName();
+            this.mailAddress = foundUserSummary.getMailAddress();
         }
     }
 }

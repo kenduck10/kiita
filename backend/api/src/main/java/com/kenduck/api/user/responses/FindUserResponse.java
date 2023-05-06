@@ -10,8 +10,11 @@ public class FindUserResponse {
 
     private final String firstName;
 
+    private final String mailAddress;
+
     public FindUserResponse(FoundUser foundUser) {
         this.lastName = foundUser.getLastName();
         this.firstName = foundUser.getFirstName();
+        this.mailAddress = foundUser.getMailAddress();
     }
 }

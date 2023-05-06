@@ -1,11 +1,11 @@
 package com.kenduck.common.user.models;
 
 
+import com.kenduck.common.generated.models.GeneratedUser;
 import com.kenduck.common.user.dtos.CreateUser;
 import com.kenduck.common.user.dtos.UpdateUser;
-import com.kenduck.common.generated.models.GeneratedUser;
 
-public class User extends GeneratedUser{
+public class User extends GeneratedUser {
 
     public static final int MAX_LAST_NAME_LENGTH = 50;
     public static final int MAX_FIRST_NAME_LENGTH = 50;
@@ -14,7 +14,8 @@ public class User extends GeneratedUser{
         super(
                 generatedUser.getId(),
                 generatedUser.getLastName(),
-                generatedUser.getFirstName()
+                generatedUser.getFirstName(),
+                generatedUser.getMailAddress()
         );
     }
 
@@ -22,7 +23,8 @@ public class User extends GeneratedUser{
         super(
                 null,
                 createUser.getLastName(),
-                createUser.getFirstName()
+                createUser.getFirstName(),
+                createUser.getMailAddress()
         );
     }
 
@@ -30,7 +32,8 @@ public class User extends GeneratedUser{
         super(
                 updateUser.getUserId(),
                 updateUser.getLastName(),
-                updateUser.getFirstName()
+                updateUser.getFirstName(),
+                updateUser.getMailAddress()
         );
     }
 }
