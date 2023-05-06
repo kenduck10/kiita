@@ -67,18 +67,19 @@ export const getServerSideProps = async () => {
       };
     });
 
-  if (userSummariesResponse.status !== HttpStatusCode.Ok) {
+  const status = userSummariesResponse.status;
+  if (status === HttpStatusCode.Ok) {
     return {
-      redirect: {
-        permanent: false,
-        destination: '/error',
+      props: {
+        userSummaries: JSON.parse(JSON.stringify(userSummariesResponse.userSummaries)),
       },
     };
   }
 
   return {
-    props: {
-      userSummaries: JSON.parse(JSON.stringify(userSummariesResponse.userSummaries)),
+    redirect: {
+      permanent: false,
+      destination: '/error',
     },
   };
 };

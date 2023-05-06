@@ -25,7 +25,7 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
           statusCode: error.response.status,
         };
       });
-    return response.status(HttpStatusCode.Ok).json(result.getUserResponse);
+    return response.status(result.statusCode).json(result.getUserResponse);
   }
 
   if (request.method === 'DELETE') {

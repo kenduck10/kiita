@@ -1,4 +1,4 @@
-import axios, { HttpStatusCode } from 'axios';
+import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
 import User from '@/features/user/models/User';
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
@@ -96,24 +96,35 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         status: response.status,
       };
     })
-    .catch((error) => {
+    .catch((error: AxiosError) => {
       return {
         user: undefined,
-        status: error.status,
+        status: error.response?.status,
       };
     });
+
+  const status = userResponse.status;
+  if (status === HttpStatusCode.Ok) {
+    return {
+      props: {
+        user: JSON.parse(JSON.stringify(userResponse.user)),
+      },
+    };
+  }
 
   if (userResponse.status === HttpStatusCode.NotFound) {
     return {
       redirect: {
         permanent: false,
-        destination: '/error',
+        destination: '/notFound',
       },
     };
   }
+
   return {
-    props: {
-      user: JSON.parse(JSON.stringify(userResponse.user)),
+    redirect: {
+      permanent: false,
+      destination: '/error',
     },
   };
 };

@@ -2,6 +2,7 @@ package com.kenduck.common.user.services;
 
 import com.kenduck.common.user.dtos.FoundUser;
 import com.kenduck.common.user.dtos.FoundUserSummaries;
+import com.kenduck.common.user.exceptions.UserNotFoundException;
 import com.kenduck.common.user.mappers.UserMapper;
 import com.kenduck.common.user.models.User;
 import com.kenduck.common.user.models.Users;
@@ -19,7 +20,9 @@ public class FindUserService {
 
     @Transactional(readOnly = true)
     public FoundUser findUserById(int userId) {
-        User user = userMapper.selectByPrimaryKey(userId).get();
+        User user = userMapper.selectByPrimaryKey(userId).orElseThrow(
+                () -> new UserNotFoundException(userId, "target user is not found.")
+        );
         return new FoundUser(user);
     }
 

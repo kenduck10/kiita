@@ -118,24 +118,35 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         status: response.status,
       };
     })
-    .catch((error) => {
+    .catch((error: AxiosError) => {
       return {
         user: undefined,
-        status: error.status,
+        status: error.response?.status,
       };
     });
+
+  const status = userResponse.status;
+  if (status === HttpStatusCode.Ok) {
+    return {
+      props: {
+        user: JSON.parse(JSON.stringify(userResponse.user)),
+      },
+    };
+  }
 
   if (userResponse.status === HttpStatusCode.NotFound) {
     return {
       redirect: {
         permanent: false,
-        destination: '/error',
+        destination: '/notFound',
       },
     };
   }
+
   return {
-    props: {
-      user: JSON.parse(JSON.stringify(userResponse.user)),
+    redirect: {
+      permanent: false,
+      destination: '/error',
     },
   };
 };
