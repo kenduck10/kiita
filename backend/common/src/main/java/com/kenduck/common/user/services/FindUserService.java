@@ -7,12 +7,14 @@ import com.kenduck.common.user.mappers.UserMapper;
 import com.kenduck.common.user.models.User;
 import com.kenduck.common.user.models.Users;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FindUserService {
 
     @NonNull
@@ -21,7 +23,11 @@ public class FindUserService {
     @Transactional(readOnly = true)
     public FoundUser findUserById(int userId) {
         User user = userMapper.selectByPrimaryKey(userId).orElseThrow(
-                () -> new UserNotFoundException(userId, "target user is not found.")
+                () -> {
+                    String message = String.format("target user (id=%d) is not found", userId);
+                    log.warn(message);
+                    return new UserNotFoundException(userId, message);
+                }
         );
         return new FoundUser(user);
     }
