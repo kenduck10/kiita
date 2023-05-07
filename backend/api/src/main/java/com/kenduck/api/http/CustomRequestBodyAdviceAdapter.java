@@ -1,5 +1,8 @@
-package com.kenduck.api;
+package com.kenduck.api.http;
 
+import com.kenduck.api.log.LoggingService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
@@ -11,18 +14,26 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAd
 import java.lang.reflect.Type;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 @Slf4j
 public class CustomRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
 
+    @NonNull
+    private final HttpServletRequest request;
+
+    @NonNull
+    private final LoggingService loggingService;
+
+    @NonNull
     @Override
     public Object afterBodyRead(
-            Object body,
+            @NonNull Object body,
             @NonNull HttpInputMessage inputMessage,
             @NonNull MethodParameter parameter,
             @NonNull Type targetType,
             @NonNull Class<? extends HttpMessageConverter<?>> converterType
     ) {
-        log.info(body.toString());
+        loggingService.displayRequestLog(request, body);
         return super.afterBodyRead(body, inputMessage, parameter, targetType, converterType);
     }
 

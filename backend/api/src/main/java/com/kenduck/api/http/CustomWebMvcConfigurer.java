@@ -1,4 +1,4 @@
-package com.kenduck.api;
+package com.kenduck.api.http;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -11,10 +11,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class CustomWebMvcConfigurer implements WebMvcConfigurer {
 
     @NonNull
-    private final LoggingHandlerInterceptor loggingHandlerInterceptor;
+    private final CustomHandlerInterceptor customHandlerInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry interceptorRegistry) {
-        interceptorRegistry.addInterceptor(loggingHandlerInterceptor);
+        interceptorRegistry.addInterceptor(customHandlerInterceptor);
     }
 }
