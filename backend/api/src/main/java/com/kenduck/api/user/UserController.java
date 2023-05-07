@@ -15,6 +15,7 @@ import com.kenduck.common.user.services.DeleteUserService;
 import com.kenduck.common.user.services.FindUserService;
 import com.kenduck.common.user.services.UpdateUserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     @NonNull
@@ -40,6 +42,9 @@ public class UserController {
 
     @GetMapping("")
     ResponseEntity<FindUserSummariesResponse> findUserSummaries() {
+        log.info("infoですよ");
+        log.warn("warnですよ");
+        log.error("errorですよ");
         FoundUserSummaries foundUserSummaries = findUserService.findAllUserSummaries();
         return ResponseEntity.ok(new FindUserSummariesResponse(foundUserSummaries));
     }

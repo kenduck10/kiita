@@ -11,12 +11,12 @@ export const UserDetail = ({ user }: { user: User }) => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
   const { isLoading, startLoad } = useLoad();
-  const { isSubmitting, startSubmit } = useSubmit();
+  const { isSubmitting, startSubmit, stopSubmit } = useSubmit();
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
 
-  const onClickEditButton = () => {
+  const onClickEditButton = async () => {
     startLoad();
-    router.push(`/users/edit/${user.id}`);
+    await router.push(`/users/edit/${user.id}`);
   };
   const onClickDeleteButton = async () => {
     setIsOpenDeleteDialog(true);
@@ -26,15 +26,16 @@ export const UserDetail = ({ user }: { user: User }) => {
     startSubmit();
     await axios
       .delete(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`)
-      .then(() => router.push('/'))
-      .catch((error) => {
+      .then(async () => await router.push('/'))
+      .catch(async (error) => {
         if (error.response.status === HttpStatusCode.NotFound) {
           setErrorMessage('このユーザーは既に削除されています');
           setIsOpenDeleteDialog(false);
           return;
         }
-        router.push('/error');
-      });
+        await router.push('/error');
+      })
+      .finally(() => stopSubmit());
   };
 
   const onClickDeleteCancel = () => {
