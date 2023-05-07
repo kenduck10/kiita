@@ -2,7 +2,6 @@ package com.kenduck.common.user.services;
 
 import com.kenduck.common.user.dtos.FoundUser;
 import com.kenduck.common.user.dtos.FoundUserSummaries;
-import com.kenduck.common.user.exceptions.UserNotFoundException;
 import com.kenduck.common.user.mappers.UserMapper;
 import com.kenduck.common.user.models.User;
 import com.kenduck.common.user.models.Users;
@@ -11,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.kenduck.common.user.functions.ExceptionFunction.userNotFoundSupplier;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +23,9 @@ public class FindUserService {
 
     @Transactional(readOnly = true)
     public FoundUser findUserById(int userId) {
-        User user = userMapper.selectByPrimaryKey(userId).orElseThrow(
-                () -> {
-                    String message = String.format("target user (id=%d) is not found", userId);
-                    log.warn(message);
-                    return new UserNotFoundException(userId, message);
-                }
-        );
+        User user = userMapper
+                .selectByPrimaryKey(userId)
+                .orElseThrow(userNotFoundSupplier(userId));
         return new FoundUser(user);
     }
 

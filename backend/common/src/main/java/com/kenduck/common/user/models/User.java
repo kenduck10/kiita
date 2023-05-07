@@ -5,6 +5,8 @@ import com.kenduck.common.generated.models.GeneratedUser;
 import com.kenduck.common.user.dtos.CreateUser;
 import com.kenduck.common.user.dtos.UpdateUser;
 
+import java.util.Objects;
+
 public class User extends GeneratedUser {
 
     public static final int MAX_LAST_NAME_LENGTH = 50;
@@ -35,5 +37,9 @@ public class User extends GeneratedUser {
                 updateUser.getFirstName(),
                 updateUser.getMailAddress()
         );
+    }
+
+    public boolean hasId(int id) {
+        return Objects.nonNull(this.getId()) && this.getId().equals(id);
     }
 }

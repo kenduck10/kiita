@@ -1,12 +1,13 @@
 package com.kenduck.common.user.services;
 
-import com.kenduck.common.user.exceptions.UserNotFoundException;
 import com.kenduck.common.user.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.kenduck.common.user.functions.ExceptionFunction.userNotFoundSupplier;
 
 @Service
 @RequiredArgsConstructor
@@ -18,13 +19,8 @@ public class DeleteUserService {
 
     @Transactional
     public void deleteUser(int userId) {
-        userMapper.selectById(userId).orElseThrow(
-                () -> {
-                    String message = String.format("target user (id=%d) is not found", userId);
-                    log.warn(message);
-                    return new UserNotFoundException(userId, message);
-                }
-        );
+        userMapper.selectById(userId)
+                .orElseThrow(userNotFoundSupplier(userId));
         userMapper.deleteByPrimaryKey(userId);
     }
 }
