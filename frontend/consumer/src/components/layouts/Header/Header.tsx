@@ -5,11 +5,11 @@ import Link from 'next/link';
 export const Header = () => {
   return (
     <header>
-      <AppBar>
+      <AppBar position="relative">
         <Container maxWidth="xl">
           <Toolbar>
             <Link href={'/'}>
-              <Image src="logo.svg" alt="logo" width="96" height="32" />
+              <Image src="/logo.svg" alt="logo" width="96" height="32" />
             </Link>
           </Toolbar>
         </Container>

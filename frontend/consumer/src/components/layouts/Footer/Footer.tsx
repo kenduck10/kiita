@@ -1,7 +1,12 @@
+import { Container, Typography } from '@mui/material';
+import React from 'react';
+
 export const Footer = () => {
   return (
     <footer>
-      <p>フッターです</p>
+      <Container maxWidth="xl" sx={{ py: 1 }}>
+        <Typography>© 2022 kenduck all rights reserved.</Typography>
+      </Container>
     </footer>
   );
 };

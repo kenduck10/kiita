@@ -1,17 +1,17 @@
 import Header from '@/components/layouts/Header/Header';
 import Footer from '@/components/layouts/Footer/Footer';
 import { ReactElement } from 'react';
-import { Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
 
 export const Layout = ({ children }: { children: ReactElement }) => {
   return (
-    <>
+    <Box id="root-box">
       <Header />
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" sx={{ py: 2 }}>
         <main>{children}</main>
       </Container>
       <Footer />
-    </>
+    </Box>
   );
 };
 

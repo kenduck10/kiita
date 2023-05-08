@@ -1,0 +1,16 @@
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+footer {
+    color: white;
+    background: #696969;
+}
+
+#root-box {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 100%;
+    min-height: 100vh;
+}
