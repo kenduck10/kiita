@@ -7,7 +7,7 @@ export const Layout = ({ children }: { children: ReactElement }) => {
   return (
     <Box id="root-box">
       <Header />
-      <Container maxWidth="xl" sx={{ py: 2 }}>
+      <Container maxWidth="xl" sx={{ my: 2 }}>
         <main>{children}</main>
       </Container>
       <Footer />
