@@ -1,8 +1,8 @@
 import {
   Button,
   Card,
-  Container,
   Divider,
+  Grid,
   Table,
   TableBody,
   TableCell,
@@ -29,39 +29,41 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
     await router.push(`/users/new`);
   };
   return (
-    <Container maxWidth={'sm'}>
-      <Card sx={{ p: 4 }}>
-        <Typography variant={'h5'} sx={{ fontWeight: 'bold' }} textAlign={'center'} mb={4}>
-          ユーザー一覧
-        </Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Button variant="contained" color="primary" onClick={onClickToAdd} sx={{ mb: 2 }}>
-          追加
-        </Button>
-        <TableContainer>
-          <Table component="div" aria-label="user table">
-            <TableHead component="div">
-              <TableRow component="div">
-                <TableCell component="div">ID</TableCell>
-                <TableCell component="div">姓</TableCell>
-                <TableCell component="div">名</TableCell>
-                <TableCell component="div">メールアドレス</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody component="div">
-              {userSummaries.value.map((userSummary) => (
-                <TableRow component={Link} href={`/users/${userSummary.id}`} key={userSummary.id}>
-                  <TableCell component="div">{userSummary.id}</TableCell>
-                  <TableCell component="div">{userSummary.lastName}</TableCell>
-                  <TableCell component="div">{userSummary.firstName}</TableCell>
-                  <TableCell component="div">{userSummary.mailAddress}</TableCell>
+    <Grid container justifyContent={'center'}>
+      <Grid item xs={12} md={6}>
+        <Card sx={{ p: 4 }}>
+          <Typography variant={'h5'} sx={{ fontWeight: 'bold' }} textAlign={'center'} mb={4}>
+            ユーザー一覧
+          </Typography>
+          <Divider sx={{ mb: 2 }} />
+          <Button variant="contained" color="primary" onClick={onClickToAdd} sx={{ mb: 2 }}>
+            追加
+          </Button>
+          <TableContainer>
+            <Table component="div" aria-label="user table">
+              <TableHead component="div">
+                <TableRow component="div">
+                  <TableCell component="div">ID</TableCell>
+                  <TableCell component="div">姓</TableCell>
+                  <TableCell component="div">名</TableCell>
+                  <TableCell component="div">メールアドレス</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Card>
-    </Container>
+              </TableHead>
+              <TableBody component="div">
+                {userSummaries.value.map((userSummary) => (
+                  <TableRow component={Link} href={`/users/${userSummary.id}`} key={userSummary.id}>
+                    <TableCell component="div">{userSummary.id}</TableCell>
+                    <TableCell component="div">{userSummary.lastName}</TableCell>
+                    <TableCell component="div">{userSummary.firstName}</TableCell>
+                    <TableCell component="div">{userSummary.mailAddress}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
+      </Grid>
+    </Grid>
   );
 };
 
