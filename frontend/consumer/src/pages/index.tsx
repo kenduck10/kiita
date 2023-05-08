@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import {
   Button,
   Card,
@@ -6,19 +7,35 @@ import {
   Table,
   TableBody,
   TableCell,
+  tableCellClasses,
   TableContainer,
   TableHead,
   TableRow,
   Typography,
 } from '@mui/material';
-import Link from 'next/link';
 import axios, { HttpStatusCode } from 'axios';
 import UserSummaries from '@/features/user/models/UserSummaries';
 import { NextPageWithLayout } from '@/pages/_app';
 import Layout from '@/components/layouts/Layout';
 import { useRouter } from 'next/router';
 import React from 'react';
+import styled from '@emotion/styled';
 
+const StyledTableHeadCell = styled(TableCell)({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: 'black',
+    color: 'white',
+  },
+});
+
+const StyledTableRow = styled(TableRow)({
+  '&:nth-of-type(odd)': {
+    backgroundColor: '#f5f5f5',
+  },
+  '&:hover': {
+    opacity: 0.7,
+  },
+});
 export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   userSummaries,
 }: {
@@ -28,6 +45,7 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   const onClickToAdd = async () => {
     await router.push(`/users/new`);
   };
+  // @ts-ignore
   return (
     <Grid container justifyContent={'center'}>
       <Grid item xs={12} md={6}>
@@ -43,20 +61,20 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
             <Table component="div" aria-label="user table">
               <TableHead component="div">
                 <TableRow component="div">
-                  <TableCell component="div">ID</TableCell>
-                  <TableCell component="div">姓</TableCell>
-                  <TableCell component="div">名</TableCell>
-                  <TableCell component="div">メールアドレス</TableCell>
+                  <StyledTableHeadCell component="div">ID</StyledTableHeadCell>
+                  <StyledTableHeadCell component="div">姓</StyledTableHeadCell>
+                  <StyledTableHeadCell component="div">名</StyledTableHeadCell>
+                  <StyledTableHeadCell component="div">メールアドレス</StyledTableHeadCell>
                 </TableRow>
               </TableHead>
               <TableBody component="div">
                 {userSummaries.value.map((userSummary) => (
-                  <TableRow component={Link} href={`/users/${userSummary.id}`} key={userSummary.id}>
+                  <StyledTableRow component={Link} href={`/users/${userSummary.id}`} key={userSummary.id}>
                     <TableCell component="div">{userSummary.id}</TableCell>
                     <TableCell component="div">{userSummary.lastName}</TableCell>
                     <TableCell component="div">{userSummary.firstName}</TableCell>
                     <TableCell component="div">{userSummary.mailAddress}</TableCell>
-                  </TableRow>
+                  </StyledTableRow>
                 ))}
               </TableBody>
             </Table>
