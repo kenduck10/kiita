@@ -28,12 +28,12 @@ const StyledTableHeadCell = styled(TableCell)({
   },
 });
 
-const StyledTableRow = styled(TableRow)({
+const StyledTableBodyRow = styled(TableRow)<{ component: React.ElementType; href: string }>({
   '&:nth-of-type(odd)': {
     backgroundColor: '#f5f5f5',
   },
-  '&:hover': {
-    opacity: 0.7,
+  '&:last-child *': {
+    border: 0,
   },
 });
 export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
@@ -69,12 +69,12 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
               </TableHead>
               <TableBody component="div">
                 {userSummaries.value.map((userSummary) => (
-                  <StyledTableRow component={Link} href={`/users/${userSummary.id}`} key={userSummary.id}>
+                  <StyledTableBodyRow component={Link} href={`/users/${userSummary.id}`} key={userSummary.id}>
                     <TableCell component="div">{userSummary.id}</TableCell>
                     <TableCell component="div">{userSummary.lastName}</TableCell>
                     <TableCell component="div">{userSummary.firstName}</TableCell>
                     <TableCell component="div">{userSummary.mailAddress}</TableCell>
-                  </StyledTableRow>
+                  </StyledTableBodyRow>
                 ))}
               </TableBody>
             </Table>
