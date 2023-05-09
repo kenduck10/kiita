@@ -1,53 +1,119 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import Link from 'next/link';
+import {
+  Button,
+  Card,
+  Divider,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableFooter,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import axios, { HttpStatusCode } from 'axios';
 import UserSummaries from '@/features/user/models/UserSummaries';
 import { NextPageWithLayout } from '@/pages/_app';
 import Layout from '@/components/layouts/Layout';
+import { useRouter } from 'next/router';
+import React, { MouseEventHandler, useState } from 'react';
+import styled from '@emotion/styled';
 
+const StyledTableHeadCell = styled(TableCell)({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: 'black',
+    color: 'white',
+  },
+});
+
+const StyledTableBodyRow = styled(TableRow)<{ onClick: MouseEventHandler<HTMLTableRowElement> }>({
+  '&:nth-of-type(odd)': {
+    backgroundColor: '#f5f5f5',
+  },
+  '&:hover': {
+    cursor: 'pointer',
+    opacity: 0.6,
+  },
+  '&': {
+    textDecoration: 'none',
+  },
+});
 export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   userSummaries,
 }: {
   userSummaries: UserSummaries;
 }) => {
+  const router = useRouter();
+
+  const onClickToAdd = async () => {
+    await router.push(`/users/new`);
+  };
+  const onClickUser = async (userId: number) => {
+    await router.push(`/users/${userId}`);
+  };
+
+  const [page, setPage] = useState(0);
+  const rowsPerPage = 5;
+  const onPageChange = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setPage(newPage);
+  };
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userSummaries.value.length) : 0;
+
   return (
-    <>
-      <TableContainer>
-        <Table component="div" sx={{ minWidth: 650 }} aria-label="user table">
-          <TableHead component="div">
-            <TableRow component="div">
-              <TableCell component="div">ID</TableCell>
-              <TableCell component="div" align="right">
-                姓
-              </TableCell>
-              <TableCell component="div" align="right">
-                名
-              </TableCell>
-              <TableCell component="div" align="right">
-                メールアドレス
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody component="div">
-            {userSummaries.value.map((userSummary) => (
-              <TableRow component={Link} href={`/users/${userSummary.id}`} key={userSummary.id}>
-                <TableCell component="div">{userSummary.id}</TableCell>
-                <TableCell component="div" align="right">
-                  {userSummary.lastName}
-                </TableCell>
-                <TableCell component="div" align="right">
-                  {userSummary.firstName}
-                </TableCell>
-                <TableCell component="div" align="right">
-                  {userSummary.mailAddress}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Link href={'users/new'}>ユーザー追加</Link>
-    </>
+    <Grid container justifyContent={'center'}>
+      <Grid item xs={12} md={6}>
+        <Card sx={{ p: 4 }}>
+          <Typography variant={'h5'} sx={{ fontWeight: 'bold' }} textAlign={'center'} mb={4}>
+            ユーザー一覧
+          </Typography>
+          <Divider sx={{ mb: 2 }} />
+          <Button variant="contained" color="primary" onClick={onClickToAdd} sx={{ mb: 2 }}>
+            追加
+          </Button>
+          <TableContainer>
+            <Table aria-label="user table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableHeadCell>ID</StyledTableHeadCell>
+                  <StyledTableHeadCell>姓</StyledTableHeadCell>
+                  <StyledTableHeadCell>名</StyledTableHeadCell>
+                  <StyledTableHeadCell>メールアドレス</StyledTableHeadCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {userSummaries.value.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((userSummary) => (
+                  <StyledTableBodyRow key={userSummary.id} onClick={() => onClickUser(userSummary.id)}>
+                    <TableCell>{userSummary.id}</TableCell>
+                    <TableCell>{userSummary.lastName}</TableCell>
+                    <TableCell>{userSummary.firstName}</TableCell>
+                    <TableCell>{userSummary.mailAddress}</TableCell>
+                  </StyledTableBodyRow>
+                ))}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={4} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    count={userSummaries.value.length}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    rowsPerPageOptions={[]}
+                    onPageChange={onPageChange}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        </Card>
+      </Grid>
+    </Grid>
   );
 };
 
