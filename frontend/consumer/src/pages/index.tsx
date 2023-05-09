@@ -33,10 +33,8 @@ const StyledTableBodyRow = styled(TableRow)<{ onClick: MouseEventHandler<HTMLTab
   '&:nth-of-type(odd)': {
     backgroundColor: '#f5f5f5',
   },
-  '&:last-child *': {
-    // border: 0,
-  },
   '&:hover': {
+    cursor: 'pointer',
     opacity: 0.6,
   },
   '&': {
