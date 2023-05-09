@@ -9,7 +9,9 @@ import {
   TableCell,
   tableCellClasses,
   TableContainer,
+  TableFooter,
   TableHead,
+  TablePagination,
   TableRow,
   Typography,
 } from '@mui/material';
@@ -18,7 +20,7 @@ import UserSummaries from '@/features/user/models/UserSummaries';
 import { NextPageWithLayout } from '@/pages/_app';
 import Layout from '@/components/layouts/Layout';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 
 const StyledTableHeadCell = styled(TableCell)({
@@ -33,13 +35,13 @@ const StyledTableBodyRow = styled(TableRow)<{ component: React.ElementType; href
     backgroundColor: '#f5f5f5',
   },
   '&:last-child *': {
-    border: 0,
+    // border: 0,
   },
   '&:hover': {
     opacity: 0.6,
   },
   '&': {
-    'text-decoration': 'none',
+    textDecoration: 'none',
   },
 });
 export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
@@ -50,6 +52,11 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   const router = useRouter();
   const onClickToAdd = async () => {
     await router.push(`/users/new`);
+  };
+  const [page, setPage] = useState(0);
+  const rowsPerPage = 5;
+  const onPageChange = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setPage(newPage);
   };
   // @ts-ignore
   return (
@@ -74,7 +81,7 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
                 </TableRow>
               </TableHead>
               <TableBody component="div">
-                {userSummaries.value.map((userSummary) => (
+                {userSummaries.value.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((userSummary) => (
                   <StyledTableBodyRow component={Link} href={`/users/${userSummary.id}`} key={userSummary.id}>
                     <TableCell component="div">{userSummary.id}</TableCell>
                     <TableCell component="div">{userSummary.lastName}</TableCell>
@@ -83,6 +90,17 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
                   </StyledTableBodyRow>
                 ))}
               </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    count={userSummaries.value.length}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    rowsPerPageOptions={[]}
+                    onPageChange={onPageChange}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </Card>
