@@ -56,10 +56,11 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   };
 
   const [page, setPage] = useState(0);
-  const rowsPerPage = 10;
+  const rowsPerPage = 5;
   const onPageChange = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
   };
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userSummaries.value.length) : 0;
 
   return (
     <Grid container justifyContent={'center'}>
@@ -91,6 +92,11 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
                     <TableCell>{userSummary.mailAddress}</TableCell>
                   </StyledTableBodyRow>
                 ))}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={4} />
+                  </TableRow>
+                )}
               </TableBody>
               <TableFooter>
                 <TableRow>
