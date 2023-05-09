@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import {
   Button,
   Card,
@@ -20,7 +19,7 @@ import UserSummaries from '@/features/user/models/UserSummaries';
 import { NextPageWithLayout } from '@/pages/_app';
 import Layout from '@/components/layouts/Layout';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { MouseEventHandler, useState } from 'react';
 import styled from '@emotion/styled';
 
 const StyledTableHeadCell = styled(TableCell)({
@@ -30,7 +29,7 @@ const StyledTableHeadCell = styled(TableCell)({
   },
 });
 
-const StyledTableBodyRow = styled(TableRow)<{ component: React.ElementType; href: string }>({
+const StyledTableBodyRow = styled(TableRow)<{ onClick: MouseEventHandler<HTMLTableRowElement> }>({
   '&:nth-of-type(odd)': {
     backgroundColor: '#f5f5f5',
   },
@@ -50,15 +49,20 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   userSummaries: UserSummaries;
 }) => {
   const router = useRouter();
+
   const onClickToAdd = async () => {
     await router.push(`/users/new`);
   };
+  const onClickUser = async (userId: number) => {
+    await router.push(`/users/${userId}`);
+  };
+
   const [page, setPage] = useState(0);
-  const rowsPerPage = 5;
+  const rowsPerPage = 10;
   const onPageChange = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
   };
-  // @ts-ignore
+
   return (
     <Grid container justifyContent={'center'}>
       <Grid item xs={12} md={6}>
@@ -71,22 +75,22 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
             追加
           </Button>
           <TableContainer>
-            <Table component="div" aria-label="user table">
-              <TableHead component="div">
-                <TableRow component="div">
-                  <StyledTableHeadCell component="div">ID</StyledTableHeadCell>
-                  <StyledTableHeadCell component="div">姓</StyledTableHeadCell>
-                  <StyledTableHeadCell component="div">名</StyledTableHeadCell>
-                  <StyledTableHeadCell component="div">メールアドレス</StyledTableHeadCell>
+            <Table aria-label="user table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableHeadCell>ID</StyledTableHeadCell>
+                  <StyledTableHeadCell>姓</StyledTableHeadCell>
+                  <StyledTableHeadCell>名</StyledTableHeadCell>
+                  <StyledTableHeadCell>メールアドレス</StyledTableHeadCell>
                 </TableRow>
               </TableHead>
-              <TableBody component="div">
+              <TableBody>
                 {userSummaries.value.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((userSummary) => (
-                  <StyledTableBodyRow component={Link} href={`/users/${userSummary.id}`} key={userSummary.id}>
-                    <TableCell component="div">{userSummary.id}</TableCell>
-                    <TableCell component="div">{userSummary.lastName}</TableCell>
-                    <TableCell component="div">{userSummary.firstName}</TableCell>
-                    <TableCell component="div">{userSummary.mailAddress}</TableCell>
+                  <StyledTableBodyRow key={userSummary.id} onClick={() => onClickUser(userSummary.id)}>
+                    <TableCell>{userSummary.id}</TableCell>
+                    <TableCell>{userSummary.lastName}</TableCell>
+                    <TableCell>{userSummary.firstName}</TableCell>
+                    <TableCell>{userSummary.mailAddress}</TableCell>
                   </StyledTableBodyRow>
                 ))}
               </TableBody>
