@@ -35,6 +35,12 @@ const StyledTableBodyRow = styled(TableRow)<{ component: React.ElementType; href
   '&:last-child *': {
     border: 0,
   },
+  '&:hover': {
+    opacity: 0.6,
+  },
+  '&': {
+    'text-decoration': 'none',
+  },
 });
 export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   userSummaries,
