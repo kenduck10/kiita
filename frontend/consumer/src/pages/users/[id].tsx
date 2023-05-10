@@ -1,11 +1,25 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
 import User from '@/features/user/models/User';
-import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  Grid,
+  Typography,
+} from '@mui/material';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useSubmit } from '@/hooks/useSubmit';
 import { useLoad } from '@/hooks/useLoad';
+import Link from 'next/link';
 
 export const UserDetail = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -42,39 +56,58 @@ export const UserDetail = ({ user }: { user: User }) => {
     setIsOpenDeleteDialog(false);
   };
 
-  const onClickToHome = async () => {
-    startLoad();
-    await router.push(`/`);
-  };
-
   const isDisabled = isSubmitting || isLoading;
   return (
-    <>
-      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-      <p>{user.id}</p>
-      <p>{user.lastName}</p>
-      <p>{user.firstName}</p>
-      <p>{user.mailAddress}</p>
-      <Button variant="contained" color="primary" onClick={onClickEditButton} disabled={isDisabled}>
-        編集
-      </Button>
-      <Button variant="contained" color="error" onClick={onClickDeleteButton} disabled={isDisabled}>
-        削除
-      </Button>
-      <Button variant="contained" color="secondary" onClick={onClickToHome} disabled={isDisabled}>
-        ホーム
-      </Button>
-      <Dialog open={isOpenDeleteDialog} onClose={() => setIsOpenDeleteDialog(false)}>
-        <DialogTitle>{'本当に削除しますか？'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>一旦削除したユーザーは元に戻すことができません</DialogContentText>
-          <DialogActions>
-            <Button onClick={onClickDeleteCancel}>キャンセル</Button>
-            <Button onClick={onClickDeleteAgreement}>削除</Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
-    </>
+    <Grid container justifyContent={'center'}>
+      <Grid item xs={12} md={6}>
+        <Card sx={{ p: 4 }}>
+          <Typography variant={'h5'} sx={{ fontWeight: 'bold' }} textAlign={'center'} mb={4}>
+            ユーザー詳細
+          </Typography>
+          <Divider sx={{ mb: 2 }} />
+          {errorMessage && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {errorMessage}
+            </Alert>
+          )}
+          <Box mb={2} display={'flex'} justifyContent={'space-between'}>
+            <Box>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={onClickEditButton}
+                disabled={isDisabled}
+                sx={{ mr: 2 }}
+              >
+                編集
+              </Button>
+              <Button variant="contained" color="error" onClick={onClickDeleteButton} disabled={isDisabled}>
+                削除
+              </Button>
+            </Box>
+            <Link href={'/'}>一覧へ</Link>
+          </Box>
+          <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
+            名前
+          </Typography>
+          <Typography mb={1}>{`${user.lastName} ${user.firstName}`}</Typography>
+          <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
+            メールアドレス
+          </Typography>
+          <Typography mb={1}>{user.mailAddress}</Typography>
+          <Dialog open={isOpenDeleteDialog} onClose={() => setIsOpenDeleteDialog(false)}>
+            <DialogTitle>{'本当に削除しますか？'}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>一旦削除したユーザーは元に戻すことができません</DialogContentText>
+              <DialogActions>
+                <Button onClick={onClickDeleteCancel}>キャンセル</Button>
+                <Button onClick={onClickDeleteAgreement}>削除</Button>
+              </DialogActions>
+            </DialogContent>
+          </Dialog>
+        </Card>
+      </Grid>
+    </Grid>
   );
 };
 
