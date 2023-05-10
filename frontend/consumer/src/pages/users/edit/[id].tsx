@@ -127,7 +127,7 @@ export const UserEdit = ({ user }: { user: User }) => {
           <Button variant="contained" color="primary" onClick={handleSubmit(onClickSave)} sx={{ mr: 2 }}>
             保存
           </Button>
-          <Button variant="contained" color="secondary" onClick={handleSubmit(onClickCancel)} sx={{ color: 'white' }}>
+          <Button variant="contained" color="secondary" onClick={onClickCancel} sx={{ color: 'white' }}>
             キャンセル
           </Button>
         </Card>
