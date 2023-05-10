@@ -7,6 +7,8 @@ import { RecoilRoot } from 'recoil';
 import NextNProgress from 'nextjs-progressbar';
 import { Router } from 'next/router';
 import { RecoilReset } from '@/components/recoils/RecoilReset';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import theme from '@/config/theme';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement, router: Router) => ReactNode;
@@ -21,10 +23,11 @@ export const MyApp = ({ Component, pageProps, router }: AppPropsWithLayout) => {
   return (
     <RecoilRoot>
       <RecoilReset router={router}>
-        <>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
           <NextNProgress options={{ showSpinner: false }} />
           {getLayout(<Component {...pageProps} />, router)}
-        </>
+        </ThemeProvider>
       </RecoilReset>
     </RecoilRoot>
   );
