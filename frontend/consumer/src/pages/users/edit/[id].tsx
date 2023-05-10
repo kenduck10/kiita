@@ -1,9 +1,9 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
 import User from '@/features/user/models/User';
-import { Alert, Button } from '@mui/material';
+import { Alert, Box, Button, Card, Divider, Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import * as yup from 'yup';
 import {
   FIRST_NAME_YUP_SCHEMA,
@@ -78,24 +78,59 @@ export const UserEdit = ({ user }: { user: User }) => {
   const onClickCancel = () => router.back();
 
   return (
-    <div>
-      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-      <ControlledTextField control={control} name={'lastName'} type={'text'} label={'姓'} disabled={isSubmitting} />
-      <ControlledTextField control={control} name={'firstName'} type={'text'} label={'名'} disabled={isSubmitting} />
-      <ControlledTextField
-        control={control}
-        name={'mailAddress'}
-        type={'email'}
-        label={'メールアドレス'}
-        disabled={isSubmitting}
-      />
-      <Button variant="contained" color="primary" onClick={handleSubmit(onClickSave)}>
-        保存
-      </Button>
-      <Button variant="contained" color="secondary" onClick={handleSubmit(onClickCancel)}>
-        キャンセル
-      </Button>
-    </div>
+    <Grid container justifyContent={'center'}>
+      <Grid item xs={12} md={6}>
+        <Card sx={{ p: 4 }}>
+          <Typography variant={'h5'} sx={{ fontWeight: 'bold' }} textAlign={'center'} mb={4}>
+            ユーザー編集
+          </Typography>
+          <Divider sx={{ mb: 2 }} />
+          {errorMessage && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {errorMessage}
+            </Alert>
+          )}
+          <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={2}>
+            名前
+          </Typography>
+          <Box mb={2}>
+            <ControlledTextField
+              control={control}
+              name={'lastName'}
+              type={'text'}
+              label={'姓'}
+              disabled={isSubmitting}
+              sx={{ mr: 2 }}
+            />
+            <ControlledTextField
+              control={control}
+              name={'firstName'}
+              type={'text'}
+              label={'名'}
+              disabled={isSubmitting}
+            />
+          </Box>
+          <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={2}>
+            メールアドレス
+          </Typography>
+          <Box mb={4}>
+            <ControlledTextField
+              control={control}
+              name={'mailAddress'}
+              type={'email'}
+              disabled={isSubmitting}
+              sx={{ width: '350px' }}
+            />
+          </Box>
+          <Button variant="contained" color="primary" onClick={handleSubmit(onClickSave)} sx={{ mr: 2 }}>
+            保存
+          </Button>
+          <Button variant="contained" color="secondary" onClick={handleSubmit(onClickCancel)}>
+            キャンセル
+          </Button>
+        </Card>
+      </Grid>
+    </Grid>
   );
 };
 

@@ -1,5 +1,5 @@
 import { Control, Controller, FieldValues } from 'react-hook-form';
-import { TextField } from '@mui/material';
+import { SxProps, TextField, Theme } from '@mui/material';
 import { FieldPath } from 'react-hook-form/dist/types';
 
 export const ControlledTextField = <
@@ -11,12 +11,14 @@ export const ControlledTextField = <
   type,
   label,
   disabled,
+  sx,
 }: {
   control: Control<TFieldValues>;
   name: TName;
   type: string;
-  label: string;
+  label?: string;
   disabled?: boolean;
+  sx?: SxProps<Theme>;
 }) => {
   return (
     <Controller
@@ -30,6 +32,7 @@ export const ControlledTextField = <
           error={fieldState.invalid}
           helperText={fieldState.error?.message}
           disabled={disabled ?? false}
+          sx={sx}
         />
       )}
     />
