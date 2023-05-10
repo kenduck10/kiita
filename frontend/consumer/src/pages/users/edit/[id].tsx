@@ -100,7 +100,7 @@ export const UserEdit = ({ user }: { user: User }) => {
               type={'text'}
               label={'姓'}
               disabled={isSubmitting}
-              sx={{ mr: 2 }}
+              sx={{ mr: 2, width: '120px' }}
             />
             <ControlledTextField
               control={control}
@@ -108,6 +108,7 @@ export const UserEdit = ({ user }: { user: User }) => {
               type={'text'}
               label={'名'}
               disabled={isSubmitting}
+              sx={{ width: '120px' }}
             />
           </Box>
           <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={2}>
@@ -119,7 +120,8 @@ export const UserEdit = ({ user }: { user: User }) => {
               name={'mailAddress'}
               type={'email'}
               disabled={isSubmitting}
-              sx={{ width: '350px' }}
+              sx={{ maxWidth: '400px' }}
+              fullWidth={true}
             />
           </Box>
           <Button variant="contained" color="primary" onClick={handleSubmit(onClickSave)} sx={{ mr: 2 }}>
