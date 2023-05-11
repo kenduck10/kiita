@@ -1,10 +1,11 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
-import { Button } from '@mui/material';
+import { Button, Card, Divider, Grid, Typography } from '@mui/material';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { createUserErrorMessageState, createUserState } from '@/stores/user';
 import { useSubmit } from '@/hooks/useSubmit';
 import { useLoad } from '@/hooks/useLoad';
+import React from 'react';
 
 type SubmitArguments = {
   lastName: string;
@@ -55,17 +56,30 @@ export const UserNewConfirm = () => {
 
   return (
     createUser && (
-      <div>
-        <p suppressHydrationWarning>{createUser.lastName}</p>
-        <p suppressHydrationWarning>{createUser.firstName}</p>
-        <p suppressHydrationWarning>{createUser.mailAddress}</p>
-        <Button variant="contained" onClick={onClickAdd} disabled={isDisabled}>
-          追加する
-        </Button>
-        <Button variant="contained" onClick={onClickModify} disabled={isDisabled}>
-          修正する
-        </Button>
-      </div>
+      <Grid container justifyContent={'center'}>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ p: 4 }}>
+            <Typography variant={'h5'} sx={{ fontWeight: 'bold' }} textAlign={'center'} mb={4}>
+              ユーザー追加
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+            <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
+              名前
+            </Typography>
+            <Typography mb={1}>{`${createUser.lastName} ${createUser.firstName}`}</Typography>
+            <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
+              メールアドレス
+            </Typography>
+            <Typography mb={4}>{createUser.mailAddress}</Typography>
+            <Button variant="contained" color="primary" onClick={onClickAdd} sx={{ mr: 2 }}>
+              追加
+            </Button>
+            <Button variant="contained" color="secondary" onClick={onClickModify} sx={{ color: 'white' }}>
+              修正
+            </Button>
+          </Card>
+        </Grid>
+      </Grid>
     )
   );
 };
