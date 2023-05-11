@@ -61,7 +61,7 @@ export const LinkTable = <T extends object & { id: number }>({
           <TableHead>
             <TableRow>
               {tableHeads.map((head) => (
-                <StyledTableHeadCell>{head.name}</StyledTableHeadCell>
+                <StyledTableHeadCell key={head.key as string}>{head.name}</StyledTableHeadCell>
               ))}
             </TableRow>
           </TableHead>
@@ -74,7 +74,7 @@ export const LinkTable = <T extends object & { id: number }>({
                   {propertyNames
                     .filter((propertyName) => headKeys.includes(propertyName))
                     .map((propertyName) => {
-                      return <TableCell>{row[propertyName as keyof T] as string}</TableCell>;
+                      return <TableCell key={propertyName}>{row[propertyName as keyof T] as string}</TableCell>;
                     })}
                 </StyledTableBodyRow>
               );
