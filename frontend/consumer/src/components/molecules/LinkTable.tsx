@@ -34,12 +34,12 @@ const StyledTableBodyRow = styled(TableRow)<{ onClick: MouseEventHandler<HTMLTab
 });
 export const LinkTable = <T extends object & { id: number }>({
   rows,
-  tableHeadNames,
+  tableHeads,
   router,
   linkParentPath,
 }: {
   rows: T[];
-  tableHeadNames: string[];
+  tableHeads: { key: keyof T; name: string }[];
   router: NextRouter;
   linkParentPath: string;
 }) => {
@@ -60,19 +60,22 @@ export const LinkTable = <T extends object & { id: number }>({
         <Table aria-label="user table">
           <TableHead>
             <TableRow>
-              {tableHeadNames.map((name) => (
-                <StyledTableHeadCell>{name}</StyledTableHeadCell>
+              {tableHeads.map((head) => (
+                <StyledTableHeadCell>{head.name}</StyledTableHeadCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               const propertyNames = Object.getOwnPropertyNames(row);
+              const headKeys = tableHeads.map((tableHead) => tableHead.key as string);
               return (
                 <StyledTableBodyRow key={row.id} onClick={() => onClickRow(row.id)}>
-                  {propertyNames.map((propertyName) => {
-                    return <TableCell>{row[propertyName as keyof T] as string}</TableCell>;
-                  })}
+                  {propertyNames
+                    .filter((propertyName) => headKeys.includes(propertyName))
+                    .map((propertyName) => {
+                      return <TableCell>{row[propertyName as keyof T] as string}</TableCell>;
+                    })}
                 </StyledTableBodyRow>
               );
             })}

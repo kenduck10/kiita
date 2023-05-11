@@ -4,8 +4,9 @@ import UserSummaries from '@/features/user/models/UserSummaries';
 import { NextPageWithLayout } from '@/pages/_app';
 import Layout from '@/components/layouts/Layout';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
 import { LinkTable } from '@/components/molecules/LinkTable';
+import UserSummary from '@/features/user/models/UserSummary';
 
 export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   userSummaries,
@@ -17,16 +18,16 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   const onClickToAdd = async () => {
     await router.push(`/users/new`);
   };
-  const onClickUser = async (userId: number) => {
-    await router.push(`/users/${userId}`);
-  };
 
-  const [page, setPage] = useState(0);
-  const rowsPerPage = 5;
-  const onPageChange = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-    setPage(newPage);
-  };
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userSummaries.value.length) : 0;
+  const tableHeads: { key: keyof UserSummary; name: string }[] = [
+    { key: 'id', name: 'ID' },
+    { key: 'lastName', name: '姓' },
+    {
+      key: 'firstName',
+      name: '名',
+    },
+    { key: 'mailAddress', name: 'メールアドレス' },
+  ];
 
   return (
     <Grid container justifyContent={'center'}>
@@ -41,7 +42,7 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
           </Button>
           <LinkTable
             rows={userSummaries.value}
-            tableHeadNames={['ID', '姓', '名', 'メールアドレス']}
+            tableHeads={tableHeads}
             router={router}
             linkParentPath={'/users/'}
           ></LinkTable>
