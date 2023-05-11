@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import React, { MouseEventHandler, useState } from 'react';
 import { NextRouter } from 'next/router';
-import UserSummary from '@/features/user/models/UserSummary';
 
 const StyledTableHeadCell = styled(TableCell)({
   [`&.${tableCellClasses.head}`]: {
@@ -33,13 +32,13 @@ const StyledTableBodyRow = styled(TableRow)<{ onClick: MouseEventHandler<HTMLTab
     textDecoration: 'none',
   },
 });
-export const LinkTable = ({
+export const LinkTable = <T extends object & { id: number }>({
   rows,
   tableHeadNames,
   router,
   linkParentPath,
 }: {
-  rows: UserSummary[];
+  rows: T[];
   tableHeadNames: string[];
   router: NextRouter;
   linkParentPath: string;
@@ -67,14 +66,16 @@ export const LinkTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <StyledTableBodyRow key={row.id} onClick={() => onClickRow(row.id)}>
-                <TableCell>{row.id}</TableCell>
-                <TableCell>{row.lastName}</TableCell>
-                <TableCell>{row.firstName}</TableCell>
-                <TableCell>{row.mailAddress}</TableCell>
-              </StyledTableBodyRow>
-            ))}
+            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+              const propertyNames = Object.getOwnPropertyNames(row);
+              return (
+                <StyledTableBodyRow key={row.id} onClick={() => onClickRow(row.id)}>
+                  {propertyNames.map((propertyName) => {
+                    return <TableCell>{row[propertyName as keyof T] as string}</TableCell>;
+                  })}
+                </StyledTableBodyRow>
+              );
+            })}
             {emptyRows > 0 && (
               <TableRow style={{ height: 53 * emptyRows }}>
                 <TableCell colSpan={4} />
