@@ -41,11 +41,12 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
             追加
           </Button>
           <LinkTable
-            rows={userSummaries.value}
             tableHeads={tableHeads}
+            rows={userSummaries.value}
+            rowsPerPage={5}
             router={router}
             linkParentPath={'/users/'}
-          ></LinkTable>
+          />
         </Card>
       </Grid>
     </Grid>
