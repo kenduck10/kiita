@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Alert, Box, Button, Card, Divider, Grid, Typography } from '@mui/material';
-import { ControlledTextField } from '@/components/elements/ControlledTextField';
+import { ControlledTextField } from '@/components/molecules/ControlledTextField';
 import {
   FIRST_NAME_YUP_SCHEMA,
   LAST_NAME_YUP_SCHEMA,

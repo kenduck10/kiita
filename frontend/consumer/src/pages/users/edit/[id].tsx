@@ -12,7 +12,7 @@ import {
 } from '@/features/user/validations/YupSchema';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ControlledTextField } from '@/components/elements/ControlledTextField';
+import { ControlledTextField } from '@/components/molecules/ControlledTextField';
 import { useSubmit } from '@/hooks/useSubmit';
 
 type SubmitArguments = {

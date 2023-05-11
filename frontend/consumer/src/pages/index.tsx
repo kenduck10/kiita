@@ -1,46 +1,12 @@
-import {
-  Button,
-  Card,
-  Divider,
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  tableCellClasses,
-  TableContainer,
-  TableFooter,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Button, Card, Divider, Grid, Typography } from '@mui/material';
 import axios, { HttpStatusCode } from 'axios';
 import UserSummaries from '@/features/user/models/UserSummaries';
 import { NextPageWithLayout } from '@/pages/_app';
 import Layout from '@/components/layouts/Layout';
 import { useRouter } from 'next/router';
-import React, { MouseEventHandler, useState } from 'react';
-import styled from '@emotion/styled';
+import React, { useState } from 'react';
+import { LinkTable } from '@/components/molecules/LinkTable';
 
-const StyledTableHeadCell = styled(TableCell)({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: 'black',
-    color: 'white',
-  },
-});
-
-const StyledTableBodyRow = styled(TableRow)<{ onClick: MouseEventHandler<HTMLTableRowElement> }>({
-  '&:nth-of-type(odd)': {
-    backgroundColor: '#f5f5f5',
-  },
-  '&:hover': {
-    cursor: 'pointer',
-    opacity: 0.6,
-  },
-  '&': {
-    textDecoration: 'none',
-  },
-});
 export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   userSummaries,
 }: {
@@ -73,44 +39,12 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
           <Button variant="contained" color="primary" onClick={onClickToAdd} sx={{ mb: 2 }}>
             追加
           </Button>
-          <TableContainer>
-            <Table aria-label="user table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableHeadCell>ID</StyledTableHeadCell>
-                  <StyledTableHeadCell>姓</StyledTableHeadCell>
-                  <StyledTableHeadCell>名</StyledTableHeadCell>
-                  <StyledTableHeadCell>メールアドレス</StyledTableHeadCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {userSummaries.value.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((userSummary) => (
-                  <StyledTableBodyRow key={userSummary.id} onClick={() => onClickUser(userSummary.id)}>
-                    <TableCell>{userSummary.id}</TableCell>
-                    <TableCell>{userSummary.lastName}</TableCell>
-                    <TableCell>{userSummary.firstName}</TableCell>
-                    <TableCell>{userSummary.mailAddress}</TableCell>
-                  </StyledTableBodyRow>
-                ))}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={4} />
-                  </TableRow>
-                )}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    count={userSummaries.value.length}
-                    page={page}
-                    rowsPerPage={rowsPerPage}
-                    rowsPerPageOptions={[]}
-                    onPageChange={onPageChange}
-                  />
-                </TableRow>
-              </TableFooter>
-            </Table>
-          </TableContainer>
+          <LinkTable
+            rows={userSummaries.value}
+            tableHeadNames={['ID', '姓', '名', 'メールアドレス']}
+            router={router}
+            linkParentPath={'/users/'}
+          ></LinkTable>
         </Card>
       </Grid>
     </Grid>
