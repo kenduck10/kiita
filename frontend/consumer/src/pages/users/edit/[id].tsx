@@ -1,7 +1,7 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
 import User from '@/features/user/models/User';
-import { Alert, Box, Button, Card, Grid, Typography } from '@mui/material';
+import { Alert, Button, Card, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import * as yup from 'yup';
@@ -12,9 +12,9 @@ import {
 } from '@/features/user/validations/YupSchema';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ControlledTextField } from '@/components/molecules/ControlledTextField';
 import { useSubmit } from '@/hooks/useSubmit';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
+import { UserItemsForm } from '@/components/organisms/UserItemsForm';
 
 type SubmitArguments = {
   lastName: string;
@@ -88,40 +88,7 @@ export const UserEdit = ({ user }: { user: User }) => {
               {errorMessage}
             </Alert>
           )}
-          <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={2}>
-            名前
-          </Typography>
-          <Box mb={2}>
-            <ControlledTextField
-              control={control}
-              name={'lastName'}
-              type={'text'}
-              label={'姓'}
-              disabled={isSubmitting}
-              sx={{ mr: 2, width: '120px' }}
-            />
-            <ControlledTextField
-              control={control}
-              name={'firstName'}
-              type={'text'}
-              label={'名'}
-              disabled={isSubmitting}
-              sx={{ width: '120px' }}
-            />
-          </Box>
-          <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={2}>
-            メールアドレス
-          </Typography>
-          <Box mb={4}>
-            <ControlledTextField
-              control={control}
-              name={'mailAddress'}
-              type={'email'}
-              disabled={isSubmitting}
-              sx={{ maxWidth: '400px' }}
-              fullWidth={true}
-            />
-          </Box>
+          <UserItemsForm control={control} isSubmitting={isSubmitting} />
           <Button variant="contained" color="primary" onClick={handleSubmit(onClickSave)} sx={{ mr: 2 }}>
             保存
           </Button>

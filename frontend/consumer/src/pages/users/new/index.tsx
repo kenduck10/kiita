@@ -1,7 +1,6 @@
 import * as yup from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Alert, Box, Button, Card, Grid, Typography } from '@mui/material';
-import { ControlledTextField } from '@/components/molecules/ControlledTextField';
+import { Alert, Button, Card, Grid } from '@mui/material';
 import {
   FIRST_NAME_YUP_SCHEMA,
   LAST_NAME_YUP_SCHEMA,
@@ -14,6 +13,7 @@ import { createUserErrorMessageState, createUserState } from '@/stores/user';
 import { useLoad } from '@/hooks/useLoad';
 import React from 'react';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
+import { UserItemsForm } from '@/components/organisms/UserItemsForm';
 
 type SubmitArguments = {
   lastName: string;
@@ -65,40 +65,7 @@ export const UserNew = () => {
               {createUserErrorMessage}
             </Alert>
           )}
-          <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={2}>
-            名前
-          </Typography>
-          <Box mb={2}>
-            <ControlledTextField
-              control={control}
-              name={'lastName'}
-              type={'text'}
-              label={'姓'}
-              disabled={isLoading}
-              sx={{ mr: 2, width: '120px' }}
-            />
-            <ControlledTextField
-              control={control}
-              name={'firstName'}
-              type={'text'}
-              label={'名'}
-              disabled={isLoading}
-              sx={{ width: '120px' }}
-            />
-          </Box>
-          <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={2}>
-            メールアドレス
-          </Typography>
-          <Box mb={4}>
-            <ControlledTextField
-              control={control}
-              name={'mailAddress'}
-              type={'email'}
-              disabled={isLoading}
-              sx={{ maxWidth: '400px' }}
-              fullWidth={true}
-            />
-          </Box>
+          <UserItemsForm control={control} isSubmitting={isLoading} />
           <Button variant="contained" color="primary" onClick={handleSubmit(onClickToConfirm)} sx={{ mr: 2 }}>
             確認
           </Button>
