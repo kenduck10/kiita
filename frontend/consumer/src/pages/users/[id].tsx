@@ -8,6 +8,7 @@ import { useSubmit } from '@/hooks/useSubmit';
 import { useLoad } from '@/hooks/useLoad';
 import Link from 'next/link';
 import { SelectDialog } from '@/components/molecules/SelectDialog';
+import { UserItems } from '@/components/organisms/UserItems';
 
 export const UserDetail = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -75,14 +76,7 @@ export const UserDetail = ({ user }: { user: User }) => {
             </Box>
             <Link href={'/'}>一覧へ</Link>
           </Box>
-          <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
-            名前
-          </Typography>
-          <Typography mb={1}>{`${user.lastName} ${user.firstName}`}</Typography>
-          <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
-            メールアドレス
-          </Typography>
-          <Typography mb={1}>{user.mailAddress}</Typography>
+          <UserItems user={user} />
           <SelectDialog
             open={isOpenDeleteDialog}
             onClose={() => setIsOpenDeleteDialog(false)}

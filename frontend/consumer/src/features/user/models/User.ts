@@ -4,7 +4,7 @@ class User {
   static readonly LAST_NAME_MAX_LENGTH = 50;
   static readonly FIRST_NAME_MAX_LENGTH = 50;
 
-  readonly id: number;
+  readonly id?: number;
   readonly lastName: string;
   readonly firstName: string;
   readonly mailAddress: string;

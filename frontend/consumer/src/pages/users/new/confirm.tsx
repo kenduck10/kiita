@@ -6,6 +6,7 @@ import { createUserErrorMessageState, createUserState } from '@/stores/user';
 import { useSubmit } from '@/hooks/useSubmit';
 import { useLoad } from '@/hooks/useLoad';
 import React from 'react';
+import { UserItems } from '@/components/organisms/UserItems';
 
 type SubmitArguments = {
   lastName: string;
@@ -63,14 +64,7 @@ export const UserNewConfirm = () => {
               ユーザー追加
             </Typography>
             <Divider sx={{ mb: 2 }} />
-            <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
-              名前
-            </Typography>
-            <Typography mb={1}>{`${createUser.lastName} ${createUser.firstName}`}</Typography>
-            <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
-              メールアドレス
-            </Typography>
-            <Typography mb={4}>{createUser.mailAddress}</Typography>
+            <UserItems user={createUser} />
             <Button variant="contained" color="primary" onClick={onClickAdd} sx={{ mr: 2 }}>
               追加
             </Button>
