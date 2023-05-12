@@ -1,7 +1,7 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
 import User from '@/features/user/models/User';
-import { Alert, Box, Button, Card, Divider, Grid, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useSubmit } from '@/hooks/useSubmit';
@@ -9,6 +9,7 @@ import { useLoad } from '@/hooks/useLoad';
 import Link from 'next/link';
 import { SelectDialog } from '@/components/molecules/SelectDialog';
 import { UserItems } from '@/components/organisms/UserItems';
+import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 
 export const UserDetail = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -50,10 +51,7 @@ export const UserDetail = ({ user }: { user: User }) => {
     <Grid container justifyContent={'center'}>
       <Grid item xs={12} md={6}>
         <Card sx={{ p: 4 }}>
-          <Typography variant={'h5'} sx={{ fontWeight: 'bold' }} textAlign={'center'} mb={4}>
-            ユーザー詳細
-          </Typography>
-          <Divider sx={{ mb: 2 }} />
+          <MainContentHeader title={'ユーザー詳細'} sx={{ mb: 2 }} />
           {errorMessage && (
             <Alert severity="error" sx={{ mb: 2 }}>
               {errorMessage}

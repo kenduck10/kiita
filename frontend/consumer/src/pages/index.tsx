@@ -1,4 +1,4 @@
-import { Button, Card, Divider, Grid, Typography } from '@mui/material';
+import { Button, Card, Grid } from '@mui/material';
 import axios, { HttpStatusCode } from 'axios';
 import UserSummaries from '@/features/user/models/UserSummaries';
 import { NextPageWithLayout } from '@/pages/_app';
@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { LinkTable } from '@/components/molecules/LinkTable';
 import UserSummary from '@/features/user/models/UserSummary';
+import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 
 export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   userSummaries,
@@ -33,10 +34,7 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
     <Grid container justifyContent={'center'}>
       <Grid item xs={12} md={6}>
         <Card sx={{ p: 4 }}>
-          <Typography variant={'h5'} sx={{ fontWeight: 'bold' }} textAlign={'center'} mb={4}>
-            ユーザー一覧
-          </Typography>
-          <Divider sx={{ mb: 2 }} />
+          <MainContentHeader title={'ユーザー一覧'} sx={{ mb: 2 }} />
           <Button variant="contained" color="primary" onClick={onClickToAdd} sx={{ mb: 2 }}>
             追加
           </Button>

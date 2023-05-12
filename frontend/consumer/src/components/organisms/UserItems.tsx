@@ -1,10 +1,10 @@
 import User from '@/features/user/models/User';
-import { Typography } from '@mui/material';
+import { Box, SxProps, Theme, Typography } from '@mui/material';
 import React from 'react';
 
-export const UserItems = ({ user }: { user: User }) => {
+export const UserItems = ({ user, sx }: { user: User; sx?: SxProps<Theme> }) => {
   return (
-    <>
+    <Box sx={sx}>
       <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
         名前
       </Typography>
@@ -13,6 +13,6 @@ export const UserItems = ({ user }: { user: User }) => {
         メールアドレス
       </Typography>
       <Typography mb={1}>{user.mailAddress}</Typography>
-    </>
+    </Box>
   );
 };

@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Alert, Box, Button, Card, Divider, Grid, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, Grid, Typography } from '@mui/material';
 import { ControlledTextField } from '@/components/molecules/ControlledTextField';
 import {
   FIRST_NAME_YUP_SCHEMA,
@@ -13,6 +13,7 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { createUserErrorMessageState, createUserState } from '@/stores/user';
 import { useLoad } from '@/hooks/useLoad';
 import React from 'react';
+import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 
 type SubmitArguments = {
   lastName: string;
@@ -58,10 +59,7 @@ export const UserNew = () => {
     <Grid container justifyContent={'center'}>
       <Grid item xs={12} md={6}>
         <Card sx={{ p: 4 }}>
-          <Typography variant={'h5'} sx={{ fontWeight: 'bold' }} textAlign={'center'} mb={4}>
-            ユーザー追加
-          </Typography>
-          <Divider sx={{ mb: 2 }} />
+          <MainContentHeader title={'ユーザー追加'} sx={{ mb: 2 }} />
           {createUserErrorMessage && (
             <Alert severity="error" sx={{ mb: 2 }}>
               {createUserErrorMessage}
