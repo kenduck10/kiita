@@ -33,13 +33,15 @@ const StyledTableBodyRow = styled(TableRow)<{ onClick: MouseEventHandler<HTMLTab
   },
 });
 export const LinkTable = <T extends object & { id: number }>({
-  rows,
   tableHeads,
+  rows,
+  rowsPerPage,
   router,
   linkParentPath,
 }: {
-  rows: T[];
   tableHeads: { key: keyof T; name: string }[];
+  rows: T[];
+  rowsPerPage: number;
   router: NextRouter;
   linkParentPath: string;
 }) => {
@@ -48,7 +50,6 @@ export const LinkTable = <T extends object & { id: number }>({
   };
 
   const [page, setPage] = useState(0);
-  const rowsPerPage = 5;
   const onPageChange = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
   };
@@ -57,7 +58,7 @@ export const LinkTable = <T extends object & { id: number }>({
   return (
     <>
       <TableContainer>
-        <Table aria-label="user table">
+        <Table>
           <TableHead>
             <TableRow>
               {tableHeads.map((head) => (
@@ -68,7 +69,7 @@ export const LinkTable = <T extends object & { id: number }>({
           <TableBody>
             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               const propertyNames = Object.getOwnPropertyNames(row);
-              const headKeys = tableHeads.map((tableHead) => tableHead.key as string);
+              const headKeys = tableHeads.map((head) => head.key as string);
               return (
                 <StyledTableBodyRow key={row.id} onClick={() => onClickRow(row.id)}>
                   {propertyNames

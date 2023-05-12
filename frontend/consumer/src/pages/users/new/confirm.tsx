@@ -1,11 +1,13 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
-import { Button, Card, Divider, Grid, Typography } from '@mui/material';
+import { Button, Card, Grid } from '@mui/material';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { createUserErrorMessageState, createUserState } from '@/stores/user';
 import { useSubmit } from '@/hooks/useSubmit';
 import { useLoad } from '@/hooks/useLoad';
 import React from 'react';
+import { UserItems } from '@/components/organisms/UserItems';
+import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 
 type SubmitArguments = {
   lastName: string;
@@ -52,25 +54,13 @@ export const UserNewConfirm = () => {
     await router.push('/users/new');
   };
 
-  const isDisabled = isSubmitting || isLoading;
-
   return (
     createUser && (
       <Grid container justifyContent={'center'}>
         <Grid item xs={12} md={6}>
           <Card sx={{ p: 4 }}>
-            <Typography variant={'h5'} sx={{ fontWeight: 'bold' }} textAlign={'center'} mb={4}>
-              ユーザー追加
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-            <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
-              名前
-            </Typography>
-            <Typography mb={1}>{`${createUser.lastName} ${createUser.firstName}`}</Typography>
-            <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
-              メールアドレス
-            </Typography>
-            <Typography mb={4}>{createUser.mailAddress}</Typography>
+            <MainContentHeader title={'ユーザー追加'} sx={{ mb: 2 }} />
+            <UserItems user={createUser} sx={{ mb: 2 }} />
             <Button variant="contained" color="primary" onClick={onClickAdd} sx={{ mr: 2 }}>
               追加
             </Button>

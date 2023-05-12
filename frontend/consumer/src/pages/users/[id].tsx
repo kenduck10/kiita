@@ -1,25 +1,15 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
 import User from '@/features/user/models/User';
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Divider,
-  Grid,
-  Typography,
-} from '@mui/material';
+import { Alert, Box, Button, Card, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useSubmit } from '@/hooks/useSubmit';
 import { useLoad } from '@/hooks/useLoad';
 import Link from 'next/link';
+import { SelectDialog } from '@/components/molecules/SelectDialog';
+import { UserItems } from '@/components/organisms/UserItems';
+import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 
 export const UserDetail = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -61,10 +51,7 @@ export const UserDetail = ({ user }: { user: User }) => {
     <Grid container justifyContent={'center'}>
       <Grid item xs={12} md={6}>
         <Card sx={{ p: 4 }}>
-          <Typography variant={'h5'} sx={{ fontWeight: 'bold' }} textAlign={'center'} mb={4}>
-            ユーザー詳細
-          </Typography>
-          <Divider sx={{ mb: 2 }} />
+          <MainContentHeader title={'ユーザー詳細'} sx={{ mb: 2 }} />
           {errorMessage && (
             <Alert severity="error" sx={{ mb: 2 }}>
               {errorMessage}
@@ -87,24 +74,17 @@ export const UserDetail = ({ user }: { user: User }) => {
             </Box>
             <Link href={'/'}>一覧へ</Link>
           </Box>
-          <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
-            名前
-          </Typography>
-          <Typography mb={1}>{`${user.lastName} ${user.firstName}`}</Typography>
-          <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={1}>
-            メールアドレス
-          </Typography>
-          <Typography mb={1}>{user.mailAddress}</Typography>
-          <Dialog open={isOpenDeleteDialog} onClose={() => setIsOpenDeleteDialog(false)}>
-            <DialogTitle>{'本当に削除しますか？'}</DialogTitle>
-            <DialogContent>
-              <DialogContentText>一旦削除したユーザーは元に戻すことができません</DialogContentText>
-              <DialogActions>
-                <Button onClick={onClickDeleteCancel}>キャンセル</Button>
-                <Button onClick={onClickDeleteAgreement}>削除</Button>
-              </DialogActions>
-            </DialogContent>
-          </Dialog>
+          <UserItems user={user} />
+          <SelectDialog
+            open={isOpenDeleteDialog}
+            onClose={() => setIsOpenDeleteDialog(false)}
+            dialogTitle={'本当に削除しますか？'}
+            dialogContentText={'削除したユーザーは元に戻すことができません'}
+            dialogButtons={[
+              { action: onClickDeleteCancel, label: 'キャンセル', color: 'secondary' },
+              { action: onClickDeleteAgreement, label: '削除', color: 'error' },
+            ]}
+          />
         </Card>
       </Grid>
     </Grid>
