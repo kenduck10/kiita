@@ -9,6 +9,7 @@ export const SelectDialog = ({
   dialogTitle,
   dialogContentText,
   dialogButtons,
+  isLoading,
 }: {
   open: boolean;
   onClose: () => void;
@@ -22,6 +23,7 @@ export const SelectDialog = ({
       ButtonPropsColorOverrides
     >;
   }[];
+  isLoading: boolean;
 }) => {
   return (
     <Dialog open={open} onClose={onClose}>
@@ -31,7 +33,13 @@ export const SelectDialog = ({
         <DialogActions sx={{ pr: 0 }}>
           {dialogButtons.map((button) => {
             return (
-              <Button variant="contained" onClick={button.action} color={button.color} key={button.label}>
+              <Button
+                variant="contained"
+                onClick={button.action}
+                color={button.color}
+                disabled={isLoading}
+                key={button.label}
+              >
                 {button.label}
               </Button>
             );
