@@ -10,11 +10,11 @@ type SubmitArguments = {
 };
 export const UserItemsForm = ({
   control,
-  isSubmitting,
+  isLoading,
   sx,
 }: {
   control: Control<SubmitArguments>;
-  isSubmitting: boolean;
+  isLoading: boolean;
   sx?: SxProps<Theme>;
 }) => {
   return (
@@ -28,7 +28,7 @@ export const UserItemsForm = ({
           name={'lastName'}
           type={'text'}
           label={'姓'}
-          disabled={isSubmitting}
+          disabled={isLoading}
           sx={{ mr: 2, width: '120px' }}
         />
         <ControlledTextField
@@ -36,7 +36,7 @@ export const UserItemsForm = ({
           name={'firstName'}
           type={'text'}
           label={'名'}
-          disabled={isSubmitting}
+          disabled={isLoading}
           sx={{ width: '120px' }}
         />
       </Box>
@@ -48,7 +48,7 @@ export const UserItemsForm = ({
           control={control}
           name={'mailAddress'}
           type={'email'}
-          disabled={isSubmitting}
+          disabled={isLoading}
           sx={{ maxWidth: '400px' }}
           fullWidth={true}
         />

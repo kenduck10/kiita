@@ -65,7 +65,7 @@ export const UserNew = () => {
               {createUserErrorMessage}
             </Alert>
           )}
-          <UserItemsForm control={control} isSubmitting={isLoading} />
+          <UserItemsForm control={control} isLoading={isLoading} />
           <Button variant="contained" color="primary" onClick={handleSubmit(onClickToConfirm)} sx={{ mr: 2 }}>
             確認
           </Button>

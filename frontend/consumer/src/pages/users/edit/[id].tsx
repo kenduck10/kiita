@@ -3,24 +3,18 @@ import { GetServerSideProps } from 'next';
 import User from '@/features/user/models/User';
 import { Alert, Button, Card, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import {
   FIRST_NAME_YUP_SCHEMA,
   LAST_NAME_YUP_SCHEMA,
   MAIL_ADDRESS_YUP_SCHEMA,
 } from '@/features/user/validations/YupSchema';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useSubmit } from '@/hooks/useSubmit';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { UserItemsForm } from '@/components/organisms/UserItemsForm';
-
-type SubmitArguments = {
-  lastName: string;
-  firstName: string;
-  mailAddress: string;
-};
+import { UserUpdateBody, useUserUpdate } from '@/hooks/useUserUpdate';
 
 const errorSchema = yup.object().shape({
   lastName: LAST_NAME_YUP_SCHEMA,
@@ -30,10 +24,9 @@ const errorSchema = yup.object().shape({
 
 export const UserEdit = ({ user }: { user: User }) => {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState('');
-  const { isSubmitting, startSubmit, stopSubmit } = useSubmit();
+  const { doUpdate, isLoading, errorMessage } = useUserUpdate(Number(user.id), () => router.push('/'));
 
-  const { control, handleSubmit } = useForm<SubmitArguments>({
+  const { control, handleSubmit } = useForm<UserUpdateBody>({
     mode: 'all',
     criteriaMode: 'all',
     shouldFocusError: false,
@@ -45,38 +38,7 @@ export const UserEdit = ({ user }: { user: User }) => {
     resolver: yupResolver(errorSchema),
   });
 
-  const onClickSave: SubmitHandler<SubmitArguments> = async (data) => {
-    startSubmit();
-    await axios
-      .put(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`, data)
-      .then(async () => {
-        await router.push(`/users/${user.id}`);
-      })
-      .catch(async (error: AxiosError) => {
-        const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.NotFound, HttpStatusCode.Conflict];
-        const actualStatus = error.response?.status;
-        if (!actualStatus || !expectedStatuses.includes(actualStatus)) {
-          await router.push('/error');
-          return;
-        }
-
-        if (actualStatus === HttpStatusCode.BadRequest) {
-          setErrorMessage('入力内容に誤りがあります');
-          return;
-        }
-        if (actualStatus === HttpStatusCode.NotFound) {
-          setErrorMessage('このユーザーは既に削除されています');
-          return;
-        }
-        if (actualStatus === HttpStatusCode.Conflict) {
-          setErrorMessage('指定のメールアドレスは既に利用されています');
-          return;
-        }
-      })
-      .finally(() => stopSubmit());
-  };
-
-  const onClickCancel = () => router.back();
+  const onClickCancel = () => router.push('/');
 
   return (
     <Grid container justifyContent={'center'}>
@@ -88,8 +50,8 @@ export const UserEdit = ({ user }: { user: User }) => {
               {errorMessage}
             </Alert>
           )}
-          <UserItemsForm control={control} isSubmitting={isSubmitting} />
-          <Button variant="contained" color="primary" onClick={handleSubmit(onClickSave)} sx={{ mr: 2 }}>
+          <UserItemsForm control={control} isLoading={isLoading} />
+          <Button variant="contained" color="primary" onClick={handleSubmit(doUpdate)} sx={{ mr: 2 }}>
             保存
           </Button>
           <Button variant="contained" color="secondary" onClick={onClickCancel} sx={{ color: 'white' }}>
