@@ -6,7 +6,6 @@ import Layout from '@/components/layouts/Layout';
 import { RecoilRoot } from 'recoil';
 import NextNProgress from 'nextjs-progressbar';
 import { Router } from 'next/router';
-import { RecoilReset } from '@/components/recoils/RecoilReset';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import theme from '@/config/theme';
 
@@ -22,13 +21,11 @@ export const MyApp = ({ Component, pageProps, router }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page, router) => <Layout>{page}</Layout>);
   return (
     <RecoilRoot>
-      <RecoilReset router={router}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <NextNProgress options={{ showSpinner: false }} />
-          {getLayout(<Component {...pageProps} />, router)}
-        </ThemeProvider>
-      </RecoilReset>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <NextNProgress options={{ showSpinner: false }} />
+        {getLayout(<Component {...pageProps} />, router)}
+      </ThemeProvider>
     </RecoilRoot>
   );
 };

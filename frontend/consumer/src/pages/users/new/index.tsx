@@ -10,16 +10,11 @@ import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { createUserErrorMessageState, createUserState } from '@/stores/user';
-import { useLoad } from '@/hooks/useLoad';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { UserItemsForm } from '@/components/organisms/UserItemsForm';
-
-type SubmitArguments = {
-  lastName: string;
-  firstName: string;
-  mailAddress: string;
-};
+import { GetServerSidePropsContext } from 'next';
+import { UserCreateBody } from '@/hooks/useUserCreate';
 
 const errorSchema = yup.object().shape({
   lastName: LAST_NAME_YUP_SCHEMA,
@@ -27,31 +22,43 @@ const errorSchema = yup.object().shape({
   mailAddress: MAIL_ADDRESS_YUP_SCHEMA,
 });
 
-export const UserNew = () => {
+export const UserNew = ({ isFromConfirm }: { isFromConfirm: boolean }) => {
   const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const [createUser, setCreateUser] = useRecoilState(createUserState);
   const createUserErrorMessage = useRecoilValue(createUserErrorMessageState);
-  const resetCreateUserErrorMessage = useResetRecoilState(createUserErrorMessageState);
-  const { isLoading, startLoad } = useLoad();
 
-  const { control, handleSubmit } = useForm<SubmitArguments>({
+  const resetCreateUser = useResetRecoilState(createUserState);
+  const resetCreateUserErrorMessage = useResetRecoilState(createUserErrorMessageState);
+
+  const { control, handleSubmit, reset } = useForm<UserCreateBody>({
     mode: 'all',
     criteriaMode: 'all',
     shouldFocusError: false,
     defaultValues: {
-      lastName: createUser.lastName,
-      firstName: createUser.firstName,
-      mailAddress: createUser.mailAddress,
+      lastName: '',
+      firstName: '',
+      mailAddress: '',
     },
     resolver: yupResolver(errorSchema),
   });
-  const onClickCancel = async () => await router.push('/');
 
-  const confirmPageUrl = '/users/new/confirm';
-  const onClickToConfirm: SubmitHandler<SubmitArguments> = async (data) => {
-    startLoad();
-    setCreateUser({ lastName: data.lastName, firstName: data.firstName, mailAddress: data.mailAddress });
-    await router.push({ pathname: confirmPageUrl, query: data }, confirmPageUrl);
+  useEffect(() => {
+    if (isFromConfirm) {
+      reset(createUser);
+      return;
+    }
+    resetCreateUser();
+    resetCreateUserErrorMessage();
+  }, []);
+
+  const onClickCancel = async () => await router.push('/');
+  const onClickToConfirm: SubmitHandler<UserCreateBody> = async (createUser) => {
+    setIsLoading(true);
+    setCreateUser(createUser);
+    await router.push('/users/new/confirm');
     resetCreateUserErrorMessage();
   };
 
@@ -79,3 +86,12 @@ export const UserNew = () => {
 };
 
 export default UserNew;
+
+export const getServerSideProps = (context: GetServerSidePropsContext) => {
+  const referer = context.req.headers.referer;
+  return {
+    props: {
+      isFromConfirm: referer === 'http://localhost:3000/users/new/confirm',
+    },
+  };
+};
