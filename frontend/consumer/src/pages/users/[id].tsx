@@ -4,49 +4,32 @@ import User from '@/features/user/models/User';
 import { Alert, Box, Button, Card, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { useSubmit } from '@/hooks/useSubmit';
-import { useLoad } from '@/hooks/useLoad';
 import Link from 'next/link';
 import { SelectDialog } from '@/components/molecules/SelectDialog';
 import { UserItems } from '@/components/organisms/UserItems';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
+import { useUserDelete } from '@/hooks/useUserDelete';
 
 export const UserDetail = ({ user }: { user: User }) => {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState('');
-  const { isLoading, startLoad } = useLoad();
-  const { isSubmitting, startSubmit, stopSubmit } = useSubmit();
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+  const { doDelete, isLoading, errorMessage } = useUserDelete(Number(user.id), async () => await router.push('/'));
 
   const onClickEditButton = async () => {
-    startLoad();
     await router.push(`/users/edit/${user.id}`);
   };
   const onClickDeleteButton = async () => {
     setIsOpenDeleteDialog(true);
   };
 
-  const onClickDeleteAgreement = async () => {
-    startSubmit();
-    await axios
-      .delete(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${user.id}`)
-      .then(async () => await router.push('/'))
-      .catch(async (error) => {
-        if (error.response.status === HttpStatusCode.NotFound) {
-          setErrorMessage('このユーザーは既に削除されています');
-          setIsOpenDeleteDialog(false);
-          return;
-        }
-        await router.push('/error');
-      })
-      .finally(() => stopSubmit());
+  const onClickDeleteAgreement = () => {
+    doDelete().then(() => setIsOpenDeleteDialog(false));
   };
 
   const onClickDeleteCancel = () => {
     setIsOpenDeleteDialog(false);
   };
 
-  const isDisabled = isSubmitting || isLoading;
   return (
     <Grid container justifyContent={'center'}>
       <Grid item xs={12} md={6}>
@@ -63,12 +46,12 @@ export const UserDetail = ({ user }: { user: User }) => {
                 variant="contained"
                 color="primary"
                 onClick={onClickEditButton}
-                disabled={isDisabled}
+                disabled={isLoading}
                 sx={{ mr: 2 }}
               >
                 編集
               </Button>
-              <Button variant="contained" color="error" onClick={onClickDeleteButton} disabled={isDisabled}>
+              <Button variant="contained" color="error" onClick={onClickDeleteButton} disabled={isLoading}>
                 削除
               </Button>
             </Box>
@@ -84,6 +67,7 @@ export const UserDetail = ({ user }: { user: User }) => {
               { action: onClickDeleteCancel, label: 'キャンセル', color: 'secondary' },
               { action: onClickDeleteAgreement, label: '削除', color: 'error' },
             ]}
+            isLoading={isLoading}
           />
         </Card>
       </Grid>

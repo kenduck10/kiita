@@ -24,7 +24,7 @@ const errorSchema = yup.object().shape({
 
 export const UserEdit = ({ user }: { user: User }) => {
   const router = useRouter();
-  const { doUpdate, isLoading, errorMessage } = useUserUpdate(Number(user.id), () => router.push('/'));
+  const { doUpdate, isLoading, errorMessage } = useUserUpdate(Number(user.id), async () => await router.push('/'));
 
   const { control, handleSubmit } = useForm<UserUpdateBody>({
     mode: 'all',
@@ -38,7 +38,7 @@ export const UserEdit = ({ user }: { user: User }) => {
     resolver: yupResolver(errorSchema),
   });
 
-  const onClickCancel = () => router.push('/');
+  const onClickCancel = async () => await router.push('/');
 
   return (
     <Grid container justifyContent={'center'}>
