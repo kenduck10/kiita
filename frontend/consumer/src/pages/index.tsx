@@ -8,6 +8,7 @@ import React from 'react';
 import { LinkTable } from '@/components/molecules/LinkTable';
 import UserSummary from '@/features/user/models/UserSummary';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
+import { buildServerSideRedirect } from '@/utils/functions/route';
 
 export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   userSummaries,
@@ -76,12 +77,7 @@ export const getServerSideProps = async () => {
     };
   }
 
-  return {
-    redirect: {
-      permanent: false,
-      destination: '/error',
-    },
-  };
+  return buildServerSideRedirect('/error');
 };
 
 Home.getLayout = (page, router) => {

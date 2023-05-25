@@ -9,6 +9,7 @@ import { SelectDialog } from '@/components/molecules/SelectDialog';
 import { UserItems } from '@/components/organisms/UserItems';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { useUserDelete } from '@/hooks/useUserDelete';
+import { buildServerSideRedirect } from '@/utils/functions/route';
 
 export const UserDetail = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -77,12 +78,7 @@ export const UserDetail = ({ user }: { user: User }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   if (context.params === undefined) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/error',
-      },
-    };
+    return buildServerSideRedirect('/error');
   }
 
   const id = context.params.id;
@@ -111,20 +107,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   if (userResponse.status === HttpStatusCode.NotFound) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/notFound',
-      },
-    };
+    return buildServerSideRedirect('/notFound');
   }
 
-  return {
-    redirect: {
-      permanent: false,
-      destination: '/error',
-    },
-  };
+  return buildServerSideRedirect('/error');
 };
 
 export default UserDetail;

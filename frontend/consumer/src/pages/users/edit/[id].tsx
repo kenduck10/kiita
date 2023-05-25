@@ -15,6 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { UserItemsForm } from '@/components/organisms/UserItemsForm';
 import { UserUpdateBody, useUserUpdate } from '@/hooks/useUserUpdate';
+import { buildServerSideRedirect } from '@/utils/functions/route';
 
 const errorSchema = yup.object().shape({
   lastName: LAST_NAME_YUP_SCHEMA,
@@ -65,12 +66,7 @@ export const UserEdit = ({ user }: { user: User }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   if (context.params === undefined) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/error',
-      },
-    };
+    return buildServerSideRedirect('/error');
   }
 
   const id = context.params.id;
@@ -99,20 +95,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   if (userResponse.status === HttpStatusCode.NotFound) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/notFound',
-      },
-    };
+    return buildServerSideRedirect('/notFound');
   }
 
-  return {
-    redirect: {
-      permanent: false,
-      destination: '/error',
-    },
-  };
+  return buildServerSideRedirect('/error');
 };
 
 export default UserEdit;
