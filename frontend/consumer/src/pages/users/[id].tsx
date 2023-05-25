@@ -1,4 +1,3 @@
-import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
 import User from '@/features/user/models/User';
 import { Alert, Box, Button, Card, Grid } from '@mui/material';
@@ -9,6 +8,8 @@ import { SelectDialog } from '@/components/molecules/SelectDialog';
 import { UserItems } from '@/components/organisms/UserItems';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { useUserDelete } from '@/hooks/useUserDelete';
+import { buildServerSideRedirect } from '@/utils/functions/route';
+import { fetchUser } from '@/features/user/utils/functions/ssr';
 
 export const UserDetail = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -76,55 +77,11 @@ export const UserDetail = ({ user }: { user: User }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  if (context.params === undefined) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/error',
-      },
-    };
+  const userId = context.params?.id;
+  if (userId === undefined) {
+    return buildServerSideRedirect('/error');
   }
-
-  const id = context.params.id;
-  const userResponse = await axios
-    .get(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${id}`)
-    .then((response) => {
-      return {
-        user: new User(Number(id), response.data),
-        status: response.status,
-      };
-    })
-    .catch((error: AxiosError) => {
-      return {
-        user: undefined,
-        status: error.response?.status,
-      };
-    });
-
-  const status = userResponse.status;
-  if (status === HttpStatusCode.Ok) {
-    return {
-      props: {
-        user: JSON.parse(JSON.stringify(userResponse.user)),
-      },
-    };
-  }
-
-  if (userResponse.status === HttpStatusCode.NotFound) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/notFound',
-      },
-    };
-  }
-
-  return {
-    redirect: {
-      permanent: false,
-      destination: '/error',
-    },
-  };
+  return fetchUser(Number(userId));
 };
 
 export default UserDetail;

@@ -1,4 +1,3 @@
-import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
 import User from '@/features/user/models/User';
 import { Alert, Button, Card, Grid } from '@mui/material';
@@ -15,6 +14,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { UserItemsForm } from '@/components/organisms/UserItemsForm';
 import { UserUpdateBody, useUserUpdate } from '@/hooks/useUserUpdate';
+import { buildServerSideRedirect } from '@/utils/functions/route';
+import { fetchUser } from '@/features/user/utils/functions/ssr';
 
 const errorSchema = yup.object().shape({
   lastName: LAST_NAME_YUP_SCHEMA,
@@ -64,55 +65,11 @@ export const UserEdit = ({ user }: { user: User }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  if (context.params === undefined) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/error',
-      },
-    };
+  const userId = context.params?.id;
+  if (userId === undefined) {
+    return buildServerSideRedirect('/error');
   }
-
-  const id = context.params.id;
-  const userResponse = await axios
-    .get(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${id}`)
-    .then((response) => {
-      return {
-        user: new User(Number(id), response.data),
-        status: response.status,
-      };
-    })
-    .catch((error: AxiosError) => {
-      return {
-        user: undefined,
-        status: error.response?.status,
-      };
-    });
-
-  const status = userResponse.status;
-  if (status === HttpStatusCode.Ok) {
-    return {
-      props: {
-        user: JSON.parse(JSON.stringify(userResponse.user)),
-      },
-    };
-  }
-
-  if (userResponse.status === HttpStatusCode.NotFound) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/notFound',
-      },
-    };
-  }
-
-  return {
-    redirect: {
-      permanent: false,
-      destination: '/error',
-    },
-  };
+  return fetchUser(Number(userId));
 };
 
 export default UserEdit;

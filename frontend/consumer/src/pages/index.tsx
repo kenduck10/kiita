@@ -1,5 +1,4 @@
 import { Button, Card, Grid } from '@mui/material';
-import axios, { HttpStatusCode } from 'axios';
 import UserSummaries from '@/features/user/models/UserSummaries';
 import { NextPageWithLayout } from '@/pages/_app';
 import Layout from '@/components/layouts/Layout';
@@ -8,6 +7,7 @@ import React from 'react';
 import { LinkTable } from '@/components/molecules/LinkTable';
 import UserSummary from '@/features/user/models/UserSummary';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
+import { fetchUserSummaries } from '@/features/user/utils/functions/ssr';
 
 export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   userSummaries,
@@ -52,36 +52,7 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
 };
 
 export const getServerSideProps = async () => {
-  const userSummariesResponse = await axios
-    .get(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users`)
-    .then((response) => {
-      return {
-        userSummaries: new UserSummaries(response.data),
-        status: response.status,
-      };
-    })
-    .catch((error) => {
-      return {
-        userSummaries: undefined,
-        status: error.status,
-      };
-    });
-
-  const status = userSummariesResponse.status;
-  if (status === HttpStatusCode.Ok) {
-    return {
-      props: {
-        userSummaries: JSON.parse(JSON.stringify(userSummariesResponse.userSummaries)),
-      },
-    };
-  }
-
-  return {
-    redirect: {
-      permanent: false,
-      destination: '/error',
-    },
-  };
+  return fetchUserSummaries();
 };
 
 Home.getLayout = (page, router) => {

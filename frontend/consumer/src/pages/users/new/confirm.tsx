@@ -7,6 +7,7 @@ import { UserItems } from '@/components/organisms/UserItems';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { UserCreateBody, useUserCreate } from '@/hooks/useUserCreate';
 import { GetServerSidePropsContext } from 'next';
+import { buildServerSideRedirect } from '@/utils/functions/route';
 
 export const UserNewConfirm = () => {
   const router = useRouter();
@@ -69,12 +70,7 @@ export default UserNewConfirm;
 export const getServerSideProps = (context: GetServerSidePropsContext) => {
   const referer = context.req.headers.referer;
   if (referer !== 'http://localhost:3000/users/new') {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/users/new',
-      },
-    };
+    return buildServerSideRedirect('/users/new');
   }
 
   return {
