@@ -92,7 +92,7 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
   const referer = context.req.headers.referer;
   return {
     props: {
-      isFromConfirm: referer === 'http://localhost:3000/' + PAGE_PATH.USER_NEW_CONFIRM,
+      isFromConfirm: referer === process.env.NEXT_PUBLIC_KIITA_FRONTEND_BASE_URL + PAGE_PATH.USER_NEW_CONFIRM,
     },
   };
 };
