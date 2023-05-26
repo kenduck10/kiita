@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios, { HttpStatusCode } from 'axios';
+import { BACKEND_API_PATH_BUILDER } from '@/utils/consts/api';
 
 export type GetUserResponse = {
   lastName: string;
@@ -9,10 +10,10 @@ export type GetUserResponse = {
 
 export const handler = async (request: NextApiRequest, response: NextApiResponse) => {
   const { id } = request.query;
-  const BASE_URL = `${process.env.KIITA_BACKEND_API_BASE_URL}users/${id}`;
+  const apiPath = BACKEND_API_PATH_BUILDER.USER(Number(id));
   if (request.method === 'GET') {
     const result = await axios
-      .get(BASE_URL)
+      .get(apiPath)
       .then((response) => {
         return {
           getUserResponse: response.data,
@@ -30,7 +31,7 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
 
   if (request.method === 'DELETE') {
     const result = await axios
-      .delete(BASE_URL)
+      .delete(apiPath)
       .then(() => {
         return {
           statusCode: HttpStatusCode.Ok,
@@ -46,7 +47,7 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
 
   if (request.method === 'PUT') {
     const result = await axios
-      .put(BASE_URL, request.body)
+      .put(apiPath, request.body)
       .then(() => {
         return {
           statusCode: HttpStatusCode.Ok,

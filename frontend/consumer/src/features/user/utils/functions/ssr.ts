@@ -2,10 +2,12 @@ import { buildServerSideRedirect } from '@/utils/functions/route';
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import User from '@/features/user/models/User';
 import UserSummaries from '@/features/user/models/UserSummaries';
+import { PAGE_PATH } from '@/utils/consts/route';
+import { FRONTEND_API_PATH, FRONTEND_API_PATH_BUILDER } from '@/utils/consts/api';
 
 export const fetchUser = async (userId: number) => {
   const userResponse = await axios
-    .get(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${userId}`)
+    .get(FRONTEND_API_PATH_BUILDER.USER(userId))
     .then((response) => {
       return {
         user: new User(userId, response.data),
@@ -29,14 +31,14 @@ export const fetchUser = async (userId: number) => {
   }
 
   if (userResponse.status === HttpStatusCode.NotFound) {
-    return buildServerSideRedirect('/notFound');
+    return buildServerSideRedirect(PAGE_PATH.NOT_FOUND);
   }
 
-  return buildServerSideRedirect('/error');
+  return buildServerSideRedirect(PAGE_PATH.ERROR);
 };
 export const fetchUserSummaries = async () => {
   const userSummariesResponse = await axios
-    .get(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users`)
+    .get(FRONTEND_API_PATH.USERS)
     .then((response) => {
       return {
         userSummaries: new UserSummaries(response.data),
@@ -59,5 +61,5 @@ export const fetchUserSummaries = async () => {
     };
   }
 
-  return buildServerSideRedirect('/error');
+  return buildServerSideRedirect(PAGE_PATH.ERROR);
 };

@@ -37,16 +37,16 @@ export const LinkTable = <T extends object & { id: number }>({
   rows,
   rowsPerPage,
   router,
-  linkParentPath,
+  link,
 }: {
   tableHeads: { key: keyof T; name: string }[];
   rows: T[];
   rowsPerPage: number;
   router: NextRouter;
-  linkParentPath: string;
+  link: (id: number) => string;
 }) => {
   const onClickRow = async (id: number) => {
-    await router.push(`${linkParentPath}${id}`);
+    await router.push(link(id));
   };
 
   const [page, setPage] = useState(0);

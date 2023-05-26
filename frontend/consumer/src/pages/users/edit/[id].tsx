@@ -16,6 +16,7 @@ import { UserItemsForm } from '@/components/organisms/UserItemsForm';
 import { UserUpdateBody, useUserUpdate } from '@/hooks/useUserUpdate';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { fetchUser } from '@/features/user/utils/functions/ssr';
+import { PAGE_PATH } from '@/utils/consts/route';
 
 const errorSchema = yup.object().shape({
   lastName: LAST_NAME_YUP_SCHEMA,
@@ -67,7 +68,7 @@ export const UserEdit = ({ user }: { user: User }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = context.params?.id;
   if (userId === undefined) {
-    return buildServerSideRedirect('/error');
+    return buildServerSideRedirect(PAGE_PATH.ERROR);
   }
   return fetchUser(Number(userId));
 };

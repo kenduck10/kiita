@@ -10,6 +10,7 @@ import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { useUserDelete } from '@/hooks/useUserDelete';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { fetchUser } from '@/features/user/utils/functions/ssr';
+import { PAGE_PATH, PAGE_PATH_BUILDER } from '@/utils/consts/route';
 
 export const UserDetail = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -17,7 +18,7 @@ export const UserDetail = ({ user }: { user: User }) => {
   const { doDelete, isLoading, errorMessage } = useUserDelete(Number(user.id), async () => await router.push('/'));
 
   const onClickEditButton = async () => {
-    await router.push(`/users/edit/${user.id}`);
+    await router.push(PAGE_PATH_BUILDER.USER_EDIT(Number(user.id)));
   };
   const onClickDeleteButton = async () => {
     setIsOpenDeleteDialog(true);
@@ -79,7 +80,7 @@ export const UserDetail = ({ user }: { user: User }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = context.params?.id;
   if (userId === undefined) {
-    return buildServerSideRedirect('/error');
+    return buildServerSideRedirect(PAGE_PATH.ERROR);
   }
   return fetchUser(Number(userId));
 };

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
+import { PAGE_PATH } from '@/utils/consts/route';
+import { FRONTEND_API_PATH } from '@/utils/consts/api';
 
 export type UserCreateBody = {
   lastName: string;
@@ -15,13 +17,13 @@ export const useUserCreate = (onSuccess: () => void, onError: (errorMessage: str
   const doCreate = async (body: UserCreateBody) => {
     setIsLoading(true);
     await axios
-      .post(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users`, body)
+      .post(FRONTEND_API_PATH.USERS, body)
       .then(onSuccess)
       .catch(async (error: AxiosError) => {
         const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.Conflict];
         const actualStatus = error.response?.status;
         if (!actualStatus || !expectedStatuses.includes(actualStatus)) {
-          await router.push('/error');
+          await router.push(PAGE_PATH.ERROR);
           return;
         }
 

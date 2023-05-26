@@ -15,6 +15,7 @@ import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { UserItemsForm } from '@/components/organisms/UserItemsForm';
 import { GetServerSidePropsContext } from 'next';
 import { UserCreateBody } from '@/hooks/useUserCreate';
+import { PAGE_PATH } from '@/utils/consts/route';
 
 const errorSchema = yup.object().shape({
   lastName: LAST_NAME_YUP_SCHEMA,
@@ -54,11 +55,11 @@ export const UserNew = ({ isFromConfirm }: { isFromConfirm: boolean }) => {
     resetCreateUserErrorMessage();
   }, []);
 
-  const onClickCancel = async () => await router.push('/');
+  const onClickCancel = async () => await router.push(PAGE_PATH.HOME);
   const onClickToConfirm: SubmitHandler<UserCreateBody> = async (createUser) => {
     setIsLoading(true);
     setCreateUser(createUser);
-    await router.push('/users/new/confirm');
+    await router.push(PAGE_PATH.USER_NEW_CONFIRM);
     resetCreateUserErrorMessage();
   };
 
@@ -91,7 +92,7 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
   const referer = context.req.headers.referer;
   return {
     props: {
-      isFromConfirm: referer === 'http://localhost:3000/users/new/confirm',
+      isFromConfirm: referer === process.env.NEXT_PUBLIC_KIITA_FRONTEND_BASE_URL + PAGE_PATH.USER_NEW_CONFIRM,
     },
   };
 };
