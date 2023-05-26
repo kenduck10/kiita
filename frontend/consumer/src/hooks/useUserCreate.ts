@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
+import { PAGE_PATH } from '@/utils/consts/route';
 
 export type UserCreateBody = {
   lastName: string;
@@ -21,7 +22,7 @@ export const useUserCreate = (onSuccess: () => void, onError: (errorMessage: str
         const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.Conflict];
         const actualStatus = error.response?.status;
         if (!actualStatus || !expectedStatuses.includes(actualStatus)) {
-          await router.push('/error');
+          await router.push(PAGE_PATH.ERROR);
           return;
         }
 

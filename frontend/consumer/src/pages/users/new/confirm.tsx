@@ -8,6 +8,7 @@ import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { UserCreateBody, useUserCreate } from '@/hooks/useUserCreate';
 import { GetServerSidePropsContext } from 'next';
 import { buildServerSideRedirect } from '@/utils/functions/route';
+import { PAGE_PATH } from '@/utils/consts/route';
 
 export const UserNewConfirm = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ export const UserNewConfirm = () => {
     },
     async (errorMessage: string) => {
       setCreateUserErrorMessage(errorMessage);
-      await router.push('/users/new');
+      await router.push(PAGE_PATH.USER_NEW);
     }
   );
 
@@ -36,7 +37,7 @@ export const UserNewConfirm = () => {
   };
 
   const onClickModify = async () => {
-    await router.push('/users/new');
+    await router.push(PAGE_PATH.USER_NEW);
   };
 
   return (
@@ -69,8 +70,8 @@ export default UserNewConfirm;
 
 export const getServerSideProps = (context: GetServerSidePropsContext) => {
   const referer = context.req.headers.referer;
-  if (referer !== 'http://localhost:3000/users/new') {
-    return buildServerSideRedirect('/users/new');
+  if (referer !== 'http://localhost:3000' + PAGE_PATH.USER_NEW) {
+    return buildServerSideRedirect(PAGE_PATH.USER_NEW);
   }
 
   return {

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios, { HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
+import { PAGE_PATH } from '@/utils/consts/route';
 
 export const useUserDelete = (userId: number, onSuccess: () => void) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +18,7 @@ export const useUserDelete = (userId: number, onSuccess: () => void) => {
           setErrorMessage('このユーザーは既に削除されています');
           return;
         }
-        await router.push('/error');
+        await router.push(PAGE_PATH.ERROR);
       })
       .finally(() => setIsLoading(false));
   };

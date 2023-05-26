@@ -8,6 +8,7 @@ import { LinkTable } from '@/components/molecules/LinkTable';
 import UserSummary from '@/features/user/models/UserSummary';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { fetchUserSummaries } from '@/features/user/utils/functions/ssr';
+import { PAGE_PATH, PAGE_PATH_BUILDER } from '@/utils/consts/route';
 
 export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   userSummaries,
@@ -17,7 +18,7 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
   const router = useRouter();
 
   const onClickToAdd = async () => {
-    await router.push(`/users/new`);
+    await router.push(PAGE_PATH.USER_NEW);
   };
 
   const tableHeads: { key: keyof UserSummary; name: string }[] = [
@@ -43,7 +44,7 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
             rows={userSummaries.value}
             rowsPerPage={5}
             router={router}
-            linkParentPath={'/users/'}
+            link={PAGE_PATH_BUILDER.USER_DETAIL}
           />
         </Card>
       </Grid>

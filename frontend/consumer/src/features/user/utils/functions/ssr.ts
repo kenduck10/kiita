@@ -2,6 +2,7 @@ import { buildServerSideRedirect } from '@/utils/functions/route';
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import User from '@/features/user/models/User';
 import UserSummaries from '@/features/user/models/UserSummaries';
+import { PAGE_PATH } from '@/utils/consts/route';
 
 export const fetchUser = async (userId: number) => {
   const userResponse = await axios
@@ -29,10 +30,10 @@ export const fetchUser = async (userId: number) => {
   }
 
   if (userResponse.status === HttpStatusCode.NotFound) {
-    return buildServerSideRedirect('/notFound');
+    return buildServerSideRedirect(PAGE_PATH.NOT_FOUND);
   }
 
-  return buildServerSideRedirect('/error');
+  return buildServerSideRedirect(PAGE_PATH.ERROR);
 };
 export const fetchUserSummaries = async () => {
   const userSummariesResponse = await axios
@@ -59,5 +60,5 @@ export const fetchUserSummaries = async () => {
     };
   }
 
-  return buildServerSideRedirect('/error');
+  return buildServerSideRedirect(PAGE_PATH.ERROR);
 };
