@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
 import { PAGE_PATH } from '@/utils/consts/route';
+import { FRONTEND_API_PATH_BUILDER } from '@/utils/consts/api';
 
 export type UserUpdateBody = {
   lastName: string;
@@ -16,7 +17,7 @@ export const useUserUpdate = (userId: number, onSuccess: () => void) => {
   const doUpdate = async (body: UserUpdateBody) => {
     setIsLoading(true);
     await axios
-      .put(`${process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL}users/${userId}`, body)
+      .put(FRONTEND_API_PATH_BUILDER.USER(userId), body)
       .then(onSuccess)
       .catch(async (error: AxiosError) => {
         const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.NotFound, HttpStatusCode.Conflict];

@@ -70,7 +70,7 @@ export default UserNewConfirm;
 
 export const getServerSideProps = (context: GetServerSidePropsContext) => {
   const referer = context.req.headers.referer;
-  if (referer !== 'http://localhost:3000' + PAGE_PATH.USER_NEW) {
+  if (referer !== process.env.NEXT_PUBLIC_KIITA_FRONTEND_BASE_URL + PAGE_PATH.USER_NEW) {
     return buildServerSideRedirect(PAGE_PATH.USER_NEW);
   }
 

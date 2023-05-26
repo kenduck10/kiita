@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios, { AxiosResponse, HttpStatusCode } from 'axios';
+import { BACKEND_API_PATH } from '@/utils/consts/api';
 
 type CreateUserResponse = {
   userId: number;
@@ -20,15 +21,16 @@ export type GetUsersResponseElement = {
 };
 
 export const handler = async (request: NextApiRequest, response: NextApiResponse) => {
-  const BASE_URL = `${process.env.KIITA_BACKEND_API_BASE_URL}users`;
   if (request.method === 'GET') {
-    const result = await axios.get(BASE_URL).then((response: AxiosResponse<GetUsersResponse>) => response.data);
+    const result = await axios
+      .get(BACKEND_API_PATH.USERS)
+      .then((response: AxiosResponse<GetUsersResponse>) => response.data);
     return response.status(HttpStatusCode.Ok).json(result);
   }
 
   if (request.method === 'POST') {
     const result = await axios
-      .post(BASE_URL, request.body)
+      .post(BACKEND_API_PATH.USERS, request.body)
       .then((response: AxiosResponse<{ createdUserResponse: CreateUserResponse; statusCode: number }>) => {
         return {
           createdUserResponse: response.data,
