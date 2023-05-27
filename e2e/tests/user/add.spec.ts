@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 
 test('add user successfully', async ({ page }) => {
-  await page.goto('http://localhost:3000/');
+  await page.goto('/');
   await page.locator('#add-user-button').click();
-  await expect(page).toHaveURL('http://localhost:3000/users/new');
+  await expect(page).toHaveURL('/users/new');
 
   await expect(page.locator('#main-content-title')).toContainText('ユーザー追加');
 
@@ -28,7 +28,7 @@ test('add user successfully', async ({ page }) => {
   await mailAddressField.fill('yamada@xxx.com');
 
   await page.locator('#confirm-button').click();
-  await expect(page).toHaveURL('http://localhost:3000/users/new/confirm');
+  await expect(page).toHaveURL('/users/new/confirm');
 
   await expect(page.locator('#main-content-title')).toContainText('ユーザー追加');
 
@@ -39,7 +39,7 @@ test('add user successfully', async ({ page }) => {
   await expect(page.locator('#mail-address')).toContainText('yamada@xxx.com');
 
   await page.locator('#add-button').click();
-  await expect(page).toHaveURL('http://localhost:3000/');
+  await expect(page).toHaveURL('/');
 
   await expect(page.locator('#row-2-column-0')).toContainText('3');
   await expect(page.locator('#row-2-column-1')).toContainText('山田');

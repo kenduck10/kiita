@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('display user table', async ({ page }) => {
-  await page.goto('http://localhost:3000/');
+  await page.goto('/');
 
   await expect(page.locator('#main-content-title')).toContainText('ユーザー一覧');
 
