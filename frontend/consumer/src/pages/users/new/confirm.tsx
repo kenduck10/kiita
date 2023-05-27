@@ -47,10 +47,18 @@ export const UserNewConfirm = () => {
           <Card sx={{ p: 4 }}>
             <MainContentHeader title={'ユーザー追加'} sx={{ mb: 2 }} />
             <UserItems user={displayCreateUser} sx={{ mb: 2 }} />
-            <Button variant="contained" color="primary" onClick={onClickAdd} disabled={isLoading} sx={{ mr: 2 }}>
+            <Button
+              id={'add-button'}
+              variant="contained"
+              color="primary"
+              onClick={onClickAdd}
+              disabled={isLoading}
+              sx={{ mr: 2 }}
+            >
               追加
             </Button>
             <Button
+              id={'modify-button'}
               variant="contained"
               color="secondary"
               onClick={onClickModify}

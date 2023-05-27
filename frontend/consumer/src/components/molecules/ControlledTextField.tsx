@@ -13,6 +13,7 @@ export const ControlledTextField = <
   disabled,
   sx,
   fullWidth,
+  id,
 }: {
   control: Control<TFieldValues>;
   name: TName;
@@ -21,6 +22,7 @@ export const ControlledTextField = <
   disabled?: boolean;
   sx?: SxProps<Theme>;
   fullWidth?: boolean;
+  id?: string;
 }) => {
   return (
     <Controller
@@ -36,6 +38,7 @@ export const ControlledTextField = <
           disabled={disabled ?? false}
           sx={sx}
           fullWidth={fullWidth ?? false}
+          id={id}
         />
       )}
     />

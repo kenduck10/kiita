@@ -19,7 +19,7 @@ export const UserItemsForm = ({
 }) => {
   return (
     <Box sx={sx}>
-      <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={2}>
+      <Typography id={'name-headline'} variant={'h6'} sx={{ fontWeight: 'bold' }} mb={2}>
         名前
       </Typography>
       <Box mb={2}>
@@ -30,6 +30,7 @@ export const UserItemsForm = ({
           label={'姓'}
           disabled={isLoading}
           sx={{ mr: 2, width: '120px' }}
+          id={'last-name-field'}
         />
         <ControlledTextField
           control={control}
@@ -38,9 +39,10 @@ export const UserItemsForm = ({
           label={'名'}
           disabled={isLoading}
           sx={{ width: '120px' }}
+          id={'first-name-field'}
         />
       </Box>
-      <Typography variant={'h6'} sx={{ fontWeight: 'bold' }} mb={2}>
+      <Typography id={'mail-address-headline'} variant={'h6'} sx={{ fontWeight: 'bold' }} mb={2}>
         メールアドレス
       </Typography>
       <Box mb={4}>
@@ -51,6 +53,7 @@ export const UserItemsForm = ({
           disabled={isLoading}
           sx={{ maxWidth: '400px' }}
           fullWidth={true}
+          id={'mail-address-field'}
         />
       </Box>
     </Box>
