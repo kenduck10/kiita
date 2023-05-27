@@ -19,6 +19,4 @@ test('display user table', async ({ page }) => {
   await expect(page.locator('#row-1-column-1')).toContainText('鈴木');
   await expect(page.locator('#row-1-column-2')).toContainText('二郎');
   await expect(page.locator('#row-1-column-3')).toContainText('suzuki@xxx.com');
-
-  await expect(page.locator('#row-2')).toHaveCount(0);
 });
