@@ -61,21 +61,28 @@ export const LinkTable = <T extends object & { id: number }>({
         <Table>
           <TableHead>
             <TableRow>
-              {tableHeads.map((head) => (
-                <StyledTableHeadCell key={head.key as string}>{head.name}</StyledTableHeadCell>
+              {tableHeads.map((head, index) => (
+                <StyledTableHeadCell id={`head-${index}`} key={head.key as string}>
+                  {head.name}
+                </StyledTableHeadCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, rowIndex) => {
               const propertyNames = Object.getOwnPropertyNames(row);
               const headKeys = tableHeads.map((head) => head.key as string);
+              const rowId = `row-${rowIndex}`;
               return (
-                <StyledTableBodyRow key={row.id} onClick={() => onClickRow(row.id)}>
+                <StyledTableBodyRow id={rowId} key={row.id} onClick={() => onClickRow(row.id)}>
                   {propertyNames
                     .filter((propertyName) => headKeys.includes(propertyName))
-                    .map((propertyName) => {
-                      return <TableCell key={propertyName}>{row[propertyName as keyof T] as string}</TableCell>;
+                    .map((propertyName, columnIndex) => {
+                      return (
+                        <TableCell id={`${rowId}-column-${columnIndex}`} key={propertyName}>
+                          {row[propertyName as keyof T] as string}
+                        </TableCell>
+                      );
                     })}
                 </StyledTableBodyRow>
               );
