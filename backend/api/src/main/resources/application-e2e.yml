@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/kiita_e2e
+    username: user
+    password: password
+

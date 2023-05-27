@@ -24,7 +24,7 @@ flyway {
     url = 'jdbc:mysql://localhost:3306/kiita'
     user = 'user'
     password = 'password'
-    locations = ['filesystem:migration']
+    locations = ['filesystem:migration/common', 'filesystem:migration/profile/local']
     cleanDisabled = false
 }
 
@@ -92,6 +92,7 @@ task migrateAndMbGenerateFromScratch {
 
 task migrateUt(type: FlywayMigrateTask) {
     url = 'jdbc:mysql://localhost:3306/kiita_ut'
+    locations = ['filesystem:migration/common']
 }
 
 task cleanUt(type: FlywayCleanTask) {
@@ -106,6 +107,7 @@ task migrateUtFromScratch {
 
 task migrateE2e(type: FlywayMigrateTask) {
     url = 'jdbc:mysql://localhost:3306/kiita_e2e'
+    locations = ['filesystem:migration/common', 'filesystem:migration/profile/e2e']
 }
 
 task cleanE2e(type: FlywayCleanTask) {
