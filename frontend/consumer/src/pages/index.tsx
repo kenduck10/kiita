@@ -36,7 +36,7 @@ export const Home: NextPageWithLayout<{ userSummaries: UserSummaries }> = ({
       <Grid item xs={12} md={6}>
         <Card sx={{ p: 4 }}>
           <MainContentHeader title={'ユーザー一覧'} sx={{ mb: 2 }} />
-          <Button variant="contained" color="primary" onClick={onClickToAdd} sx={{ mb: 2 }}>
+          <Button id={'add-user-button'} variant="contained" color="primary" onClick={onClickToAdd} sx={{ mb: 2 }}>
             追加
           </Button>
           <LinkTable

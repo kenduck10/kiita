@@ -74,10 +74,22 @@ export const UserNew = ({ isFromConfirm }: { isFromConfirm: boolean }) => {
             </Alert>
           )}
           <UserItemsForm control={control} isLoading={isLoading} />
-          <Button variant="contained" color="primary" onClick={handleSubmit(onClickToConfirm)} sx={{ mr: 2 }}>
+          <Button
+            id={'confirm-button'}
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit(onClickToConfirm)}
+            sx={{ mr: 2 }}
+          >
             確認
           </Button>
-          <Button variant="contained" color="secondary" onClick={onClickCancel} sx={{ color: 'white' }}>
+          <Button
+            id={'cancel-button'}
+            variant="contained"
+            color="secondary"
+            onClick={onClickCancel}
+            sx={{ color: 'white' }}
+          >
             キャンセル
           </Button>
         </Card>
