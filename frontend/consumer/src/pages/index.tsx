@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { fetchPostSummaries } from '@/features/post/utils/functions/ssr';
 import PostSummaries from '@/features/post/models/PostSummaries';
-import { PostSummaryCard } from '@/components/organisms/PostSummaryCard';
+import { PostSummaryCardList } from '@/components/organisms/PostSummaryCardList';
 
 export const Home: NextPageWithLayout<{ postSummaries: PostSummaries }> = ({
   postSummaries,
@@ -31,10 +31,8 @@ export const Home: NextPageWithLayout<{ postSummaries: PostSummaries }> = ({
 
   return (
     <Grid container justifyContent={'center'}>
-      <Grid item xs={12} md={6}>
-        {postSummaries.value.map((postSummary) => {
-          return <PostSummaryCard postSummary={postSummary} key={postSummary.id} />;
-        })}
+      <Grid item xs={12} md={8}>
+        <PostSummaryCardList postSummaries={postSummaries} />
         {/*<Card sx={{ p: 4 }}>*/}
         {/*  <MainContentHeader title={'ユーザー一覧'} sx={{ mb: 2 }} />*/}
         {/*  <Button id={'add-user-button'} variant="contained" color="primary" onClick={onClickToAdd} sx={{ mb: 2 }}>*/}

@@ -5,7 +5,7 @@ import Link from 'next/link';
 export const Header = () => {
   return (
     <header>
-      <AppBar position="relative">
+      <AppBar position="relative" elevation={0}>
         <Container maxWidth="xl">
           <Toolbar>
             <Link href={'/'}>
