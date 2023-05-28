@@ -5,7 +5,7 @@ export const Footer = () => {
   return (
     <footer>
       <Container maxWidth="xl" sx={{ py: 1 }}>
-        <Typography>© 2022 kenduck all rights reserved.</Typography>
+        <Typography>© 2023 kenduck all rights reserved.</Typography>
       </Container>
     </footer>
   );
