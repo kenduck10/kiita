@@ -35,5 +35,13 @@
             <ignoreColumn column="updated_at"/>
         </table>
 
+        <table schema="kiita" tableName="posts" mapperName="GeneratedPostMapper">
+            <property name="dynamicSqlSupportClassName" value="GeneratedPostDynamicSqlSupport"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <domainObjectRenamingRule searchString="Posts" replaceString="GeneratedPost"/>
+            <ignoreColumn column="created_at"/>
+            <ignoreColumn column="updated_at"/>
+        </table>
+
     </context>
 </generatorConfiguration>
