@@ -1,10 +1,13 @@
 import { GetServerSideProps } from 'next';
-import { Box, Card, Grid, Typography } from '@mui/material';
+import { Card, Grid } from '@mui/material';
 import React from 'react';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { PAGE_PATH } from '@/utils/consts/route';
 import { fetchPost } from '@/features/post/utils/functions/ssr';
 import Post from '@/features/post/models/Post';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { PostHeader } from '@/components/organisms/PostHeader';
 
 export const PostDetail = ({ post }: { post: Post }) => {
   // const router = useRouter();
@@ -25,51 +28,12 @@ export const PostDetail = ({ post }: { post: Post }) => {
   // const onClickDeleteCancel = () => {
   //   setIsOpenDeleteDialog(false);
   // };
-
   return (
     <Grid container justifyContent={'center'}>
       <Grid item xs={12} md={8}>
         <Card variant={'outlined'} sx={{ p: 4, border: 0 }}>
-          <Box sx={{ mb: 2 }}>
-            <Typography id={'post-title'} variant={'h5'} sx={{ fontWeight: 'bold', mb: 4 }} textAlign={'left'}>
-              {post.title}
-            </Typography>
-          </Box>
-          {/*  <MainContentHeader title={'ユーザー詳細'} sx={{ mb: 2 }} />*/}
-          {/*  {errorMessage && (*/}
-          {/*    <Alert severity="error" sx={{ mb: 2 }}>*/}
-          {/*      {errorMessage}*/}
-          {/*    </Alert>*/}
-          {/*  )}*/}
-          {/*  <Box mb={2} display={'flex'} justifyContent={'space-between'}>*/}
-          {/*    <Box>*/}
-          {/*      <Button*/}
-          {/*        variant="contained"*/}
-          {/*        color="primary"*/}
-          {/*        onClick={onClickEditButton}*/}
-          {/*        disabled={isLoading}*/}
-          {/*        sx={{ mr: 2 }}*/}
-          {/*      >*/}
-          {/*        編集*/}
-          {/*      </Button>*/}
-          {/*      <Button variant="contained" color="error" onClick={onClickDeleteButton} disabled={isLoading}>*/}
-          {/*        削除*/}
-          {/*      </Button>*/}
-          {/*    </Box>*/}
-          {/*    <Link href={'/'}>一覧へ</Link>*/}
-          {/*  </Box>*/}
-          {/*  <UserItems user={user} />*/}
-          {/*  <SelectDialog*/}
-          {/*    open={isOpenDeleteDialog}*/}
-          {/*    onClose={() => setIsOpenDeleteDialog(false)}*/}
-          {/*    dialogTitle={'本当に削除しますか？'}*/}
-          {/*    dialogContentText={'削除したユーザーは元に戻すことができません'}*/}
-          {/*    dialogButtons={[*/}
-          {/*      { action: onClickDeleteCancel, label: 'キャンセル', color: 'secondary' },*/}
-          {/*      { action: onClickDeleteAgreement, label: '削除', color: 'error' },*/}
-          {/*    ]}*/}
-          {/*    isLoading={isLoading}*/}
-          {/*  />*/}
+          <PostHeader post={post} sx={{ mb: 6 }} />
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.body}</ReactMarkdown>
         </Card>
       </Grid>
     </Grid>
