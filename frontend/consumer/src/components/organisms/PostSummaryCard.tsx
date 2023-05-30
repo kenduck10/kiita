@@ -11,6 +11,12 @@ const StyledCardContent = styled(CardContent)({
   },
 });
 
+const StyledCardActionArea = styled(CardActionArea)({
+  [`.MuiCardActionArea-focusHighlight`]: {
+    backgroundColor: 'transparent',
+  },
+});
+
 export const PostSummaryCard = ({ postSummary, sx }: { postSummary: PostSummary; sx?: SxProps<Theme> }) => {
   const router = useRouter();
   const onClickCard = async () => {
@@ -20,11 +26,13 @@ export const PostSummaryCard = ({ postSummary, sx }: { postSummary: PostSummary;
   const mergedSx = sx ? { ...baseSx, ...sx } : baseSx;
   return (
     <Card variant={'outlined'} sx={mergedSx}>
-      <CardActionArea onClick={onClickCard}>
+      <StyledCardActionArea onClick={onClickCard}>
         <StyledCardContent>
-          <Typography>{postSummary.title}</Typography>
+          <Typography variant={'h6'} fontWeight={'bold'}>
+            {postSummary.title}
+          </Typography>
         </StyledCardContent>
-      </CardActionArea>
+      </StyledCardActionArea>
     </Card>
   );
 };
