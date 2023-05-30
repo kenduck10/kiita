@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardContent, SxProps, Theme, Typography } from '@mui/material';
+import { Card, CardActionArea, CardContent, Link, SxProps, Theme } from '@mui/material';
 import React from 'react';
 import PostSummary from '@/features/post/models/PostSummary';
 import styled from '@emotion/styled';
@@ -19,18 +19,19 @@ const StyledCardActionArea = styled(CardActionArea)({
 
 export const PostSummaryCard = ({ postSummary, sx }: { postSummary: PostSummary; sx?: SxProps<Theme> }) => {
   const router = useRouter();
+  const postDetailPath = PAGE_PATH_BUILDER.POST_DETAIL(postSummary.id);
   const onClickCard = async () => {
-    await router.push(PAGE_PATH_BUILDER.POST_DETAIL(postSummary.id));
+    await router.push(postDetailPath);
   };
   const baseSx = { border: 0 };
   const mergedSx = sx ? { ...baseSx, ...sx } : baseSx;
   return (
     <Card variant={'outlined'} sx={mergedSx}>
-      <StyledCardActionArea onClick={onClickCard}>
+      <StyledCardActionArea onClick={onClickCard} disableRipple>
         <StyledCardContent>
-          <Typography variant={'h6'} fontWeight={'bold'}>
+          <Link href={postDetailPath} variant={'h6'} fontWeight={'bold'} underline={'hover'} color={'inherit'}>
             {postSummary.title}
-          </Typography>
+          </Link>
         </StyledCardContent>
       </StyledCardActionArea>
     </Card>
