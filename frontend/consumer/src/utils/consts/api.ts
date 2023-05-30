@@ -5,6 +5,7 @@ const API_SUB_PATH = {
 
 const API_SUB_PATH_BUILDER = {
   USER: (userId: number) => `/users/${userId}`,
+  POST: (postId: number) => `/posts/${postId}`,
 } as const;
 
 const FRONTEND_BASE_PATH = process.env.NEXT_PUBLIC_KIITA_FRONTEND_API_BASE_URL;
@@ -16,6 +17,7 @@ export const FRONTEND_API_PATH = {
 
 export const FRONTEND_API_PATH_BUILDER = {
   USER: (userId: number) => FRONTEND_BASE_PATH + API_SUB_PATH_BUILDER.USER(userId),
+  POST: (postId: number) => FRONTEND_BASE_PATH + API_SUB_PATH_BUILDER.POST(postId),
 } as const;
 
 const BACKEND_BASE_PATH = process.env.KIITA_BACKEND_API_BASE_URL;
@@ -26,4 +28,5 @@ export const BACKEND_API_PATH = {
 
 export const BACKEND_API_PATH_BUILDER = {
   USER: (userId: number) => BACKEND_BASE_PATH + API_SUB_PATH_BUILDER.USER(userId),
+  POST: (postId: number) => BACKEND_BASE_PATH + API_SUB_PATH_BUILDER.POST(postId),
 } as const;
