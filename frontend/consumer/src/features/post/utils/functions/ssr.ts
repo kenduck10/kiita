@@ -25,7 +25,7 @@ export const fetchPost = async (postId: number) => {
   if (status === HttpStatusCode.Ok) {
     return {
       props: {
-        user: JSON.parse(JSON.stringify(postResponse.post)),
+        post: JSON.parse(JSON.stringify(postResponse.post)),
       },
     };
   }
