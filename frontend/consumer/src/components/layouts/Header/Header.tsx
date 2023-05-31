@@ -1,6 +1,6 @@
 import { AppBar, Container, Toolbar } from '@mui/material';
-import Image from 'next/image';
-import Link from 'next/link';
+import { PostAddButton } from '@/components/organisms/PostAddButton';
+import { Logo } from '@/components/organisms/Logo';
 
 export const Header = () => {
   return (
@@ -8,9 +8,8 @@ export const Header = () => {
       <AppBar position="relative" elevation={0}>
         <Container maxWidth="xl">
           <Toolbar>
-            <Link href={'/'}>
-              <Image src="/logo.svg" alt="logo" width="96" height="32" />
-            </Link>
+            <Logo />
+            <PostAddButton />
           </Toolbar>
         </Container>
       </AppBar>
