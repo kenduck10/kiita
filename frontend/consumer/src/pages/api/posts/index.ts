@@ -37,23 +37,23 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
     return response.status(HttpStatusCode.Ok).json(result);
   }
 
-  // if (request.method === 'POST') {
-  //   const result = await axios
-  //     .post(BACKEND_API_PATH.USERS, request.body)
-  //     .then((response: AxiosResponse<{ createdUserResponse: CreateUserResponse; statusCode: number }>) => {
-  //       return {
-  //         createdUserResponse: response.data,
-  //         statusCode: HttpStatusCode.Created,
-  //       };
-  //     })
-  //     .catch((error) => {
-  //       return {
-  //         createdUserResponse: undefined,
-  //         statusCode: error.response.status,
-  //       };
-  //     });
-  //   return response.status(result.statusCode).json(result.createdUserResponse);
-  // }
+  if (request.method === 'POST') {
+    const result = await axios
+      .post(BACKEND_API_PATH.POSTS, request.body)
+      .then((response: AxiosResponse<{ postId: number; statusCode: number }>) => {
+        return {
+          postId: response.data,
+          statusCode: HttpStatusCode.Created,
+        };
+      })
+      .catch((error) => {
+        return {
+          postId: undefined,
+          statusCode: error.response.status,
+        };
+      });
+    return response.status(result.statusCode).json(result.postId);
+  }
 
   return response.status(400);
 };
