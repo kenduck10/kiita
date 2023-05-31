@@ -9,4 +9,6 @@ export const PAGE_PATH = {
 export const PAGE_PATH_BUILDER = {
   USER_DETAIL: (userId: number) => `/users/${userId}`,
   USER_EDIT: (userId: number) => `/users/edit/${userId}`,
+  POST_DETAIL: (postId: number) => `/posts/${postId}`,
+  POST_EDIT: (postId: number) => `/posts/edit/${postId}`,
 } as const;

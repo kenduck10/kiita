@@ -13,7 +13,6 @@ export const Home: NextPageWithLayout<{ postSummaries: PostSummaries }> = ({
   postSummaries: PostSummaries;
 }) => {
   const router = useRouter();
-  console.log(postSummaries);
 
   // const onClickToAdd = async () => {
   //   await router.push(PAGE_PATH.USER_NEW);
