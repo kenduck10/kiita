@@ -2,6 +2,7 @@ package com.kenduck.common.post.models;
 
 
 import com.kenduck.common.generated.models.GeneratedPost;
+import com.kenduck.common.post.dtos.CreatePost;
 
 public class Post extends GeneratedPost {
 
@@ -12,6 +13,14 @@ public class Post extends GeneratedPost {
                 generatedPost.getId(),
                 generatedPost.getTitle(),
                 generatedPost.getBody()
+        );
+    }
+
+    public Post(CreatePost createPost) {
+        super(
+                null,
+                createPost.getTitle(),
+                createPost.getBody()
         );
     }
 }
