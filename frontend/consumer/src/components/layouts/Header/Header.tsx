@@ -1,4 +1,4 @@
-import { AppBar, Container, Toolbar } from '@mui/material';
+import { AppBar, Box, Container, Toolbar } from '@mui/material';
 import { PostAddButton } from '@/components/organisms/PostAddButton';
 import { Logo } from '@/components/organisms/Logo';
 
@@ -8,8 +8,12 @@ export const Header = () => {
       <AppBar position="relative" elevation={0}>
         <Container maxWidth="xl">
           <Toolbar>
-            <Logo />
-            <PostAddButton />
+            <Box sx={{ flexGrow: 1 }}>
+              <Logo />
+            </Box>
+            <Box>
+              <PostAddButton />
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>
