@@ -1,16 +1,25 @@
-import {Grid} from '@mui/material';
-import React from 'react';
+import { Grid } from '@mui/material';
+import React, { useState } from 'react';
+import { ControlledTextField } from '@/components/molecules/ControlledTextField';
+import { useForm } from 'react-hook-form';
+import { PostCreateBody } from '@/hooks/usePostCreate';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { TITLE_YUP_SCHEMA } from '@/features/post/validations/YupSchema';
+import * as yup from 'yup';
 
-// const errorSchema = yup.object().shape({
-//   lastName: LAST_NAME_YUP_SCHEMA,
-//   firstName: FIRST_NAME_YUP_SCHEMA,
-//   mailAddress: MAIL_ADDRESS_YUP_SCHEMA,
-// });
+const errorSchema = yup.object().shape({
+  title: TITLE_YUP_SCHEMA,
+});
 
-export const PostNew = ({ isFromConfirm }: { isFromConfirm: boolean }) => {
+type SubmitArguments = {
+  title: string;
+  body: string;
+};
+
+export const PostNew = () => {
   // const router = useRouter();
   //
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   //
   // const [createUser, setCreateUser] = useRecoilState(createUserState);
   // const createUserErrorMessage = useRecoilValue(createUserErrorMessageState);
@@ -18,17 +27,16 @@ export const PostNew = ({ isFromConfirm }: { isFromConfirm: boolean }) => {
   // const resetCreateUser = useResetRecoilState(createUserState);
   // const resetCreateUserErrorMessage = useResetRecoilState(createUserErrorMessageState);
   //
-  // const { control, handleSubmit, reset } = useForm<UserCreateBody>({
-  //   mode: 'all',
-  //   criteriaMode: 'all',
-  //   shouldFocusError: false,
-  //   defaultValues: {
-  //     lastName: '',
-  //     firstName: '',
-  //     mailAddress: '',
-  //   },
-  //   resolver: yupResolver(errorSchema),
-  // });
+  const { control, handleSubmit, reset } = useForm<PostCreateBody>({
+    mode: 'all',
+    criteriaMode: 'all',
+    shouldFocusError: false,
+    defaultValues: {
+      title: '',
+      body: '',
+    },
+    resolver: yupResolver(errorSchema),
+  });
 
   // useEffect(() => {
   //   if (isFromConfirm) {
@@ -49,7 +57,17 @@ export const PostNew = ({ isFromConfirm }: { isFromConfirm: boolean }) => {
 
   return (
     <Grid container justifyContent={'center'}>
-      <Grid item xs={12} md={8}>
+      <Grid item xs={12} md={12}>
+        <ControlledTextField
+          control={control}
+          name={'title'}
+          type={'text'}
+          disabled={isLoading}
+          // sx={{ maxWidth: '400px' }}
+          label={'タイトル'}
+          fullWidth={true}
+          id={'title-field'}
+        />
         {/*<Card sx={{ p: 4 }}>*/}
         {/*  <MainContentHeader title={'ユーザー追加'} sx={{ mb: 2 }} />*/}
         {/*  {createUserErrorMessage && (*/}
