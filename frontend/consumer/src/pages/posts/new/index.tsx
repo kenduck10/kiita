@@ -1,7 +1,7 @@
-import { Grid } from '@mui/material';
+import { Box, Button, Grid, TextareaAutosize } from '@mui/material';
 import React, { useState } from 'react';
 import { ControlledTextField } from '@/components/molecules/ControlledTextField';
-import { useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { PostCreateBody } from '@/hooks/usePostCreate';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TITLE_YUP_SCHEMA } from '@/features/post/validations/YupSchema';
@@ -48,12 +48,13 @@ export const PostNew = () => {
   // }, []);
   //
   // const onClickCancel = async () => await router.push(PAGE_PATH.HOME);
-  // const onClickToConfirm: SubmitHandler<UserCreateBody> = async (createUser) => {
-  //   setIsLoading(true);
-  //   setCreateUser(createUser);
-  //   await router.push(PAGE_PATH.USER_NEW_CONFIRM);
-  //   resetCreateUserErrorMessage();
-  // };
+  const onClickPost: SubmitHandler<PostCreateBody> = async (createPost) => {
+    console.log(createPost);
+    // setIsLoading(true);
+    // setCreateUser(createUser);
+    // await router.push(PAGE_PATH.USER_NEW_CONFIRM);
+    // resetCreateUserErrorMessage();
+  };
 
   return (
     <Grid container justifyContent={'center'}>
@@ -63,11 +64,20 @@ export const PostNew = () => {
           name={'title'}
           type={'text'}
           disabled={isLoading}
-          // sx={{ maxWidth: '400px' }}
           label={'タイトル'}
           fullWidth={true}
           id={'title-field'}
         />
+        <Box mt={3}>
+          <Controller
+            control={control}
+            name={'body'}
+            render={({ field, fieldState }) => (
+              <TextareaAutosize {...field} minRows={30} style={{ width: '100%' }}></TextareaAutosize>
+            )}
+          />
+        </Box>
+        <Button onClick={handleSubmit(onClickPost)}>Kiitaに投稿する</Button>
         {/*<Card sx={{ p: 4 }}>*/}
         {/*  <MainContentHeader title={'ユーザー追加'} sx={{ mb: 2 }} />*/}
         {/*  {createUserErrorMessage && (*/}
