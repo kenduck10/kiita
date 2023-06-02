@@ -67,6 +67,7 @@ export const PostNew = () => {
           label={'タイトル'}
           fullWidth={true}
           id={'title-field'}
+          sx={{ backgroundColor: 'white' }}
         />
         <Box mt={3}>
           <Controller
@@ -77,7 +78,16 @@ export const PostNew = () => {
             )}
           />
         </Box>
-        <Button onClick={handleSubmit(onClickPost)}>Kiitaに投稿する</Button>
+        <Box mt={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button
+            variant={'contained'}
+            color={'primary'}
+            onClick={handleSubmit(onClickPost)}
+            sx={{ boxShadow: 'none' }}
+          >
+            Kiitaに投稿する
+          </Button>
+        </Box>
         {/*<Card sx={{ p: 4 }}>*/}
         {/*  <MainContentHeader title={'ユーザー追加'} sx={{ mb: 2 }} />*/}
         {/*  {createUserErrorMessage && (*/}
