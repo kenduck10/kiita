@@ -2,6 +2,7 @@ export const PAGE_PATH = {
   HOME: '/',
   USER_NEW: '/users/new',
   USER_NEW_CONFIRM: '/users/new/confirm',
+  POST_NEW: '/posts/new',
   ERROR: '/error',
   NOT_FOUND: '/notFound',
 } as const;
