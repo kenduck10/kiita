@@ -2,10 +2,11 @@ import { Box, Button, Grid, TextareaAutosize } from '@mui/material';
 import React, { useState } from 'react';
 import { ControlledTextField } from '@/components/molecules/ControlledTextField';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { PostCreateBody } from '@/hooks/usePostCreate';
+import { PostCreateBody, usePostCreate } from '@/hooks/usePostCreate';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TITLE_YUP_SCHEMA } from '@/features/post/validations/YupSchema';
 import * as yup from 'yup';
+import { useRouter } from 'next/router';
 
 const errorSchema = yup.object().shape({
   title: TITLE_YUP_SCHEMA,
@@ -17,9 +18,9 @@ type SubmitArguments = {
 };
 
 export const PostNew = () => {
-  // const router = useRouter();
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState('');
   //
-  const [isLoading, setIsLoading] = useState(false);
   //
   // const [createUser, setCreateUser] = useRecoilState(createUserState);
   // const createUserErrorMessage = useRecoilValue(createUserErrorMessageState);
@@ -38,6 +39,15 @@ export const PostNew = () => {
     resolver: yupResolver(errorSchema),
   });
 
+  const { doCreate, isLoading } = usePostCreate(
+    async () => {
+      await router.push('/');
+    },
+    (errorMessage: string) => {
+      setErrorMessage(errorMessage);
+    }
+  );
+
   // useEffect(() => {
   //   if (isFromConfirm) {
   //     reset(createUser);
@@ -49,11 +59,7 @@ export const PostNew = () => {
   //
   // const onClickCancel = async () => await router.push(PAGE_PATH.HOME);
   const onClickPost: SubmitHandler<PostCreateBody> = async (createPost) => {
-    console.log(createPost);
-    // setIsLoading(true);
-    // setCreateUser(createUser);
-    // await router.push(PAGE_PATH.USER_NEW_CONFIRM);
-    // resetCreateUserErrorMessage();
+    await doCreate(createPost);
   };
 
   return (
