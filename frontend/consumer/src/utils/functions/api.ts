@@ -1,4 +1,4 @@
-import axios, { HttpStatusCode } from 'axios/index';
+import axios, { HttpStatusCode } from 'axios';
 import { NextApiResponse } from 'next';
 
 export const requestDelete = async (apiPath: string, response: NextApiResponse) => {
