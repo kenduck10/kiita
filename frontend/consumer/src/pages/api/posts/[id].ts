@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios, { HttpStatusCode } from 'axios';
 import { BACKEND_API_PATH_BUILDER } from '@/utils/consts/api';
+import { requestDelete } from '@/utils/functions/api';
 
 export type GetPostResponse = {
   title: string;
@@ -29,19 +30,7 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
   }
 
   if (request.method === 'DELETE') {
-    const result = await axios
-      .delete(apiPath)
-      .then(() => {
-        return {
-          statusCode: HttpStatusCode.Ok,
-        };
-      })
-      .catch((error) => {
-        return {
-          statusCode: error.response.status,
-        };
-      });
-    return response.status(result.statusCode).json(null);
+    return requestDelete(apiPath, response);
   }
 
   if (request.method === 'PUT') {
