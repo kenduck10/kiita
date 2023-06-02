@@ -7,6 +7,7 @@ import com.kenduck.api.post.responses.FindPostSummariesResponse;
 import com.kenduck.common.post.dtos.FoundPost;
 import com.kenduck.common.post.dtos.FoundPostSummaries;
 import com.kenduck.common.post.services.CreatePostService;
+import com.kenduck.common.post.services.DeletePostService;
 import com.kenduck.common.post.services.FindPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,9 @@ public class PostController {
     @NonNull
     private final CreatePostService createPostService;
 
+    @NonNull
+    private final DeletePostService deletePostService;
+
     @GetMapping("")
     ResponseEntity<FindPostSummariesResponse> findPostSummaries() {
         FoundPostSummaries foundPostSummaries = findPostService.findPostSummaries();
@@ -44,6 +48,12 @@ public class PostController {
                 new CreatePost(request)
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(postId);
+    }
+
+    @DeleteMapping("/{postId}")
+    ResponseEntity<Void> deletePost(@PathVariable("postId") int postId) {
+        deletePostService.deletePost(postId);
+        return ResponseEntity.ok().build();
     }
 
 }
