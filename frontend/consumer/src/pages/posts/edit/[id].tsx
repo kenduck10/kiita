@@ -11,8 +11,7 @@ import { fetchPost } from '@/features/post/utils/functions/ssr';
 import { TITLE_YUP_SCHEMA } from '@/features/post/validations/YupSchema';
 import Post from '@/features/post/models/Post';
 import { PostUpdateBody, usePostUpdate } from '@/hooks/usePostUpdate';
-import { ControlledTextField } from '@/components/molecules/ControlledTextField';
-import { ControlledTextareaAutosize } from '@/components/molecules/ControlledTextareaAutosize';
+import { PostItemsForm } from '@/components/organisms/PostItemsForm';
 
 const errorSchema = yup.object().shape({
   title: TITLE_YUP_SCHEMA,
@@ -42,19 +41,7 @@ export const PostEdit = ({ post }: { post: Post }) => {
   return (
     <Grid container justifyContent={'center'}>
       <Grid item xs={12} md={12}>
-        <ControlledTextField
-          control={control}
-          name={'title'}
-          type={'text'}
-          disabled={isLoading}
-          label={'タイトル'}
-          fullWidth={true}
-          id={'title-field'}
-          sx={{ backgroundColor: 'white' }}
-        />
-        <Box mt={3}>
-          <ControlledTextareaAutosize control={control} name={'body'} minRows={30} style={{ width: '100%' }} />
-        </Box>
+        <PostItemsForm control={control} isLoading={isLoading} />
         <Box mt={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button variant="contained" color="primary" onClick={handleSubmit(doUpdate)} sx={{ mr: 2 }}>
             更新
