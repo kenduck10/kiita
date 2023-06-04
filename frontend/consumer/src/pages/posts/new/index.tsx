@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { TITLE_YUP_SCHEMA } from '@/features/post/validations/YupSchema';
 import * as yup from 'yup';
 import { useRouter } from 'next/router';
+import { PAGE_PATH } from '@/utils/consts/route';
 
 const errorSchema = yup.object().shape({
   title: TITLE_YUP_SCHEMA,
@@ -41,7 +42,7 @@ export const PostNew = () => {
 
   const { doCreate, isLoading } = usePostCreate(
     async () => {
-      await router.push('/');
+      await router.push(PAGE_PATH.HOME);
     },
     (errorMessage: string) => {
       setErrorMessage(errorMessage);

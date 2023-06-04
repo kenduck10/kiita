@@ -16,7 +16,7 @@ export const usePostUpdate = (postId: number, onSuccess: () => void) => {
   const doUpdate = async (body: PostUpdateBody) => {
     setIsLoading(true);
     await axios
-      .put(FRONTEND_API_PATH_BUILDER.POST(postId), body)
+      .patch(FRONTEND_API_PATH_BUILDER.POST(postId), body)
       .then(onSuccess)
       .catch(async (error: AxiosError) => {
         const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.NotFound];

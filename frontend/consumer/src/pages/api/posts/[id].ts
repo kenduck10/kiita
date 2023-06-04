@@ -35,7 +35,7 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
 
   if (request.method === 'PATCH') {
     const result = await axios
-      .put(apiPath, request.body)
+      .patch(apiPath, request.body)
       .then(() => {
         return {
           statusCode: HttpStatusCode.Ok,

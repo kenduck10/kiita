@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next';
 import { Box, Button, Card, Grid } from '@mui/material';
 import React, { useState } from 'react';
 import { buildServerSideRedirect } from '@/utils/functions/route';
-import { PAGE_PATH } from '@/utils/consts/route';
+import { PAGE_PATH, PAGE_PATH_BUILDER } from '@/utils/consts/route';
 import { fetchPost } from '@/features/post/utils/functions/ssr';
 import Post from '@/features/post/models/Post';
 import ReactMarkdown from 'react-markdown';
@@ -14,15 +14,13 @@ import { SelectDialog } from '@/components/molecules/SelectDialog';
 
 export const PostDetail = ({ post }: { post: Post }) => {
   const router = useRouter();
+  const postId = Number(post.id);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
-  const { doDelete, isLoading, errorMessage } = usePostDelete(
-    Number(post.id),
-    async () => await router.push(PAGE_PATH.HOME)
-  );
-  //
-  // const onClickEditButton = async () => {
-  //   await router.push(PAGE_PATH_BUILDER.POST_EDIT(Number(post.id)));
-  // };
+  const { doDelete, isLoading, errorMessage } = usePostDelete(postId, async () => await router.push(PAGE_PATH.HOME));
+
+  const onClickEditButton = async () => {
+    await router.push(PAGE_PATH_BUILDER.POST_EDIT(postId));
+  };
   const onClickDeleteButton = async () => {
     setIsOpenDeleteDialog(true);
   };
@@ -39,13 +37,7 @@ export const PostDetail = ({ post }: { post: Post }) => {
       <Grid item xs={12} md={8}>
         <Card variant={'outlined'} sx={{ p: 4, border: 0 }}>
           <Box mb={2} display={'flex'} justifyContent={'flex-end'}>
-            <Button
-              variant="contained"
-              color="primary"
-              // onClick={onClickEditButton}
-              // disabled={isLoading}
-              sx={{ mr: 2 }}
-            >
+            <Button variant="contained" color="primary" onClick={onClickEditButton} disabled={isLoading} sx={{ mr: 2 }}>
               編集
             </Button>
             <Button variant="contained" color="error" onClick={onClickDeleteButton} disabled={isLoading}>
