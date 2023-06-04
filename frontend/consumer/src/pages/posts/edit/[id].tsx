@@ -1,9 +1,9 @@
 import { GetServerSideProps } from 'next';
-import { Box, Button, Grid, TextareaAutosize } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import * as yup from 'yup';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { PAGE_PATH, PAGE_PATH_BUILDER } from '@/utils/consts/route';
@@ -12,6 +12,7 @@ import { TITLE_YUP_SCHEMA } from '@/features/post/validations/YupSchema';
 import Post from '@/features/post/models/Post';
 import { PostUpdateBody, usePostUpdate } from '@/hooks/usePostUpdate';
 import { ControlledTextField } from '@/components/molecules/ControlledTextField';
+import { ControlledTextareaAutosize } from '@/components/molecules/ControlledTextareaAutosize';
 
 const errorSchema = yup.object().shape({
   title: TITLE_YUP_SCHEMA,
@@ -52,13 +53,7 @@ export const PostEdit = ({ post }: { post: Post }) => {
           sx={{ backgroundColor: 'white' }}
         />
         <Box mt={3}>
-          <Controller
-            control={control}
-            name={'body'}
-            render={({ field, fieldState }) => (
-              <TextareaAutosize {...field} minRows={30} style={{ width: '100%' }}></TextareaAutosize>
-            )}
-          />
+          <ControlledTextareaAutosize control={control} name={'body'} minRows={30} style={{ width: '100%' }} />
         </Box>
         <Box mt={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button variant="contained" color="primary" onClick={handleSubmit(doUpdate)} sx={{ mr: 2 }}>
