@@ -1,7 +1,7 @@
 import { Box, Button, Grid } from '@mui/material';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { PostCreateBody, usePostCreate } from '@/hooks/usePostCreate';
+import { PostCreateBody, usePostCreate } from '@/features/post/hooks/usePostCreate';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TITLE_YUP_SCHEMA } from '@/features/post/validations/YupSchema';
 import * as yup from 'yup';

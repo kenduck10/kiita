@@ -5,7 +5,7 @@ import { createUserErrorMessageState, createUserState } from '@/stores/user';
 import React, { useEffect, useState } from 'react';
 import { UserItems } from '@/components/organisms/UserItems';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
-import { UserCreateBody, useUserCreate } from '@/hooks/useUserCreate';
+import { UserCreateBody, useUserCreate } from '@/features/user/hooks/useUserCreate';
 import { GetServerSidePropsContext } from 'next';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { PAGE_PATH } from '@/utils/consts/route';

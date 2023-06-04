@@ -10,8 +10,8 @@ import { PAGE_PATH, PAGE_PATH_BUILDER } from '@/utils/consts/route';
 import { fetchPost } from '@/features/post/utils/functions/ssr';
 import { TITLE_YUP_SCHEMA } from '@/features/post/validations/YupSchema';
 import Post from '@/features/post/models/Post';
-import { PostUpdateBody, usePostUpdate } from '@/hooks/usePostUpdate';
 import { PostItemsForm } from '@/components/organisms/PostItemsForm';
+import { PostUpdateBody, usePostUpdate } from '@/features/post/hooks/usePostUpdate';
 
 const errorSchema = yup.object().shape({
   title: TITLE_YUP_SCHEMA,

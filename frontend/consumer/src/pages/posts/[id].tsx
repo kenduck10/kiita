@@ -8,7 +8,7 @@ import Post from '@/features/post/models/Post';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { PostHeader } from '@/components/organisms/PostHeader';
-import { usePostDelete } from '@/hooks/usePostDelete';
+import { usePostDelete } from '@/features/post/hooks/usePostDelete';
 import { useRouter } from 'next/router';
 import { SelectDialog } from '@/components/molecules/SelectDialog';
 

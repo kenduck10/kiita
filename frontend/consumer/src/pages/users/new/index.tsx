@@ -14,8 +14,8 @@ import React, { useEffect, useState } from 'react';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { UserItemsForm } from '@/components/organisms/UserItemsForm';
 import { GetServerSidePropsContext } from 'next';
-import { UserCreateBody } from '@/hooks/useUserCreate';
 import { PAGE_PATH } from '@/utils/consts/route';
+import { UserCreateBody } from '@/features/user/hooks/useUserCreate';
 
 const errorSchema = yup.object().shape({
   lastName: LAST_NAME_YUP_SCHEMA,
