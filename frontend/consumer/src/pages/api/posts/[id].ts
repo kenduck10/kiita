@@ -33,7 +33,7 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
     return requestDelete(apiPath, response);
   }
 
-  if (request.method === 'PUT') {
+  if (request.method === 'PATCH') {
     const result = await axios
       .put(apiPath, request.body)
       .then(() => {
