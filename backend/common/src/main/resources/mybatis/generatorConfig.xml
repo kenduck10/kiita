@@ -43,5 +43,12 @@
             <ignoreColumn column="updated_at"/>
         </table>
 
+        <table schema="kiita" tableName="comments" mapperName="GeneratedCommentMapper">
+            <property name="dynamicSqlSupportClassName" value="GeneratedCommentDynamicSqlSupport"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <domainObjectRenamingRule searchString="Comments" replaceString="GeneratedComment"/>
+            <ignoreColumn column="created_at"/>
+            <ignoreColumn column="updated_at"/>
+        </table>
     </context>
 </generatorConfiguration>
