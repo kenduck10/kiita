@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { SelectDialog } from '@/components/molecules/SelectDialog';
 import { UserItems } from '@/components/organisms/UserItems';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
-import { useUserDelete } from '@/hooks/useUserDelete';
+import { useUserDelete } from '@/features/user/hooks/useUserDelete';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { fetchUser } from '@/features/user/utils/functions/ssr';
 import { PAGE_PATH, PAGE_PATH_BUILDER } from '@/utils/consts/route';

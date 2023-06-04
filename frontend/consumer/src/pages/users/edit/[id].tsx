@@ -13,7 +13,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MainContentHeader } from '@/components/molecules/MainContentHeader';
 import { UserItemsForm } from '@/components/organisms/UserItemsForm';
-import { UserUpdateBody, useUserUpdate } from '@/hooks/useUserUpdate';
+import { UserUpdateBody, useUserUpdate } from '@/features/user/hooks/useUserUpdate';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { fetchUser } from '@/features/user/utils/functions/ssr';
 import { PAGE_PATH } from '@/utils/consts/route';

@@ -33,9 +33,9 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
     return requestDelete(apiPath, response);
   }
 
-  if (request.method === 'PUT') {
+  if (request.method === 'PATCH') {
     const result = await axios
-      .put(apiPath, request.body)
+      .patch(apiPath, request.body)
       .then(() => {
         return {
           statusCode: HttpStatusCode.Ok,

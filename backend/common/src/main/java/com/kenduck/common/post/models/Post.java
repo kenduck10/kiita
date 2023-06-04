@@ -3,6 +3,7 @@ package com.kenduck.common.post.models;
 
 import com.kenduck.common.generated.models.GeneratedPost;
 import com.kenduck.common.post.dtos.CreatePost;
+import com.kenduck.common.post.dtos.UpdatePost;
 
 public class Post extends GeneratedPost {
 
@@ -21,6 +22,14 @@ public class Post extends GeneratedPost {
                 null,
                 createPost.getTitle(),
                 createPost.getBody()
+        );
+    }
+
+    public Post(UpdatePost updatePost) {
+        super(
+                updatePost.getPostId(),
+                updatePost.getTitle(),
+                updatePost.getBody()
         );
     }
 }
