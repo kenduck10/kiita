@@ -7,10 +7,12 @@ export const PostComments = ({
   comments,
   isLoading,
   sx,
+  onDeleteComment,
 }: {
   comments?: Comments;
   isLoading: boolean;
   sx?: SxProps<Theme>;
+  onDeleteComment: () => void;
 }) => {
   return (
     <Box sx={sx}>
@@ -19,13 +21,13 @@ export const PostComments = ({
           <CircularProgress />
         </Box>
       ) : (
-        buildLoadedCommentsComponent(comments)
+        buildLoadedCommentsComponent(comments, onDeleteComment)
       )}
     </Box>
   );
 };
 
-const buildLoadedCommentsComponent = (comments: Comments) => {
+const buildLoadedCommentsComponent = (comments: Comments, onDeleteComment: () => void) => {
   const commentsLength = comments.value.length;
   if (commentsLength === 0) {
     return (
@@ -39,7 +41,7 @@ const buildLoadedCommentsComponent = (comments: Comments) => {
     const isLast = index === commentsLength - 1;
     return (
       <Box key={comment.commentId} mt={isFirst ? 0 : 3}>
-        <PostComment comment={comment} />
+        <PostComment comment={comment} onDeleteComment={onDeleteComment} />
         {!isLast && <Divider sx={{ mt: 3 }} />}
       </Box>
     );
