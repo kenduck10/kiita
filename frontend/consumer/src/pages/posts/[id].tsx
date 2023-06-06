@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { Box, Button, Card, Grid } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { PAGE_PATH, PAGE_PATH_BUILDER } from '@/utils/consts/route';
 import { fetchPost } from '@/features/post/utils/functions/ssr';
@@ -11,12 +11,20 @@ import { PostHeader } from '@/components/organisms/PostHeader';
 import { usePostDelete } from '@/features/post/hooks/usePostDelete';
 import { useRouter } from 'next/router';
 import { SelectDialog } from '@/components/molecules/SelectDialog';
+import axios, { AxiosResponse } from 'axios';
+import { FRONTEND_API_PATH_BUILDER } from '@/utils/consts/api';
+import Comments from '@/features/comment/models/Comments';
+import { GetCommentsResponse } from '@/pages/api/posts/[id]/comments';
+import { PostComments } from '@/components/organisms/PostComments';
+import { PostCommentHeader } from '@/components/organisms/PostCommentHeader';
 
 export const PostDetail = ({ post }: { post: Post }) => {
   const router = useRouter();
   const postId = Number(post.id);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const { doDelete, isLoading, errorMessage } = usePostDelete(postId, async () => await router.push(PAGE_PATH.HOME));
+  const [comments, setComments] = useState<Comments>();
+  const [isLoadingComments, setIsLoadingComments] = useState(true);
 
   const onClickEditButton = async () => {
     await router.push(PAGE_PATH_BUILDER.POST_EDIT(postId));
@@ -24,7 +32,7 @@ export const PostDetail = ({ post }: { post: Post }) => {
   const onClickDeleteButton = async () => {
     setIsOpenDeleteDialog(true);
   };
-  //
+
   const onClickDeleteAgreement = () => {
     doDelete().then(() => setIsOpenDeleteDialog(false));
   };
@@ -32,6 +40,19 @@ export const PostDetail = ({ post }: { post: Post }) => {
   const onClickDeleteCancel = () => {
     setIsOpenDeleteDialog(false);
   };
+
+  const fetchComments = async () =>
+    await axios
+      .get(FRONTEND_API_PATH_BUILDER.POST_COMMENTS(postId))
+      .then((response: AxiosResponse<GetCommentsResponse>) => {
+        setComments(new Comments(response.data));
+      })
+      .finally(() => setIsLoadingComments(false));
+
+  useEffect(() => {
+    fetchComments().then();
+  }, []);
+
   return (
     <Grid container justifyContent={'center'}>
       <Grid item xs={12} md={8}>
@@ -57,6 +78,10 @@ export const PostDetail = ({ post }: { post: Post }) => {
             ]}
             isLoading={isLoading}
           />
+        </Card>
+        <Card variant={'outlined'} sx={{ p: 4, border: 0, mt: 3 }}>
+          <PostCommentHeader />
+          <PostComments comments={comments} isLoading={isLoadingComments} sx={{ mt: 3 }} />
         </Card>
       </Grid>
     </Grid>
