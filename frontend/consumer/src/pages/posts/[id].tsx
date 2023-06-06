@@ -81,7 +81,12 @@ export const PostDetail = ({ post }: { post: Post }) => {
         </Card>
         <Card variant={'outlined'} sx={{ p: 4, border: 0, mt: 3 }}>
           <PostCommentHeader />
-          <PostComments comments={comments} isLoading={isLoadingComments} sx={{ mt: 3 }} />
+          <PostComments
+            comments={comments}
+            isLoading={isLoadingComments}
+            sx={{ mt: 3 }}
+            onDeleteComment={fetchComments}
+          />
         </Card>
       </Grid>
     </Grid>

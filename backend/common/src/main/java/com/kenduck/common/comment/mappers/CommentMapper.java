@@ -28,4 +28,11 @@ public interface CommentMapper extends GeneratedCommentMapper {
                         .orderBy(GeneratedCommentDynamicSqlSupport.commentedAt);
         return new Comments(select(completer));
     }
+
+    default int deleteByPostId(int postId) {
+        return delete(c ->
+                c.where(GeneratedCommentDynamicSqlSupport.postId, isEqualTo(postId))
+        );
+    }
+
 }
