@@ -1,4 +1,4 @@
-package com.kenduck.api.comment.responses;
+package com.kenduck.api.post.responses;
 
 import com.kenduck.common.comment.dtos.FoundComment;
 import com.kenduck.common.comment.dtos.FoundComments;
