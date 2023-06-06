@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Divider, SxProps, Theme } from '@mui/material';
+import { Box, CircularProgress, Divider, SxProps, Theme, Typography } from '@mui/material';
 import React from 'react';
 import Comments from '@/features/comment/models/Comments';
 import { PostComment } from '@/components/organisms/PostComment';
@@ -19,14 +19,21 @@ export const PostComments = ({
           <CircularProgress />
         </Box>
       ) : (
-        buildCommentsComponent(comments)
+        buildLoadedCommentsComponent(comments)
       )}
     </Box>
   );
 };
 
-const buildCommentsComponent = (comments: Comments) => {
+const buildLoadedCommentsComponent = (comments: Comments) => {
   const commentsLength = comments.value.length;
+  if (commentsLength === 0) {
+    return (
+      <Box display={'flex'} justifyContent={'center'}>
+        <Typography>コメントはありません</Typography>
+      </Box>
+    );
+  }
   return comments.value.map((comment, index) => {
     const isFirst = index === 0;
     const isLast = index === commentsLength - 1;
