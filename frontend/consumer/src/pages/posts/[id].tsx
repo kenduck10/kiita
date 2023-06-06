@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { Box, Button, Card, Divider, Grid, Typography } from '@mui/material';
+import { Box, Button, Card, CircularProgress, Divider, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { PAGE_PATH, PAGE_PATH_BUILDER } from '@/utils/consts/route';
@@ -22,6 +22,7 @@ export const PostDetail = ({ post }: { post: Post }) => {
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const { doDelete, isLoading, errorMessage } = usePostDelete(postId, async () => await router.push(PAGE_PATH.HOME));
   const [comments, setComments] = useState<Comments>();
+  const [isLoadingComments, setIsLoadingComments] = useState(true);
 
   const onClickEditButton = async () => {
     await router.push(PAGE_PATH_BUILDER.POST_EDIT(postId));
@@ -43,7 +44,8 @@ export const PostDetail = ({ post }: { post: Post }) => {
       .get(FRONTEND_API_PATH_BUILDER.POST_COMMENTS(postId))
       .then((response: AxiosResponse<GetCommentsResponse>) => {
         setComments(new Comments(response.data));
-      });
+      })
+      .finally(() => setIsLoadingComments(false));
 
   useEffect(() => {
     fetchComments().then();
@@ -82,10 +84,23 @@ export const PostDetail = ({ post }: { post: Post }) => {
             </Typography>
             <Divider />
           </Box>
-          <Box>
-            {comments?.value.map((comment) => {
-              return <Typography>{comment.body}</Typography>;
-            })}
+          <Box sx={{ mt: 3 }}>
+            {isLoadingComments || comments === undefined ? (
+              <Box display={'flex'} justifyContent={'center'}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              comments.value.map((comment, index) => {
+                const isFirst = index === 0;
+                const isLast = index === comments.value.length - 1;
+                return (
+                  <Box key={comment.commentId} mt={isFirst ? 0 : 3}>
+                    <Typography>{comment.body}</Typography>
+                    {!isLast && <Divider sx={{ mt: 3 }} />}
+                  </Box>
+                );
+              })
+            )}
           </Box>
         </Card>
       </Grid>
