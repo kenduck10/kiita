@@ -19,17 +19,22 @@ export const PostComments = ({
           <CircularProgress />
         </Box>
       ) : (
-        comments.value.map((comment, index) => {
-          const isFirst = index === 0;
-          const isLast = index === comments.value.length - 1;
-          return (
-            <Box key={comment.commentId} mt={isFirst ? 0 : 3}>
-              <PostComment comment={comment} />
-              {!isLast && <Divider sx={{ mt: 3 }} />}
-            </Box>
-          );
-        })
+        buildCommentsComponent(comments)
       )}
     </Box>
   );
+};
+
+const buildCommentsComponent = (comments: Comments) => {
+  const commentsLength = comments.value.length;
+  return comments.value.map((comment, index) => {
+    const isFirst = index === 0;
+    const isLast = index === commentsLength - 1;
+    return (
+      <Box key={comment.commentId} mt={isFirst ? 0 : 3}>
+        <PostComment comment={comment} />
+        {!isLast && <Divider sx={{ mt: 3 }} />}
+      </Box>
+    );
+  });
 };
