@@ -1,6 +1,11 @@
 package com.kenduck.api.comment;
 
+import com.kenduck.common.comment.services.DeleteCommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CommentController {
 
-//    @NonNull
-//    private final FindCommentService findCommentService;
-//
-//    @GetMapping("/{postId}")
-//    ResponseEntity<FindCommentsResponse> findComments(@PathVariable("postId") int postId) {
-//        FoundComments foundComments = findCommentService.findCommentsByPostId(postId);
-//        return ResponseEntity.ok(new FindCommentsResponse(foundComments));
-//    }
+    @NonNull
+    private final DeleteCommentService deleteCommentService;
+
+    @DeleteMapping("/{commentId}")
+    ResponseEntity<Void> deleteComment(@PathVariable("commentId") int commentId) {
+        deleteCommentService.deleteComment(commentId);
+        return ResponseEntity.ok().build();
+    }
 }
