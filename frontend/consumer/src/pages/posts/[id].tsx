@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { Box, Button, Card, CircularProgress, Divider, Grid, Typography } from '@mui/material';
+import { Box, Button, Card, Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { PAGE_PATH, PAGE_PATH_BUILDER } from '@/utils/consts/route';
@@ -15,6 +15,8 @@ import axios, { AxiosResponse } from 'axios';
 import { FRONTEND_API_PATH_BUILDER } from '@/utils/consts/api';
 import Comments from '@/features/comment/models/Comments';
 import { GetCommentsResponse } from '@/pages/api/posts/[id]/comments';
+import { PostComments } from '@/components/organisms/PostComments';
+import { PostCommentHeader } from '@/components/organisms/PostCommentHeader';
 
 export const PostDetail = ({ post }: { post: Post }) => {
   const router = useRouter();
@@ -78,30 +80,8 @@ export const PostDetail = ({ post }: { post: Post }) => {
           />
         </Card>
         <Card variant={'outlined'} sx={{ p: 4, border: 0, mt: 3 }}>
-          <Box>
-            <Typography variant={'h5'} sx={{ fontWeight: 'bold', mb: 3 }} textAlign={'left'}>
-              コメント
-            </Typography>
-            <Divider />
-          </Box>
-          <Box sx={{ mt: 3 }}>
-            {isLoadingComments || comments === undefined ? (
-              <Box display={'flex'} justifyContent={'center'}>
-                <CircularProgress />
-              </Box>
-            ) : (
-              comments.value.map((comment, index) => {
-                const isFirst = index === 0;
-                const isLast = index === comments.value.length - 1;
-                return (
-                  <Box key={comment.commentId} mt={isFirst ? 0 : 3}>
-                    <Typography>{comment.body}</Typography>
-                    {!isLast && <Divider sx={{ mt: 3 }} />}
-                  </Box>
-                );
-              })
-            )}
-          </Box>
+          <PostCommentHeader />
+          <PostComments comments={comments} isLoading={isLoadingComments} sx={{ mt: 3 }} />
         </Card>
       </Grid>
     </Grid>
