@@ -22,16 +22,8 @@ public class Comment extends GeneratedComment {
                 null,
                 createComment.getPostId(),
                 null,
-                false,
+                null,
                 createComment.getBody()
         );
     }
-//
-//    public Comment(UpdatePost updatePost) {
-//        super(
-//                updatePost.getPostId(),
-//                updatePost.getTitle(),
-//                updatePost.getBody()
-//        );
-//    }
 }

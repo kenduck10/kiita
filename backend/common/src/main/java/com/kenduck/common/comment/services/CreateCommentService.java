@@ -18,7 +18,8 @@ public class CreateCommentService {
     @Transactional
     public int createComment(CreateComment createComment) {
         Comment comment = new Comment(createComment);
-        commentMapper.insert(comment);
+        // null指定カラムはDBデフォルト値を採用したいためinsertSelectiveを使用
+        commentMapper.insertSelective(comment);
         return comment.getId();
     }
 }
