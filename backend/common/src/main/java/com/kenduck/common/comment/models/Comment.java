@@ -1,6 +1,7 @@
 package com.kenduck.common.comment.models;
 
 
+import com.kenduck.common.comment.dtos.CreateComment;
 import com.kenduck.common.generated.models.GeneratedComment;
 
 public class Comment extends GeneratedComment {
@@ -16,13 +17,15 @@ public class Comment extends GeneratedComment {
         );
     }
 
-//    public Comment(CreatePost createPost) {
-//        super(
-//                null,
-//                createPost.getTitle(),
-//                createPost.getBody()
-//        );
-//    }
+    public Comment(CreateComment createComment) {
+        super(
+                null,
+                createComment.getPostId(),
+                null,
+                false,
+                createComment.getBody()
+        );
+    }
 //
 //    public Comment(UpdatePost updatePost) {
 //        super(

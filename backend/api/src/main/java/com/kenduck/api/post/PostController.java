@@ -1,13 +1,16 @@
 package com.kenduck.api.post;
 
+import com.kenduck.api.post.dtos.CreateComment;
 import com.kenduck.api.post.dtos.CreatePost;
 import com.kenduck.api.post.dtos.UpdatePost;
+import com.kenduck.api.post.requests.CreateCommentRequest;
 import com.kenduck.api.post.requests.CreatePostRequest;
 import com.kenduck.api.post.requests.UpdatePostRequest;
 import com.kenduck.api.post.responses.FindCommentsResponse;
 import com.kenduck.api.post.responses.FindPostResponse;
 import com.kenduck.api.post.responses.FindPostSummariesResponse;
 import com.kenduck.common.comment.dtos.FoundComments;
+import com.kenduck.common.comment.services.CreateCommentService;
 import com.kenduck.common.comment.services.FindCommentService;
 import com.kenduck.common.post.dtos.FoundPost;
 import com.kenduck.common.post.dtos.FoundPostSummaries;
@@ -41,6 +44,9 @@ public class PostController {
 
     @NonNull
     private final FindCommentService findCommentService;
+
+    @NonNull
+    private final CreateCommentService createCommentService;
 
     @GetMapping("")
     ResponseEntity<FindPostSummariesResponse> findPostSummaries() {
@@ -82,5 +88,15 @@ public class PostController {
     ResponseEntity<FindCommentsResponse> findComments(@PathVariable("postId") int postId) {
         FoundComments foundComments = findCommentService.findCommentsByPostId(postId);
         return ResponseEntity.ok(new FindCommentsResponse(foundComments));
+    }
+
+    @PostMapping("/{postId}/comments")
+    ResponseEntity<Integer> createComment(
+            @PathVariable("postId") int postId,
+            @RequestBody @Validated CreateCommentRequest request) {
+        int createdCommentId = createCommentService.createComment(
+                new CreateComment(postId, request)
+        );
+        return ResponseEntity.ok(createdCommentId);
     }
 }
