@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { Box, Button, Card, CircularProgress, Grid, Typography } from '@mui/material';
+import { Box, Button, Card, CircularProgress, Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { PAGE_PATH, PAGE_PATH_BUILDER } from '@/utils/consts/route';
@@ -17,15 +17,7 @@ import Comments from '@/features/comment/models/Comments';
 import { GetCommentsResponse } from '@/pages/api/posts/[id]/comments';
 import { PostComments } from '@/components/organisms/PostComments';
 import { PostCommentHeader } from '@/components/organisms/PostCommentHeader';
-import { ControlledTextareaAutosize } from '@/components/molecules/ControlledTextareaAutosize';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { CommentCreateBody, useCommentCreate } from '@/features/comment/hooks/useCommentCreate';
-import * as yup from 'yup';
-import { BODY_YUP_SCHEMA } from '@/features/comment/validations/YupSchema';
-
-const errorSchema = yup.object().shape({
-  body: BODY_YUP_SCHEMA,
-});
+import { PostCommentForm } from '@/components/organisms/PostCommentForm';
 
 export const PostDetail = ({ post }: { post: Post }) => {
   const router = useRouter();
@@ -34,25 +26,6 @@ export const PostDetail = ({ post }: { post: Post }) => {
   const { doDelete, isLoading, errorMessage } = usePostDelete(postId, async () => await router.push(PAGE_PATH.HOME));
   const [comments, setComments] = useState<Comments>();
   const [isLoadingComments, setIsLoadingComments] = useState(true);
-  const { control, handleSubmit, reset, getValues } = useForm<CommentCreateBody>({
-    mode: 'all',
-    criteriaMode: 'all',
-    shouldFocusError: false,
-    defaultValues: {
-      body: '',
-    },
-    // resolver: yupResolver(errorSchema),
-  });
-  const { doCreate, isCreating: isCreatingComment } = useCommentCreate(
-    postId,
-    async () => {
-      await fetchComments();
-      reset();
-    },
-    (errorMessage: string) => {
-      // setErrorMessage(errorMessage);
-    }
-  );
 
   const onClickEditButton = async () => {
     await router.push(PAGE_PATH_BUILDER.POST_EDIT(postId));
@@ -81,10 +54,6 @@ export const PostDetail = ({ post }: { post: Post }) => {
     setIsLoadingComments(true);
     fetchComments().then(() => setIsLoadingComments(false));
   }, []);
-
-  const onClickPost: SubmitHandler<CommentCreateBody> = async (createComment) => {
-    await doCreate(createComment);
-  };
 
   return (
     <Grid container justifyContent={'center'}>
@@ -121,25 +90,7 @@ export const PostDetail = ({ post }: { post: Post }) => {
           ) : (
             <>
               <PostComments comments={comments} sx={{ mt: 3 }} onDeleteComment={fetchComments} />
-              <Box>
-                <Typography variant={'h6'} sx={{ fontWeight: 'bold', mt: 3 }} textAlign={'left'}>
-                  コメントする
-                </Typography>
-                <Box mt={1}>
-                  <ControlledTextareaAutosize control={control} name={'body'} minRows={10} style={{ width: '100%' }} />
-                </Box>
-                <Box mt={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button
-                    variant={'contained'}
-                    color={'primary'}
-                    onClick={handleSubmit(onClickPost)}
-                    sx={{ boxShadow: 'none' }}
-                    disabled={isCreatingComment}
-                  >
-                    追加する
-                  </Button>
-                </Box>
-              </Box>
+              <PostCommentForm postId={postId} onSuccess={fetchComments} sx={{ mt: 3 }} />
             </>
           )}
         </Card>
