@@ -21,9 +21,7 @@ export const ControlledTextareaAutosize = <
     <Controller
       control={control}
       name={name}
-      render={({ field, fieldState }) => (
-        <TextareaAutosize {...field} minRows={minRows} style={style}></TextareaAutosize>
-      )}
+      render={({ field }) => <TextareaAutosize {...field} minRows={minRows} style={style}></TextareaAutosize>}
     />
   );
 };

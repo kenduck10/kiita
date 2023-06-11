@@ -22,23 +22,23 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
     return response.status(HttpStatusCode.Ok).json(result);
   }
 
-  // if (request.method === 'POST') {
-  //   const result = await axios
-  //     .post(BACKEND_API_PATH.POSTS, request.body)
-  //     .then((response: AxiosResponse<{ postId: number; statusCode: number }>) => {
-  //       return {
-  //         postId: response.data,
-  //         statusCode: HttpStatusCode.Created,
-  //       };
-  //     })
-  //     .catch((error) => {
-  //       return {
-  //         postId: undefined,
-  //         statusCode: error.response.status,
-  //       };
-  //     });
-  //   return response.status(result.statusCode).json(result.postId);
-  // }
+  if (request.method === 'POST') {
+    const result = await axios
+      .post(BACKEND_API_PATH_BUILDER.POST_COMMENTS(Number(id)), request.body)
+      .then((response: AxiosResponse<{ commentId: number; statusCode: number }>) => {
+        return {
+          commentId: response.data,
+          statusCode: HttpStatusCode.Created,
+        };
+      })
+      .catch((error) => {
+        return {
+          commentId: undefined,
+          statusCode: error.response.status,
+        };
+      });
+    return response.status(result.statusCode).json(result.commentId);
+  }
 
   return response.status(400);
 };

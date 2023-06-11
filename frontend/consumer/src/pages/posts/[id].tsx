@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { Box, Button, Card, Grid } from '@mui/material';
+import { Box, Button, Card, CircularProgress, Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { PAGE_PATH, PAGE_PATH_BUILDER } from '@/utils/consts/route';
@@ -17,6 +17,7 @@ import Comments from '@/features/comment/models/Comments';
 import { GetCommentsResponse } from '@/pages/api/posts/[id]/comments';
 import { PostComments } from '@/components/organisms/PostComments';
 import { PostCommentHeader } from '@/components/organisms/PostCommentHeader';
+import { PostCommentForm } from '@/components/organisms/PostCommentForm';
 
 export const PostDetail = ({ post }: { post: Post }) => {
   const router = useRouter();
@@ -41,16 +42,17 @@ export const PostDetail = ({ post }: { post: Post }) => {
     setIsOpenDeleteDialog(false);
   };
 
-  const fetchComments = async () =>
+  const fetchComments = async () => {
     await axios
       .get(FRONTEND_API_PATH_BUILDER.POST_COMMENTS(postId))
       .then((response: AxiosResponse<GetCommentsResponse>) => {
         setComments(new Comments(response.data));
-      })
-      .finally(() => setIsLoadingComments(false));
+      });
+  };
 
   useEffect(() => {
-    fetchComments().then();
+    setIsLoadingComments(true);
+    fetchComments().then(() => setIsLoadingComments(false));
   }, []);
 
   return (
@@ -81,12 +83,16 @@ export const PostDetail = ({ post }: { post: Post }) => {
         </Card>
         <Card variant={'outlined'} sx={{ p: 4, border: 0, mt: 3 }}>
           <PostCommentHeader />
-          <PostComments
-            comments={comments}
-            isLoading={isLoadingComments}
-            sx={{ mt: 3 }}
-            onDeleteComment={fetchComments}
-          />
+          {isLoadingComments || comments === undefined ? (
+            <Box display={'flex'} justifyContent={'center'} mt={3}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <>
+              <PostComments comments={comments} sx={{ mt: 3 }} onDeleteComment={fetchComments} />
+              <PostCommentForm postId={postId} onSuccess={fetchComments} sx={{ mt: 3 }} />
+            </>
+          )}
         </Card>
       </Grid>
     </Grid>
