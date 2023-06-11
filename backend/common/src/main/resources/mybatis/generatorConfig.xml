@@ -50,5 +50,13 @@
             <ignoreColumn column="created_at"/>
             <ignoreColumn column="updated_at"/>
         </table>
+
+        <table schema="kiita" tableName="members" mapperName="GeneratedMemberMapper">
+            <property name="dynamicSqlSupportClassName" value="GeneratedMemberDynamicSqlSupport"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <domainObjectRenamingRule searchString="Members" replaceString="GeneratedMember"/>
+            <ignoreColumn column="created_at"/>
+            <ignoreColumn column="updated_at"/>
+        </table>
     </context>
 </generatorConfiguration>
