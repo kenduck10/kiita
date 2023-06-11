@@ -8,12 +8,12 @@ export type CommentCreateBody = {
   body: string;
 };
 export const useCommentCreate = (postId: number, onSuccess: () => void, onError: (errorMessage: string) => void) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
   const doCreate = async (body: CommentCreateBody) => {
-    setIsLoading(true);
+    setIsCreating(true);
     await axios
       .post(FRONTEND_API_PATH_BUILDER.POST_COMMENTS(postId), body)
       .then(onSuccess)
@@ -32,8 +32,8 @@ export const useCommentCreate = (postId: number, onSuccess: () => void, onError:
         setErrorMessage(errorMessage);
         onError(errorMessage);
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => setIsCreating(false));
   };
 
-  return { doCreate, isLoading, errorMessage };
+  return { doCreate, isCreating, errorMessage };
 };

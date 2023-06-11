@@ -7,7 +7,7 @@ import { useCommentDelete } from '@/features/comment/hooks/useCommentDelete';
 export const PostComment = ({ comment, onDeleteComment }: { comment: Comment; onDeleteComment: () => void }) => {
   const commentId = comment.commentId;
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
-  const { doDelete, isLoading, errorMessage } = useCommentDelete(commentId, () => {
+  const { doDelete, isDeleting, errorMessage } = useCommentDelete(commentId, () => {
     setIsOpenDeleteDialog(false);
     onDeleteComment();
   });
@@ -29,7 +29,7 @@ export const PostComment = ({ comment, onDeleteComment }: { comment: Comment; on
       <Typography>{comment.body}</Typography>
       {!comment.isDeleted && (
         <Box mt={2} display={'flex'} justifyContent={'flex-end'}>
-          <Button variant="contained" color="error" onClick={onClickDeleteButton} disabled={isLoading}>
+          <Button variant="contained" color="error" onClick={onClickDeleteButton} disabled={isDeleting}>
             削除
           </Button>
         </Box>
@@ -43,7 +43,7 @@ export const PostComment = ({ comment, onDeleteComment }: { comment: Comment; on
           { action: onClickDeleteCancel, label: 'キャンセル', color: 'secondary' },
           { action: onClickDeleteAgreement, label: '削除', color: 'error' },
         ]}
-        isLoading={false}
+        isLoading={isDeleting}
       />
     </>
   );

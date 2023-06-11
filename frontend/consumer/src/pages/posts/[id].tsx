@@ -43,7 +43,7 @@ export const PostDetail = ({ post }: { post: Post }) => {
     },
     // resolver: yupResolver(errorSchema),
   });
-  const { doCreate, isLoading: createCommentIsLoading } = useCommentCreate(
+  const { doCreate, isCreating: isCreatingComment } = useCommentCreate(
     postId,
     async () => {
       await fetchComments();
@@ -134,6 +134,7 @@ export const PostDetail = ({ post }: { post: Post }) => {
                     color={'primary'}
                     onClick={handleSubmit(onClickPost)}
                     sx={{ boxShadow: 'none' }}
+                    disabled={isCreatingComment}
                   >
                     追加する
                   </Button>
