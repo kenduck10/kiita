@@ -4,9 +4,6 @@ import { ControlledTextareaAutosize } from '@/components/molecules/ControlledTex
 import { useForm } from 'react-hook-form';
 import { CommentCreateBody, useCommentCreate } from '@/features/comment/hooks/useCommentCreate';
 
-type SubmitArguments = {
-  body: string;
-};
 export const PostCommentForm = ({
   postId,
   onSuccess,
@@ -17,15 +14,15 @@ export const PostCommentForm = ({
   sx: SxProps<Theme>;
 }) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const { control, handleSubmit, reset } = useForm<CommentCreateBody>({
+  const { control, handleSubmit, reset, watch } = useForm<CommentCreateBody>({
     mode: 'all',
     criteriaMode: 'all',
     shouldFocusError: false,
     defaultValues: {
       body: '',
     },
-    // resolver: yupResolver(errorSchema),
   });
+  const isBlankBody = watch('body') === '';
   const { doCreate, isCreating: isCreatingComment } = useCommentCreate(
     postId,
     () => {
@@ -57,7 +54,7 @@ export const PostCommentForm = ({
           color={'primary'}
           onClick={handleSubmit(onClickPost)}
           sx={{ boxShadow: 'none' }}
-          disabled={isCreatingComment}
+          disabled={isCreatingComment || isBlankBody}
         >
           追加する
         </Button>
