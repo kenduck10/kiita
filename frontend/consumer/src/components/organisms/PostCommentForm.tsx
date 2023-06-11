@@ -1,5 +1,5 @@
-import { Box, Button, SxProps, Theme, Typography } from '@mui/material';
-import React from 'react';
+import { Alert, Box, Button, SxProps, Theme, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import { ControlledTextareaAutosize } from '@/components/molecules/ControlledTextareaAutosize';
 import { useForm } from 'react-hook-form';
 import { CommentCreateBody, useCommentCreate } from '@/features/comment/hooks/useCommentCreate';
@@ -16,6 +16,7 @@ export const PostCommentForm = ({
   onSuccess: () => void;
   sx: SxProps<Theme>;
 }) => {
+  const [errorMessage, setErrorMessage] = useState('');
   const { control, handleSubmit, reset } = useForm<CommentCreateBody>({
     mode: 'all',
     criteriaMode: 'all',
@@ -32,12 +33,12 @@ export const PostCommentForm = ({
       reset();
     },
     (errorMessage: string) => {
-      console.log(errorMessage);
-      // setErrorMessage(errorMessage);
+      setErrorMessage(errorMessage);
     }
   );
 
   const onClickPost = async (createComment: CommentCreateBody) => {
+    setErrorMessage('');
     await doCreate(createComment);
   };
 
@@ -46,6 +47,7 @@ export const PostCommentForm = ({
       <Typography variant={'h6'} sx={{ fontWeight: 'bold', mt: 3 }} textAlign={'left'}>
         コメントする
       </Typography>
+      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       <Box mt={1}>
         <ControlledTextareaAutosize control={control} name={'body'} minRows={10} style={{ width: '100%' }} />
       </Box>
