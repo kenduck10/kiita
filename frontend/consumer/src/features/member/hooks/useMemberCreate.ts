@@ -7,6 +7,7 @@ import { FRONTEND_API_PATH } from '@/utils/consts/api';
 export type MemberCreateBody = {
   name: string;
   mailAddress: string;
+  password: string;
 };
 export const useMemberCreate = (onSuccess: () => void, onError: (errorMessage: string) => void) => {
   const [isCreating, setIsCreating] = useState(false);
