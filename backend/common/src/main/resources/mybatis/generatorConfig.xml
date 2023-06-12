@@ -58,5 +58,13 @@
             <ignoreColumn column="created_at"/>
             <ignoreColumn column="updated_at"/>
         </table>
+
+        <table schema="kiita" tableName="member_passwords" mapperName="GeneratedMemberPasswordMapper">
+            <property name="dynamicSqlSupportClassName" value="GeneratedMemberPasswordDynamicSqlSupport"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <domainObjectRenamingRule searchString="MemberPasswords" replaceString="GeneratedMemberPassword"/>
+            <ignoreColumn column="created_at"/>
+            <ignoreColumn column="updated_at"/>
+        </table>
     </context>
 </generatorConfiguration>

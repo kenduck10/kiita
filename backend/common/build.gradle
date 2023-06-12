@@ -62,10 +62,12 @@ repositories {
 dependencies {
     implementation 'mysql:mysql-connector-java:8.0.32'
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1'
     implementation 'org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.4.1'
     implementation 'org.mybatis.generator:mybatis-generator-core:1.4.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 }
 
 tasks.named('test') {
