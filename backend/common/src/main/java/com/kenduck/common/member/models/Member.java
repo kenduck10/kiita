@@ -8,6 +8,13 @@ public class Member extends GeneratedMember {
 
     public static final int MAX_NAME_LENGTH = 50;
 
+    public Member(GeneratedMember generatedMember) {
+        super(
+                generatedMember.getId(),
+                generatedMember.getName(),
+                generatedMember.getMailAddress()
+        );
+    }
 
     public Member(CreateMember createMember) {
         super(

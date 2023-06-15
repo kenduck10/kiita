@@ -19,8 +19,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.projectlombok:lombok:1.18.22'
     implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.4.1'
     implementation project(':common')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
