@@ -16,12 +16,18 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        const res = await fetch(BACKEND_API_PATH.LOGIN, {
+        const loginBody = { name: credentials?.username, password: credentials?.password };
+        const response = await fetch(BACKEND_API_PATH.LOGIN, {
           method: 'POST',
-          body: JSON.stringify(credentials),
+          body: JSON.stringify(loginBody),
           headers: { 'Content-Type': 'application/json' },
         });
-        const user = await res.json();
+        // console.log(res);
+        if (response.status !== 200) {
+          return null;
+        }
+        const user = await response.json();
+        console.log(user);
         // const { username, password } = credentials
         // ここにロジックを追加して、提供されたクレデンシャルからユーザーを検索します。
 

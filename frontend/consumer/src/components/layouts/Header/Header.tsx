@@ -1,10 +1,10 @@
-import { AppBar, Box, Container, Toolbar } from '@mui/material';
+import { AppBar, Box, Button, Container, Toolbar } from '@mui/material';
 import { PostAddButton } from '@/components/organisms/PostAddButton';
 import { Logo } from '@/components/organisms/Logo';
 import { useRouter } from 'next/router';
 import { ToSignupButton } from '@/components/organisms/ToSignupButton';
 import { LoginLink } from '@/components/organisms/LoginLink';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 export const Header = () => {
   const route = useRouter();
@@ -18,7 +18,14 @@ export const Header = () => {
               <Logo />
             </Box>
             <Box>
-              {session && <PostAddButton />}
+              {session && (
+                <>
+                  <PostAddButton />
+                  <Button sx={{ ml: 2 }} variant={'contained'} onClick={() => signOut()}>
+                    ログアウト
+                  </Button>
+                </>
+              )}
               {!session && (
                 <>
                   <LoginLink />
