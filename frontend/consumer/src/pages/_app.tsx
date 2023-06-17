@@ -8,6 +8,7 @@ import NextNProgress from 'nextjs-progressbar';
 import { Router } from 'next/router';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import theme from '@/config/theme';
+import { SessionProvider } from 'next-auth/react';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement, router: Router) => ReactNode;
@@ -17,16 +18,18 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-export const MyApp = ({ Component, pageProps, router }: AppPropsWithLayout) => {
+export const MyApp = ({ Component, pageProps: { session, ...pageProps }, router }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page, router) => <Layout>{page}</Layout>);
   return (
-    <RecoilRoot>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <NextNProgress options={{ showSpinner: false }} />
-        {getLayout(<Component {...pageProps} />, router)}
-      </ThemeProvider>
-    </RecoilRoot>
+    <SessionProvider session={session}>
+      <RecoilRoot>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <NextNProgress options={{ showSpinner: false }} />
+          {getLayout(<Component {...pageProps} />, router)}
+        </ThemeProvider>
+      </RecoilRoot>
+    </SessionProvider>
   );
 };
 
