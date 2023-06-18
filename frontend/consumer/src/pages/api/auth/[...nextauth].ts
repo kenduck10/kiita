@@ -15,14 +15,16 @@ export default NextAuth({
         username: { label: 'Username', type: 'text', placeholder: 'ユーザー名' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials, request) {
+        console.log(credentials);
+        console.log(request);
         const loginBody = { name: credentials?.username, password: credentials?.password };
         const response = await fetch(BACKEND_API_PATH.LOGIN, {
           method: 'POST',
           body: JSON.stringify(loginBody),
           headers: { 'Content-Type': 'application/json' },
         });
-        // console.log(res);
+        console.log(response);
         if (response.status !== 200) {
           return null;
         }
