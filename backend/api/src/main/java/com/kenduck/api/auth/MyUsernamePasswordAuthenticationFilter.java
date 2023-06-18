@@ -41,6 +41,7 @@ public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuth
                     .withExpiresAt(expiresAt)
                     .withClaim("name", myUserDetails.getMember().getName())
                     .sign(Algorithm.HMAC256("secret"));
+            log.info(token);
             response.setHeader("X-AUTH-TOKEN", token);
             response.setStatus(200);
             response.getWriter().write((new ObjectMapper()).writeValueAsString(myUserDetails.getMember()));

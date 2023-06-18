@@ -30,6 +30,7 @@ export type GetPostsResponseElement = {
 };
 
 export const handler = async (request: NextApiRequest, response: NextApiResponse) => {
+  const accessToken = request.headers['x-auth-token'];
   if (request.method === 'GET') {
     const result = await axios
       .get(BACKEND_API_PATH.POSTS)
@@ -39,7 +40,7 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
 
   if (request.method === 'POST') {
     const result = await axios
-      .post(BACKEND_API_PATH.POSTS, request.body)
+      .post(BACKEND_API_PATH.POSTS, request.body, { headers: { 'x-auth-token': 'Bearer ' + accessToken } })
       .then((response: AxiosResponse<{ postId: number; statusCode: number }>) => {
         return {
           postId: response.data,
