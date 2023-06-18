@@ -17,15 +17,12 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, request) {
-        console.log(credentials);
-        console.log(request);
         const loginBody = { name: credentials?.username, password: credentials?.password };
         const response = await fetch(BACKEND_API_PATH.LOGIN, {
           method: 'POST',
           body: JSON.stringify(loginBody),
           headers: { 'Content-Type': 'application/json' },
         });
-        console.log(response);
         if (response.status !== 200) {
           return null;
         }

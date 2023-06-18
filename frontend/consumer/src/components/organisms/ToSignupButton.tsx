@@ -3,7 +3,6 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { PAGE_PATH } from '@/utils/consts/route';
-import { signIn } from 'next-auth/react';
 
 const StyledButton = styled(Button)({
   [`&,&:hover`]: {
@@ -17,7 +16,7 @@ export const ToSignupButton = ({ sx }: { sx?: SxProps<Theme> }) => {
     await router.push(PAGE_PATH.SIGNUP);
   };
   return (
-    <StyledButton id={'to-signup-button'} variant="contained" onClick={() => signIn()} sx={sx}>
+    <StyledButton id={'to-signup-button'} variant="contained" onClick={onClickToSignup} sx={sx}>
       <Typography fontWeight={'bold'} color={'black'}>
         {'新規登録'}
       </Typography>
