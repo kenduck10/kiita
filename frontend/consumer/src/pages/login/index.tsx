@@ -6,13 +6,14 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { MemberCreateBody } from '@/features/member/hooks/useMemberCreate';
 import { ControlledTextField } from '@/components/molecules/ControlledTextField';
 import { LoginBody, useLogin } from '@/features/auth/hooks/useLogin';
+import { PAGE_PATH } from '@/utils/consts/route';
 
 export const Login: NextPageWithLayout = () => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
   const { doLogin, isLoggingIn } = useLogin(
-    () => {
-      console.log('success');
+    async () => {
+      await router.push(PAGE_PATH.HOME);
     },
     (errorMessage) => {
       setErrorMessage(errorMessage);

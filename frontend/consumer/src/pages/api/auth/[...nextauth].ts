@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { BACKEND_API_PATH } from '@/utils/consts/api';
+import { PAGE_PATH } from '@/utils/consts/route';
 
 export default NextAuth({
   providers: [
@@ -45,4 +46,7 @@ export default NextAuth({
       },
     }),
   ],
+  pages: {
+    signIn: PAGE_PATH.LOGIN,
+  },
 });
