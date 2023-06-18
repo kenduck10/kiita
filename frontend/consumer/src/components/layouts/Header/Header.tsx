@@ -8,7 +8,7 @@ import { signOut, useSession } from 'next-auth/react';
 
 export const Header = () => {
   const route = useRouter();
-  const { data: session } = useSession();
+  const { status } = useSession();
   return (
     <header>
       <AppBar position="relative" elevation={0}>
@@ -18,7 +18,7 @@ export const Header = () => {
               <Logo />
             </Box>
             <Box>
-              {session && (
+              {status === 'authenticated' && (
                 <>
                   <PostAddButton />
                   <Button sx={{ ml: 2 }} variant={'contained'} onClick={() => signOut()}>
@@ -26,7 +26,7 @@ export const Header = () => {
                   </Button>
                 </>
               )}
-              {!session && (
+              {status === 'unauthenticated' && (
                 <>
                   <LoginLink />
                   <ToSignupButton sx={{ ml: 2 }} />
