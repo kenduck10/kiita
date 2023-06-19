@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +19,6 @@ import java.util.Date;
 /**
  * ユーザー名＆パスワードでのカスタム認証フィルタ
  */
-@Slf4j
 public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     // 600,000ms = 600s = 10min
@@ -51,6 +49,7 @@ public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuth
             // 発行されたJWTの有効開始日時
             Date notBefore = new Date(issuedAt.getTime());
             // 発行されたJWTの有効期限日時
+            // TODO: リクエストの度に自動で延長できるか確認
             Date expiresAt = new Date(issuedAt.getTime() + EXPIRATION_TIME);
 
             String token = JWT.create()
@@ -62,6 +61,7 @@ public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuth
                     .sign(Algorithm.HMAC256("secret"));
             response.setHeader("x-auth-token", token);
             response.setStatus(HttpStatus.OK.value());
+            // TODO: レスポンスボディ本当に必要か確認
             response.getWriter().write((new ObjectMapper()).writeValueAsString(myUserDetails.getMember()));
         }
         ));

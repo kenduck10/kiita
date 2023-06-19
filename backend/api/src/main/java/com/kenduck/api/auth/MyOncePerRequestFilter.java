@@ -15,28 +15,45 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * リクエスト毎に挟むフィルタ
+ */
 public class MyOncePerRequestFilter extends OncePerRequestFilter {
+
+    private static final String TOKEN_HEADER_PREFIX = "Bearer ";
+
+    /**
+     * フィルタ処理
+     * JWTを検証する
+     *
+     * @param request     リクエスト
+     * @param response    レスポンス
+     * @param filterChain フィルタチェイン
+     * @throws ServletException {@link ServletException}
+     * @throws IOException      {@link IOException}
+     */
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        // headerからTokenを取得する
-        String header = request.getHeader("X-AUTH-TOKEN");
+        String tokenHeader = request.getHeader("x-auth-token");
 
-        //　チェック処理
-        if (header == null || !header.startsWith("Bearer ")) {
+        if (tokenHeader == null || !tokenHeader.startsWith(TOKEN_HEADER_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
-        String token = header.substring(7);
-        // Tokenの検証と認証を行う
-        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256("secret")).build().verify(token);
-        // usernameの取得
+
+        String token = tokenHeader.substring(TOKEN_HEADER_PREFIX.length());
+        DecodedJWT decodedJWT = JWT
+                .require(Algorithm.HMAC256("secret"))
+                .build()
+                .verify(token);
         String name = decodedJWT.getClaim("name").toString();
-        // ログイン状態を設定する
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(name, null, new ArrayList<>()));
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(name, null, new ArrayList<>())
+        );
         filterChain.doFilter(request, response);
     }
 }
