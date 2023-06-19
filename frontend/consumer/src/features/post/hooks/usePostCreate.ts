@@ -18,7 +18,7 @@ export const usePostCreate = (onSuccess: () => void, onError: (errorMessage: str
   const doCreate = async (body: PostCreateBody) => {
     setIsLoading(true);
     await axios
-      .post(FRONTEND_API_PATH.POSTS, body, { headers: { 'X-Auth-Token': data?.user.accessToken } })
+      .post(FRONTEND_API_PATH.POSTS, body, { headers: { 'x-auth-token': data?.user.accessToken } })
       .then(onSuccess)
       .catch(async (error: AxiosError) => {
         const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.Forbidden];

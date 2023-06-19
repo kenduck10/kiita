@@ -8,12 +8,23 @@ export type LoginBody = {
   name: string;
   password: string;
 };
+
+/**
+ * ログイン用hook
+ * @param onSuccess ログイン成功時の処理
+ * @param onError ログイン失敗時の処理
+ */
 export const useLogin = (onSuccess: () => void, onError: (errorMessage: string) => void) => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const router = useRouter();
 
+  /**
+   * ログイン実行
+   * @param body ログイン用リクエストボディ
+   */
   const doLogin = async (body: LoginBody) => {
     setIsLoggingIn(true);
+
     await signIn('credentials', {
       redirect: false,
       username: body.name,
@@ -35,6 +46,7 @@ export const useLogin = (onSuccess: () => void, onError: (errorMessage: string) 
         }
         await router.push(PAGE_PATH.ERROR);
       })
+      // statusが200以外でもthenに入るはずなので、catchされた場合は問答無用でエラーページに飛ばす
       .catch(async () => await router.push(PAGE_PATH.ERROR))
       .finally(() => setIsLoggingIn(false));
   };

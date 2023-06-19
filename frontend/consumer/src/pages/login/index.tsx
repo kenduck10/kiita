@@ -1,13 +1,15 @@
-import { Alert, Button, Card, Grid, Typography } from '@mui/material';
-import { NextPageWithLayout } from '@/pages/_app';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { MemberCreateBody } from '@/features/member/hooks/useMemberCreate';
-import { ControlledTextField } from '@/components/molecules/ControlledTextField';
-import { LoginBody, useLogin } from '@/features/auth/hooks/useLogin';
-import { PAGE_PATH } from '@/utils/consts/route';
+import {Alert, Button, Card, Grid, Typography} from '@mui/material';
+import {NextPageWithLayout} from '@/pages/_app';
+import {useRouter} from 'next/router';
+import React, {useState} from 'react';
+import {SubmitHandler, useForm} from 'react-hook-form';
+import {ControlledTextField} from '@/components/molecules/ControlledTextField';
+import {LoginBody, useLogin} from '@/features/auth/hooks/useLogin';
+import {PAGE_PATH} from '@/utils/consts/route';
 
+/**
+ * ログイン画面
+ */
 export const Login: NextPageWithLayout = () => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
@@ -19,7 +21,7 @@ export const Login: NextPageWithLayout = () => {
       setErrorMessage(errorMessage);
     }
   );
-  const { control, handleSubmit, reset } = useForm<MemberCreateBody>({
+  const { control, handleSubmit, reset } = useForm<LoginBody>({
     mode: 'all',
     criteriaMode: 'all',
     shouldFocusError: false,
@@ -27,23 +29,12 @@ export const Login: NextPageWithLayout = () => {
       name: '',
       password: '',
     },
-    // resolver: yupResolver(errorSchema),
   });
 
   const onClickLogin: SubmitHandler<LoginBody> = async (loginBody) => {
     setErrorMessage('');
     await doLogin(loginBody);
   };
-
-  // const tableHeads: { key: keyof UserSummary; name: string }[] = [
-  //   { key: 'id', name: 'ID' },
-  //   { key: 'lastName', name: '姓' },
-  //   {
-  //     key: 'firstName',
-  //     name: '名',
-  //   },
-  //   { key: 'mailAddress', name: 'メールアドレス' },
-  // ];
 
   return (
     <Grid container justifyContent={'center'}>
