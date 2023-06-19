@@ -15,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class LoginFilter extends OncePerRequestFilter {
+public class MyOncePerRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
