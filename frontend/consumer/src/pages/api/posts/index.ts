@@ -1,24 +1,7 @@
-import {NextApiRequest, NextApiResponse} from 'next';
-import axios, {AxiosResponse, HttpStatusCode} from 'axios';
-import {BACKEND_API_PATH} from '@/utils/consts/api';
-
-// type CreateUserResponse = {
-//   userId: number;
-//   lastName: string;
-//   firstLane: string;
-//   mailAddress: string;
-// };
-
-export type GetUsersResponse = {
-  users: Array<GetUsersResponseElement>;
-};
-
-export type GetUsersResponseElement = {
-  userId: number;
-  lastName: string;
-  firstName: string;
-  mailAddress: string;
-};
+import { NextApiRequest, NextApiResponse } from 'next';
+import axios, { AxiosResponse, HttpStatusCode } from 'axios';
+import { BACKEND_API_PATH } from '@/utils/consts/api';
+import { buildXAuthTokenHeader, getAccessToken } from '@/utils/functions/api'; // type CreateUserResponse = {
 
 export type GetPostsResponse = {
   posts: Array<GetPostsResponseElement>;
@@ -30,7 +13,6 @@ export type GetPostsResponseElement = {
 };
 
 export const handler = async (request: NextApiRequest, response: NextApiResponse) => {
-  const accessToken = request.headers['x-auth-token'];
   if (request.method === 'GET') {
     const result = await axios
       .get(BACKEND_API_PATH.POSTS)
@@ -38,9 +20,15 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
     return response.status(HttpStatusCode.Ok).json(result);
   }
 
+  const accessToken = await getAccessToken(request, response);
   if (request.method === 'POST') {
+    if (!accessToken) {
+      return response.status(HttpStatusCode.Unauthorized);
+    }
     const result = await axios
-      .post(BACKEND_API_PATH.POSTS, request.body, { headers: { 'x-auth-token': 'Bearer ' + accessToken } })
+      .post(BACKEND_API_PATH.POSTS, request.body, {
+        headers: buildXAuthTokenHeader(accessToken),
+      })
       .then((response: AxiosResponse<{ postId: number; statusCode: number }>) => {
         return {
           postId: response.data,

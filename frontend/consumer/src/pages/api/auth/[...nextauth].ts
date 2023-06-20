@@ -1,10 +1,10 @@
-import NextAuth, { Session, User } from 'next-auth';
+import NextAuth, { NextAuthOptions, Session, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { BACKEND_API_PATH } from '@/utils/consts/api';
 import { PAGE_PATH } from '@/utils/consts/route';
 import { JWT } from 'next-auth/jwt';
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       credentials: {
@@ -51,4 +51,5 @@ export default NextAuth({
   pages: {
     signIn: PAGE_PATH.LOGIN,
   },
-});
+};
+export default NextAuth(authOptions);
