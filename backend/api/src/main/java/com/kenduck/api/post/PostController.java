@@ -1,5 +1,6 @@
 package com.kenduck.api.post;
 
+import com.kenduck.api.auth.LoginUser;
 import com.kenduck.api.post.dtos.CreateComment;
 import com.kenduck.api.post.dtos.CreatePost;
 import com.kenduck.api.post.dtos.UpdatePost;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,7 +63,10 @@ public class PostController {
     }
 
     @PostMapping("")
-    ResponseEntity<Integer> createPost(@RequestBody @Validated CreatePostRequest request) {
+    ResponseEntity<Integer> createPost(
+            @RequestBody @Validated CreatePostRequest request,
+            @AuthenticationPrincipal LoginUser loginUser
+    ) {
         int postId = createPostService.createPost(
                 new CreatePost(request)
         );
@@ -71,7 +76,9 @@ public class PostController {
     @PatchMapping("/{postId}")
     ResponseEntity<Void> updatePost(
             @PathVariable("postId") int postId,
-            @RequestBody @Validated UpdatePostRequest request) {
+            @RequestBody @Validated UpdatePostRequest request,
+            @AuthenticationPrincipal LoginUser loginUser
+    ) {
         updatePostService.updatePost(
                 new UpdatePost(postId, request)
         );
@@ -79,7 +86,10 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    ResponseEntity<Void> deletePost(@PathVariable("postId") int postId) {
+    ResponseEntity<Void> deletePost(
+            @PathVariable("postId") int postId,
+            @AuthenticationPrincipal LoginUser loginUser
+    ) {
         deletePostService.deletePost(postId);
         return ResponseEntity.ok().build();
     }
@@ -93,7 +103,9 @@ public class PostController {
     @PostMapping("/{postId}/comments")
     ResponseEntity<Integer> createComment(
             @PathVariable("postId") int postId,
-            @RequestBody @Validated CreateCommentRequest request) {
+            @RequestBody @Validated CreateCommentRequest request,
+            @AuthenticationPrincipal LoginUser loginUser
+    ) {
         int createdCommentId = createCommentService.createComment(
                 new CreateComment(postId, request)
         );

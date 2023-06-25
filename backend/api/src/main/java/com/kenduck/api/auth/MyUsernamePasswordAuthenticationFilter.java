@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import java.util.Date;
 /**
  * ユーザー名＆パスワードでのカスタム認証フィルタ
  */
+@Slf4j
 public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     // 600,000ms = 600s = 10min
@@ -52,12 +54,20 @@ public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuth
             // TODO: リクエストの度に自動で延長できるか確認
             Date expiresAt = new Date(issuedAt.getTime() + EXPIRATION_TIME);
 
+            ObjectMapper mapper = new ObjectMapper();
+            LoginUser loginUser = new LoginUser(myUserDetails);
+            String json = mapper.writeValueAsString(loginUser);
+            log.info(json);
+            LoginUser loginUser1 = mapper.readValue(
+                    json,
+                    LoginUser.class
+            );
+
             String token = JWT.create()
                     .withIssuedAt(issuedAt)
                     .withNotBefore(notBefore)
                     .withExpiresAt(expiresAt)
-                    // JWTペイロードに載せたい情報があればwithClaimで追加していく
-                    .withClaim("name", myUserDetails.getMember().getName())
+                    .withClaim("loginUser", new ObjectMapper().writeValueAsString(new LoginUser(myUserDetails)))
                     .sign(Algorithm.HMAC256("secret"));
             response.setHeader("x-auth-token", token);
             response.setStatus(HttpStatus.OK.value());

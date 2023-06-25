@@ -1,11 +1,11 @@
-import axios, { HttpStatusCode } from 'axios';
+import axios, { AxiosRequestConfig, HttpStatusCode } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-export const requestDelete = async (apiPath: string, response: NextApiResponse) => {
+export const requestDelete = async (apiPath: string, response: NextApiResponse, config?: AxiosRequestConfig) => {
   const result = await axios
-    .delete(apiPath)
+    .delete(apiPath, config)
     .then(() => {
       return {
         statusCode: HttpStatusCode.Ok,

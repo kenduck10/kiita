@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios, { HttpStatusCode } from 'axios';
 import { BACKEND_API_PATH_BUILDER } from '@/utils/consts/api';
-import { requestDelete } from '@/utils/functions/api';
+import { buildXAuthTokenHeader, getAccessToken, requestDelete } from '@/utils/functions/api';
 
 export type GetPostResponse = {
   title: string;
@@ -29,13 +29,20 @@ export const handler = async (request: NextApiRequest, response: NextApiResponse
     return response.status(result.statusCode).json(result.getPostResponse);
   }
 
+  const accessToken = await getAccessToken(request, response);
+
+  if (!accessToken) {
+    return response.status(HttpStatusCode.Unauthorized);
+  }
+
+  const config = { headers: buildXAuthTokenHeader(accessToken) };
   if (request.method === 'DELETE') {
-    return requestDelete(apiPath, response);
+    return requestDelete(apiPath, response, config);
   }
 
   if (request.method === 'PATCH') {
     const result = await axios
-      .patch(apiPath, request.body)
+      .patch(apiPath, request.body, config)
       .then(() => {
         return {
           statusCode: HttpStatusCode.Ok,

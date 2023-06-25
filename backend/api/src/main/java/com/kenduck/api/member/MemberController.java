@@ -27,6 +27,5 @@ public class MemberController {
                 new CreateMember(request)
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(memberId);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(1);
     }
 }

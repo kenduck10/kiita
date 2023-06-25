@@ -9,6 +9,7 @@ import java.util.Collections;
 
 /**
  * 認証後のユーザー情報
+ * デシリアライズ簡易化のため、JWTのclaimにはより情報を絞った{@link LoginUser}を詰める
  */
 @Getter
 public class MyUserDetails extends User {
