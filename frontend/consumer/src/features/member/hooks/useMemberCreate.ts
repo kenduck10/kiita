@@ -4,28 +4,29 @@ import { useRouter } from 'next/router';
 import { PAGE_PATH } from '@/utils/consts/route';
 import { FRONTEND_API_PATH } from '@/utils/consts/api';
 
-export type PostCreateBody = {
-  title: string;
-  body: string;
+export type MemberCreateBody = {
+  name: string;
+  mailAddress: string;
+  password: string;
 };
 
 /**
- * 記事作成用hook
- * @param onSuccess 作成成功時の処理
- * @param onError 作成失敗時の処理
+ * 会員登録用hook
+ * @param onSuccess 登録成功時の処理
+ * @param onError 登録失敗時の処理
  */
-export const usePostCreate = (onSuccess: () => void, onError: (errorMessage: string) => void) => {
-  const [isLoading, setIsLoading] = useState(false);
+export const useMemberCreate = (onSuccess: () => void, onError: (errorMessage: string) => void) => {
+  const [isCreating, setIsCreating] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
-  const doCreate = async (body: PostCreateBody) => {
-    setIsLoading(true);
+  const doCreate = async (body: MemberCreateBody) => {
+    setIsCreating(true);
     await axios
-      .post(FRONTEND_API_PATH.POSTS, body)
+      .post(FRONTEND_API_PATH.MEMBERS, body)
       .then(onSuccess)
       .catch(async (error: AxiosError) => {
-        const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.Forbidden];
+        const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.Conflict];
         const actualStatus = error.response?.status;
         if (!actualStatus || !expectedStatuses.includes(actualStatus)) {
           await router.push(PAGE_PATH.ERROR);
@@ -36,11 +37,14 @@ export const usePostCreate = (onSuccess: () => void, onError: (errorMessage: str
         if (actualStatus === HttpStatusCode.BadRequest) {
           errorMessage = '入力内容に誤りがあります';
         }
+        if (actualStatus === HttpStatusCode.Conflict) {
+          errorMessage = '指定のメールアドレスは既に利用されています';
+        }
         setErrorMessage(errorMessage);
         onError(errorMessage);
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => setIsCreating(false));
   };
 
-  return { doCreate, isLoading, errorMessage };
+  return { doCreate, isCreating, errorMessage };
 };
