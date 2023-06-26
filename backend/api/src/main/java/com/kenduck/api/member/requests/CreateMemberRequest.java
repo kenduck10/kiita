@@ -7,7 +7,9 @@ import org.hibernate.validator.constraints.Length;
 
 import static com.kenduck.common.member.models.Member.MAX_NAME_LENGTH;
 
-
+/**
+ * 登録する会員
+ */
 @Data
 public class CreateMemberRequest {
 

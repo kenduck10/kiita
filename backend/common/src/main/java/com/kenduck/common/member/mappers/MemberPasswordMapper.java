@@ -7,18 +7,22 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Optional;
 
+/**
+ * {@link MemberPassword}マッパー
+ */
 @Mapper
 public interface MemberPasswordMapper extends GeneratedMemberPasswordMapper {
 
+    /**
+     * 指定した会員IDのパスワードを取得
+     *
+     * @param memberId 会員ID
+     * @return パスワード
+     */
     default Optional<MemberPassword> selectByPrimaryKey(int memberId) {
         Optional<GeneratedMemberPassword> generatedMemberPasswordOptional =
                 GeneratedMemberPasswordMapper.super.selectByPrimaryKey(memberId);
         return generatedMemberPasswordOptional.map(MemberPassword::new);
     }
 
-//    default Posts selectAll() {
-//        SelectDSLCompleter completer = select ->
-//                select.orderBy(GeneratedPostDynamicSqlSupport.id.descending());
-//        return new Posts(select(completer));
-//    }
 }

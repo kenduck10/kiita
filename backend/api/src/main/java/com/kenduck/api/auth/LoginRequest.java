@@ -6,7 +6,7 @@ import lombok.Data;
  * ログインAPIのリクエストボディマッピング用クラス
  */
 @Data
-public class LoginRequestBody {
+public class LoginRequest {
     private String name;
     private String password;
 }

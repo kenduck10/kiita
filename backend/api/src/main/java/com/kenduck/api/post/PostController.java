@@ -27,6 +27,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 記事コントローラ
+ */
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
@@ -50,18 +53,36 @@ public class PostController {
     @NonNull
     private final CreateCommentService createCommentService;
 
+    /**
+     * 記事一覧取得
+     *
+     * @return 記事一覧
+     */
     @GetMapping("")
     ResponseEntity<FindPostSummariesResponse> findPostSummaries() {
         FoundPostSummaries foundPostSummaries = findPostService.findPostSummaries();
         return ResponseEntity.ok(new FindPostSummariesResponse(foundPostSummaries));
     }
 
+    /**
+     * 記事取得
+     *
+     * @param postId 記事ID
+     * @return 記事
+     */
     @GetMapping("/{postId}")
     ResponseEntity<FindPostResponse> findPost(@PathVariable("postId") int postId) {
         FoundPost foundPost = findPostService.findPostById(postId);
         return ResponseEntity.ok(new FindPostResponse(foundPost));
     }
 
+    /**
+     * 記事作成
+     *
+     * @param request   作成内容
+     * @param loginUser ログインユーザー
+     * @return 記事ID
+     */
     @PostMapping("")
     ResponseEntity<Integer> createPost(
             @RequestBody @Validated CreatePostRequest request,
@@ -73,6 +94,14 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(postId);
     }
 
+    /**
+     * 記事更新
+     *
+     * @param postId    記事ID
+     * @param request   更新内容
+     * @param loginUser ログインユーザー
+     * @return レスポンスボディなし
+     */
     @PatchMapping("/{postId}")
     ResponseEntity<Void> updatePost(
             @PathVariable("postId") int postId,
@@ -85,6 +114,13 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 記事削除
+     *
+     * @param postId    記事ID
+     * @param loginUser ログインユーザー
+     * @return レスポンスボディなし
+     */
     @DeleteMapping("/{postId}")
     ResponseEntity<Void> deletePost(
             @PathVariable("postId") int postId,
@@ -94,12 +130,26 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 指定したIDの記事のコメント一覧取得
+     *
+     * @param postId 記事ID
+     * @return コメント一覧
+     */
     @GetMapping("/{postId}/comments")
     ResponseEntity<FindCommentsResponse> findComments(@PathVariable("postId") int postId) {
         FoundComments foundComments = findCommentService.findCommentsByPostId(postId);
         return ResponseEntity.ok(new FindCommentsResponse(foundComments));
     }
 
+    /**
+     * 指定したIDの記事のコメント作成
+     *
+     * @param postId    記事ID
+     * @param request   コメント内容
+     * @param loginUser ログインユーザー
+     * @return コメントID
+     */
     @PostMapping("/{postId}/comments")
     ResponseEntity<Integer> createComment(
             @PathVariable("postId") int postId,

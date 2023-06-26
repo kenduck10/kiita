@@ -24,7 +24,7 @@ import java.util.Date;
 public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     // 600,000ms = 600s = 10min
-    private static final long EXPIRATION_TIME = 1000L * 60L * 10L;
+    private static final long EXPIRATION_TIME = 1000L * 60L * 60L;
     private final AuthenticationManager authenticationManager;
 
     /**
@@ -57,7 +57,6 @@ public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuth
             ObjectMapper mapper = new ObjectMapper();
             LoginUser loginUser = new LoginUser(myUserDetails);
             String json = mapper.writeValueAsString(loginUser);
-            log.info(json);
             LoginUser loginUser1 = mapper.readValue(
                     json,
                     LoginUser.class
@@ -88,13 +87,13 @@ public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuth
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
 
         try {
-            LoginRequestBody body = new ObjectMapper()
+            LoginRequest loginRequest = new ObjectMapper()
                     .readValue(
                             request.getInputStream(),
-                            LoginRequestBody.class
+                            LoginRequest.class
                     );
             return authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(body.getName(), body.getPassword())
+                    new UsernamePasswordAuthenticationToken(loginRequest.getName(), loginRequest.getPassword())
             );
         } catch (IOException e) {
             // TODO: 500にならない例外ハンドリング追加
