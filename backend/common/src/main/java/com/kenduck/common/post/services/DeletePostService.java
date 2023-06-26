@@ -1,7 +1,11 @@
 package com.kenduck.common.post.services;
 
 import com.kenduck.common.comment.mappers.CommentMapper;
+import com.kenduck.common.post.dtos.DeletePost;
+import com.kenduck.common.post.exceptions.OthersPostFoundException;
 import com.kenduck.common.post.mappers.PostMapper;
+import com.kenduck.common.post.mappers.PostPublicationTimestampsMapper;
+import com.kenduck.common.post.models.Post;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -19,13 +23,21 @@ public class DeletePostService {
     private final PostMapper postMapper;
 
     @NonNull
+    private final PostPublicationTimestampsMapper postPublicationTimestampsMapper;
+
+    @NonNull
     private final CommentMapper commentMapper;
 
     @Transactional
-    public void deletePost(int postId) {
-        commentMapper.deleteByPostId(postId);
-        postMapper.selectByPrimaryKey(postId)
+    public void deletePost(DeletePost deletePost) {
+        int postId = deletePost.getPostId();
+        Post targetPost = postMapper.selectByPrimaryKey(postId)
                 .orElseThrow(postNotFoundSupplier(postId));
+        if (!targetPost.getAuthorId().equals(deletePost.getDeleterId())) {
+            throw new OthersPostFoundException(postId, "others post can't be deleted. (postId = " + postId + ").");
+        }
+        commentMapper.deleteByPostId(postId);
+        postPublicationTimestampsMapper.deleteByPostId(postId);
         postMapper.deleteByPrimaryKey(postId);
     }
 }

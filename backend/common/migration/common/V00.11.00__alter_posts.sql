@@ -1,2 +1,2 @@
 ALTER TABLE posts
-    ADD FOREIGN KEY (written_by) REFERENCES members (id);
+    ADD FOREIGN KEY (author_id) REFERENCES members (id);

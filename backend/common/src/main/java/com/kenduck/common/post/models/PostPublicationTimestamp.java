@@ -14,5 +14,4 @@ public class PostPublicationTimestamp extends GeneratedPostPublicationTimestamp 
                 generatedPostPublicationTimestamp.getLastPublishedAt()
         );
     }
-
 }
