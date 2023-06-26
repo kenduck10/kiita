@@ -6,11 +6,11 @@ import com.kenduck.common.generated.models.GeneratedPostPublicationTimestamp;
 import com.kenduck.common.post.models.PostPublicationTimestamp;
 import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.dynamic.sql.select.SelectDSLCompleter;
-import org.mybatis.dynamic.sql.util.mybatis3.MyBatis3Utils;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.kenduck.common.generated.mappers.GeneratedPostPublicationTimestampDynamicSqlSupport.generatedPostPublicationTimestamp;
+import static com.kenduck.common.post.functions.ExceptionFunction.postPublicationTimestampNotFoundExceptionSupplier;
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 @Mapper
@@ -30,7 +30,7 @@ public interface PostPublicationTimestampsMapper extends GeneratedPostPublicatio
         return generatedPostPublicationTimestampOptional.map(PostPublicationTimestamp::new);
     }
 
-    default int insert(int postId) {
+    default int publishForTheFirstTime(int postId) {
         GeneratedPostPublicationTimestamp timestamp = new GeneratedPostPublicationTimestamp(
                 null,
                 postId,
@@ -40,10 +40,19 @@ public interface PostPublicationTimestampsMapper extends GeneratedPostPublicatio
         return this.insertSelective(timestamp);
     }
 
-    default int update(int targetPostId) {
-        return MyBatis3Utils.update(this::update, generatedPostPublicationTimestamp, c ->
-                c.set(GeneratedPostPublicationTimestampDynamicSqlSupport.postId).equalTo(targetPostId)
-                        .where(GeneratedPostPublicationTimestampDynamicSqlSupport.postId, isEqualTo(targetPostId))
+    default int publishAgain(int postId) {
+        LocalDateTime firstPublishedAt = this.selectByPostId(postId)
+                .orElseThrow(postPublicationTimestampNotFoundExceptionSupplier(postId))
+                .getFirstPublishedAt();
+
+        GeneratedPostPublicationTimestamp timestamp = new GeneratedPostPublicationTimestamp(
+                null,
+                postId,
+                firstPublishedAt,
+                null
         );
+
+        this.deleteByPostId(postId);
+        return this.insertSelective(timestamp);
     }
 }

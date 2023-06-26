@@ -44,9 +44,9 @@ public class UpdatePostService {
                 .selectByPostId(postId);
 
         if (timestampOptional.isEmpty()) {
-            postPublicationTimestampsMapper.insert(postId);
+            postPublicationTimestampsMapper.publishForTheFirstTime(postId);
             return;
         }
-        postPublicationTimestampsMapper.update(postId);
+        postPublicationTimestampsMapper.publishAgain(postId);
     }
 }

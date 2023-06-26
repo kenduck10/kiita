@@ -25,7 +25,7 @@ public class CreatePostService {
         postMapper.insert(post);
         int postId = post.getId();
         if (!createPost.isDraft()) {
-            postPublicationTimestampsMapper.insert(postId);
+            postPublicationTimestampsMapper.publishForTheFirstTime(postId);
         }
         return postId;
     }
