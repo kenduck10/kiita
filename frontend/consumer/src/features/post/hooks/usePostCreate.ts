@@ -3,22 +3,26 @@ import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
 import { PAGE_PATH } from '@/utils/consts/route';
 import { FRONTEND_API_PATH } from '@/utils/consts/api';
-import { useSession } from 'next-auth/react';
 
 export type PostCreateBody = {
   title: string;
   body: string;
 };
+
+/**
+ * 記事作成用hook
+ * @param onSuccess 作成成功時の処理
+ * @param onError 作成失敗時の処理
+ */
 export const usePostCreate = (onSuccess: () => void, onError: (errorMessage: string) => void) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
-  const { data } = useSession();
 
   const doCreate = async (body: PostCreateBody) => {
     setIsLoading(true);
     await axios
-      .post(FRONTEND_API_PATH.POSTS, body, { headers: { 'x-auth-token': data?.user.accessToken } })
+      .post(FRONTEND_API_PATH.POSTS, body)
       .then(onSuccess)
       .catch(async (error: AxiosError) => {
         const expectedStatuses = [HttpStatusCode.BadRequest, HttpStatusCode.Forbidden];
@@ -27,11 +31,6 @@ export const usePostCreate = (onSuccess: () => void, onError: (errorMessage: str
           await router.push(PAGE_PATH.ERROR);
           return;
         }
-
-        // if (actualStatus === HttpStatusCode.Forbidden) {
-        //   await signOut();
-        //   return;
-        // }
 
         let errorMessage = '';
         if (actualStatus === HttpStatusCode.BadRequest) {

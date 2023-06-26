@@ -1,11 +1,15 @@
-import { AppBar, Box, Button, Container, Toolbar } from '@mui/material';
-import { PostAddButton } from '@/components/organisms/PostAddButton';
-import { Logo } from '@/components/organisms/Logo';
-import { ToSignupButton } from '@/components/organisms/ToSignupButton';
-import { LoginLink } from '@/components/organisms/LoginLink';
-import { signOut, useSession } from 'next-auth/react';
-import { PAGE_PATH } from '@/utils/consts/route';
+import {AppBar, Box, Container, Toolbar} from '@mui/material';
+import {PostAddButton} from '@/components/organisms/PostAddButton';
+import {Logo} from '@/components/organisms/Logo';
+import {ToSignupButton} from '@/components/organisms/ToSignupButton';
+import {LoginLink} from '@/components/organisms/LoginLink';
+import {useSession} from 'next-auth/react';
+import {LogoutButton} from '@/components/organisms/LogoutButton';
 
+/**
+ * ヘッダ
+ * @constructor
+ */
 export const Header = () => {
   const { status } = useSession();
   return (
@@ -20,13 +24,7 @@ export const Header = () => {
               {status === 'authenticated' && (
                 <>
                   <PostAddButton />
-                  <Button
-                    sx={{ ml: 2 }}
-                    variant={'contained'}
-                    onClick={async () => await signOut({ callbackUrl: PAGE_PATH.HOME })}
-                  >
-                    ログアウト
-                  </Button>
+                  <LogoutButton sx={{ ml: 2 }} />
                 </>
               )}
               {status === 'unauthenticated' && (

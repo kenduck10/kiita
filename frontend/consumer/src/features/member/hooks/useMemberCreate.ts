@@ -9,6 +9,12 @@ export type MemberCreateBody = {
   mailAddress: string;
   password: string;
 };
+
+/**
+ * 会員登録用hook
+ * @param onSuccess 登録成功時の処理
+ * @param onError 登録失敗時の処理
+ */
 export const useMemberCreate = (onSuccess: () => void, onError: (errorMessage: string) => void) => {
   const [isCreating, setIsCreating] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');

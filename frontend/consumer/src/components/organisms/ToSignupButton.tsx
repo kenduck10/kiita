@@ -10,6 +10,12 @@ const StyledButton = styled(Button)({
     boxShadow: 'none',
   },
 });
+
+/**
+ * 会員登録画面へのリンク
+ * @param sx スタイル調整props
+ * @constructor
+ */
 export const ToSignupButton = ({ sx }: { sx?: SxProps<Theme> }) => {
   const router = useRouter();
   const onClickToSignup = async () => {

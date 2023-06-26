@@ -1,14 +1,16 @@
-import { Button, Card, Grid, Typography } from '@mui/material';
-import { NextPageWithLayout } from '@/pages/_app';
-import { useRouter } from 'next/router';
+import {Button, Card, Grid, Typography} from '@mui/material';
+import {NextPageWithLayout} from '@/pages/_app';
 import React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { MemberCreateBody, useMemberCreate } from '@/features/member/hooks/useMemberCreate';
-import { ControlledTextField } from '@/components/molecules/ControlledTextField';
+import {SubmitHandler, useForm} from 'react-hook-form';
+import {MemberCreateBody, useMemberCreate} from '@/features/member/hooks/useMemberCreate';
+import {ControlledTextField} from '@/components/molecules/ControlledTextField';
 
+/**
+ * 会員登録画面
+ * @constructor
+ */
 export const Signup: NextPageWithLayout = () => {
-  const router = useRouter();
-  // const [errorMessage, setErrorMessage] = useState('');
+  // TODO: 成功、失敗時の処理を追加
   const { doCreate, isCreating, errorMessage } = useMemberCreate(
     () => {
       console.log('success');
@@ -32,16 +34,6 @@ export const Signup: NextPageWithLayout = () => {
   const onClickRegister: SubmitHandler<MemberCreateBody> = async (createMember) => {
     await doCreate(createMember);
   };
-
-  // const tableHeads: { key: keyof UserSummary; name: string }[] = [
-  //   { key: 'id', name: 'ID' },
-  //   { key: 'lastName', name: '姓' },
-  //   {
-  //     key: 'firstName',
-  //     name: '名',
-  //   },
-  //   { key: 'mailAddress', name: 'メールアドレス' },
-  // ];
 
   return (
     <Grid container justifyContent={'center'}>
