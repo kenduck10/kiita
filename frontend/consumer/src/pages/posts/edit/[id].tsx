@@ -32,6 +32,7 @@ export const PostEdit = ({ post }: { post: Post }) => {
     defaultValues: {
       title: post.title,
       body: post.body,
+      isDraft: false,
     },
     resolver: yupResolver(errorSchema),
   });

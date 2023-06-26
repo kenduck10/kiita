@@ -7,6 +7,7 @@ import { ControlledTextareaAutosize } from '@/components/molecules/ControlledTex
 type SubmitArguments = {
   title: string;
   body: string;
+  isDraft: boolean;
 };
 export const PostItemsForm = ({
   control,

@@ -7,6 +7,7 @@ import { FRONTEND_API_PATH } from '@/utils/consts/api';
 export type PostCreateBody = {
   title: string;
   body: string;
+  isDraft: boolean;
 };
 
 /**

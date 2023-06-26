@@ -11,7 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice(assignableTypes = PostController.class)
-public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
+public class PostExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(PostNotFoundException.class)
     protected ResponseEntity<Object> handleUserNotFound(PostNotFoundException exception, WebRequest request) {
         return handleExceptionInternal(exception, null, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
