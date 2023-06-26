@@ -1,6 +1,8 @@
 package com.kenduck.common.post.dtos;
 
+import com.kenduck.common.member.models.Member;
 import com.kenduck.common.post.models.Post;
+import com.kenduck.common.post.models.PostPublicationTimestamp;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -8,12 +10,16 @@ import lombok.Getter;
 @EqualsAndHashCode
 public class FoundPost {
 
-    private final String title;
+    private final Post post;
 
-    private final String body;
+    private final Member author;
 
-    public FoundPost(Post post) {
-        this.title = post.getTitle();
-        this.body = post.getBody();
+    private final PostPublicationTimestamp postPublicationTimestamp;
+
+    public FoundPost(Post post, Member author, PostPublicationTimestamp timestamp) {
+        this.post = post;
+        this.author = author;
+        this.postPublicationTimestamp = timestamp;
     }
+
 }

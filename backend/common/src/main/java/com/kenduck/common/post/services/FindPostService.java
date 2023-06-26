@@ -1,9 +1,13 @@
 package com.kenduck.common.post.services;
 
+import com.kenduck.common.member.mappers.MemberMapper;
+import com.kenduck.common.member.models.Member;
 import com.kenduck.common.post.dtos.FoundPost;
 import com.kenduck.common.post.dtos.FoundPostSummaries;
 import com.kenduck.common.post.mappers.PostMapper;
+import com.kenduck.common.post.mappers.PostPublicationTimestampsMapper;
 import com.kenduck.common.post.models.Post;
+import com.kenduck.common.post.models.PostPublicationTimestamp;
 import com.kenduck.common.post.models.Posts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
@@ -19,12 +23,28 @@ public class FindPostService {
     @NonNull
     private final PostMapper postMapper;
 
+    @NonNull
+    private final MemberMapper memberMapper;
+
+    @NonNull
+    private final PostPublicationTimestampsMapper postPublicationTimestampsMapper;
+
     @Transactional(readOnly = true)
     public FoundPost findPostById(int postId) {
         Post post = postMapper
                 .selectByPrimaryKey(postId)
                 .orElseThrow(postNotFoundSupplier(postId));
-        return new FoundPost(post);
+
+        PostPublicationTimestamp timestamp = postPublicationTimestampsMapper
+                .selectByPostId(postId)
+                .orElseThrow(postNotFoundSupplier(postId));
+
+        int authorId = post.getAuthorId();
+        Member author = memberMapper
+                .selectByPrimaryKey(authorId)
+                .orElseThrow(() -> new IllegalStateException("no author post is found (postId = " + postId + ")."));
+
+        return new FoundPost(post, author, timestamp);
     }
 
     @Transactional(readOnly = true)

@@ -2,6 +2,7 @@ package com.kenduck.common.member.mappers;
 
 import com.kenduck.common.generated.mappers.GeneratedMemberDynamicSqlSupport;
 import com.kenduck.common.generated.mappers.GeneratedMemberMapper;
+import com.kenduck.common.generated.models.GeneratedMember;
 import com.kenduck.common.member.models.Member;
 import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.dynamic.sql.select.SelectDSLCompleter;
@@ -15,6 +16,18 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
  */
 @Mapper
 public interface MemberMapper extends GeneratedMemberMapper {
+
+    /**
+     * 指定した会員IDの会員を取得
+     *
+     * @param id 会員ID
+     * @return 会員
+     */
+    default Optional<Member> selectByPrimaryKey(int id) {
+        Optional<GeneratedMember> generatedMemberOptional =
+                GeneratedMemberMapper.super.selectByPrimaryKey(id);
+        return generatedMemberOptional.map(Member::new);
+    }
 
     /**
      * 指定した名前の会員を取得
