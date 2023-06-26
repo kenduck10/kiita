@@ -4,12 +4,15 @@ import com.kenduck.common.generated.mappers.GeneratedMemberDynamicSqlSupport;
 import com.kenduck.common.generated.mappers.GeneratedMemberMapper;
 import com.kenduck.common.generated.models.GeneratedMember;
 import com.kenduck.common.member.models.Member;
+import com.kenduck.common.member.models.Members;
 import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.dynamic.sql.select.SelectDSLCompleter;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
+import static org.mybatis.dynamic.sql.SqlBuilder.isIn;
 
 /**
  * {@link Member}マッパー
@@ -41,4 +44,9 @@ public interface MemberMapper extends GeneratedMemberMapper {
         return selectOne(completer).map(Member::new);
     }
 
+    default Members selectByIds(List<Integer> ids) {
+        SelectDSLCompleter completer = select ->
+                select.where(GeneratedMemberDynamicSqlSupport.id, isIn(ids));
+        return new Members(select(completer));
+    }
 }

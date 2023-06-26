@@ -17,4 +17,18 @@ public class Posts {
                 .map(Post::new)
                 .toList();
     }
+
+    public List<Integer> getIds() {
+        return this.value
+                .stream()
+                .map(GeneratedPost::getId)
+                .toList();
+    }
+
+    public List<Integer> getAuthorIds() {
+        return this.value
+                .stream()
+                .map(GeneratedPost::getAuthorId)
+                .toList();
+    }
 }

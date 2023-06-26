@@ -5,13 +5,10 @@ import com.kenduck.common.post.exceptions.OthersPostFoundException;
 import com.kenduck.common.post.mappers.PostMapper;
 import com.kenduck.common.post.mappers.PostPublicationTimestampsMapper;
 import com.kenduck.common.post.models.Post;
-import com.kenduck.common.post.models.PostPublicationTimestamp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 import static com.kenduck.common.post.functions.ExceptionFunction.postNotFoundSupplier;
 
@@ -40,10 +37,11 @@ public class UpdatePostService {
             return;
         }
 
-        Optional<PostPublicationTimestamp> timestampOptional = postPublicationTimestampsMapper
-                .selectByPostId(postId);
+        boolean isFirstPublication = postPublicationTimestampsMapper
+                .selectByPostId(postId)
+                .isEmpty();
 
-        if (timestampOptional.isEmpty()) {
+        if (isFirstPublication) {
             postPublicationTimestampsMapper.publishForTheFirstTime(postId);
             return;
         }

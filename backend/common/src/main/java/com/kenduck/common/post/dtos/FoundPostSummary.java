@@ -1,6 +1,8 @@
 package com.kenduck.common.post.dtos;
 
+import com.kenduck.common.member.models.Member;
 import com.kenduck.common.post.models.Post;
+import com.kenduck.common.post.models.PostPublicationTimestamp;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -8,12 +10,19 @@ import lombok.Getter;
 @EqualsAndHashCode
 public class FoundPostSummary {
 
-    private final int postId;
+    private final Post post;
 
-    private final String title;
+    private final Member author;
 
-    public FoundPostSummary(Post post) {
-        this.postId = post.getId();
-        this.title = post.getTitle();
+    private final PostPublicationTimestamp postPublicationTimestamp;
+
+    public FoundPostSummary(
+            Post post,
+            Member author,
+            PostPublicationTimestamp postPublicationTimestamp
+    ) {
+        this.post = post;
+        this.author = author;
+        this.postPublicationTimestamp = postPublicationTimestamp;
     }
 }
