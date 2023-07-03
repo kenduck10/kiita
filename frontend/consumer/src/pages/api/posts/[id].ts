@@ -6,6 +6,11 @@ import { buildXAuthTokenHeader, getAccessToken, requestDelete } from '@/utils/fu
 export type GetPostResponse = {
   title: string;
   body: string;
+  authorId: number;
+  authorName: string;
+  firstPublishedAt: string;
+  lastPublishedAt: string;
+  isRePublished: boolean;
 };
 
 export const handler = async (request: NextApiRequest, response: NextApiResponse) => {
