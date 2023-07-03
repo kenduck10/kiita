@@ -11,6 +11,7 @@ public class Comment extends GeneratedComment {
         super(
                 generatedComment.getId(),
                 generatedComment.getPostId(),
+                generatedComment.getCommenterId(),
                 generatedComment.getCommentedAt(),
                 generatedComment.getIsDeleted(),
                 generatedComment.getBody()
@@ -21,6 +22,7 @@ public class Comment extends GeneratedComment {
         super(
                 null,
                 createComment.getPostId(),
+                createComment.getCommenterId(),
                 null,
                 null,
                 createComment.getBody()

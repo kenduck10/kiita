@@ -11,5 +11,8 @@ public class CreateComment {
 
     private final int postId;
 
+    private final int commenterId;
+
     private final String body;
+
 }

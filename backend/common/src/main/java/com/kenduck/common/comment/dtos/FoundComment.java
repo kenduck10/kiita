@@ -12,14 +12,17 @@ public class FoundComment {
 
     private final int commentId;
 
+    private final int commenterId;
+
     private final String body;
 
     private final LocalDateTime commentedAt;
 
-    private boolean isDeleted;
+    private final boolean isDeleted;
 
     public FoundComment(Comment comment) {
         this.commentId = comment.getId();
+        this.commenterId = comment.getCommenterId();
         this.body = comment.getBody();
         this.commentedAt = comment.getCommentedAt();
         this.isDeleted = comment.getIsDeleted();

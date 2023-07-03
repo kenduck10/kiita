@@ -33,6 +33,8 @@ public class FindCommentsResponse {
 
         private final int commentId;
 
+        private final int commenterId;
+
         private final String body;
 
         private final LocalDateTime commentedAt;
@@ -41,6 +43,7 @@ public class FindCommentsResponse {
 
         private Comment(FoundComment foundComment) {
             this.commentId = foundComment.getCommentId();
+            this.commenterId = foundComment.getCommenterId();
             this.body = foundComment.isDeleted() ? DELETED_COMMENT_BODY : foundComment.getBody();
             this.commentedAt = foundComment.getCommentedAt();
             this.isDeleted = foundComment.isDeleted();

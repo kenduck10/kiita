@@ -158,7 +158,7 @@ public class PostController {
             @AuthenticationPrincipal LoginMember loginMember
     ) {
         int createdCommentId = createCommentService.createComment(
-                new CreateComment(postId, request)
+                new CreateComment(postId, loginMember, request)
         );
         return ResponseEntity.ok(createdCommentId);
     }
