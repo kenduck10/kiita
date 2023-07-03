@@ -2,6 +2,7 @@ package com.kenduck.api.post.responses;
 
 import com.kenduck.common.comment.dtos.FoundComment;
 import com.kenduck.common.comment.dtos.FoundComments;
+import com.kenduck.common.member.models.Member;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -35,6 +36,8 @@ public class FindCommentsResponse {
 
         private final int commenterId;
 
+        private final String commenterName;
+
         private final String body;
 
         private final LocalDateTime commentedAt;
@@ -42,11 +45,14 @@ public class FindCommentsResponse {
         private final boolean isDeleted;
 
         private Comment(FoundComment foundComment) {
-            this.commentId = foundComment.getCommentId();
-            this.commenterId = foundComment.getCommenterId();
-            this.body = foundComment.isDeleted() ? DELETED_COMMENT_BODY : foundComment.getBody();
-            this.commentedAt = foundComment.getCommentedAt();
-            this.isDeleted = foundComment.isDeleted();
+            com.kenduck.common.comment.models.Comment comment = foundComment.getComment();
+            Member commenter = foundComment.getCommenter();
+            this.commentId = comment.getId();
+            this.commenterId = comment.getCommenterId();
+            this.commenterName = commenter.getName();
+            this.body = comment.getIsDeleted() ? DELETED_COMMENT_BODY : comment.getBody();
+            this.commentedAt = comment.getCommentedAt();
+            this.isDeleted = comment.getIsDeleted();
         }
     }
 }

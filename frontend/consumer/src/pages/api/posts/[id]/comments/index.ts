@@ -9,6 +9,8 @@ export type GetCommentsResponse = {
 
 export type GetCommentsResponseElement = {
   commentId: number;
+  commenterId: number;
+  commenterName: string;
   body: string;
   commentedAt: string;
   deleted: boolean;

@@ -1,30 +1,20 @@
 package com.kenduck.common.comment.dtos;
 
 import com.kenduck.common.comment.models.Comment;
+import com.kenduck.common.member.models.Member;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @EqualsAndHashCode
 public class FoundComment {
 
-    private final int commentId;
+    private final Comment comment;
 
-    private final int commenterId;
+    private final Member commenter;
 
-    private final String body;
-
-    private final LocalDateTime commentedAt;
-
-    private final boolean isDeleted;
-
-    public FoundComment(Comment comment) {
-        this.commentId = comment.getId();
-        this.commenterId = comment.getCommenterId();
-        this.body = comment.getBody();
-        this.commentedAt = comment.getCommentedAt();
-        this.isDeleted = comment.getIsDeleted();
+    public FoundComment(Comment comment, Member commenter) {
+        this.comment = comment;
+        this.commenter = commenter;
     }
 }

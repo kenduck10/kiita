@@ -17,4 +17,11 @@ public class Comments {
                 .map(Comment::new)
                 .toList();
     }
+
+    public List<Integer> getCommenterIds() {
+        return this.value
+                .stream()
+                .map(GeneratedComment::getId)
+                .toList();
+    }
 }
