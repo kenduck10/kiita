@@ -25,11 +25,10 @@ export const PostComments = ({
     <Box sx={sx}>
       {comments.value.map((comment, index) => {
         const isFirst = index === 0;
-        const isLast = index === commentsLength - 1;
         return (
           <Box key={comment.commentId} mt={isFirst ? 0 : 3}>
             <PostComment comment={comment} onDeleteComment={onDeleteComment} />
-            {!isLast && <Divider sx={{ mt: 3 }} />}
+            <Divider sx={{ mt: 3 }} />
           </Box>
         );
       })}

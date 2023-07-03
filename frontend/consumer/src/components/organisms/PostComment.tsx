@@ -26,7 +26,17 @@ export const PostComment = ({ comment, onDeleteComment }: { comment: Comment; on
 
   return (
     <>
-      <Typography>{comment.body}</Typography>
+      <Box display={'flex'} justifyContent={'flex-end'}>
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography>{`@${comment.commenterName}`}</Typography>
+        </Box>
+        <Box>
+          <Typography>{comment.commentedAt}</Typography>
+        </Box>
+      </Box>
+      <Box mt={1}>
+        <Typography>{comment.body}</Typography>
+      </Box>
       {!comment.isDeleted && (
         <Box mt={2} display={'flex'} justifyContent={'flex-end'}>
           <Button variant="contained" color="error" onClick={onClickDeleteButton} disabled={isDeleting}>
