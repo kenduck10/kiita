@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { Box, Button, Card, CircularProgress, Grid } from '@mui/material';
+import { Box, Card, CircularProgress, Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { buildServerSideRedirect } from '@/utils/functions/route';
 import { PAGE_PATH, PAGE_PATH_BUILDER } from '@/utils/consts/route';
@@ -59,15 +59,13 @@ export const PostDetail = ({ post }: { post: Post }) => {
     <Grid container justifyContent={'center'}>
       <Grid item xs={12} md={8}>
         <Card variant={'outlined'} sx={{ p: 4, border: 0 }}>
-          <Box mb={2} display={'flex'} justifyContent={'flex-end'}>
-            <Button variant="contained" color="primary" onClick={onClickEditButton} disabled={isLoading} sx={{ mr: 2 }}>
-              編集
-            </Button>
-            <Button variant="contained" color="error" onClick={onClickDeleteButton} disabled={isLoading}>
-              削除
-            </Button>
-          </Box>
-          <PostHeader post={post} sx={{ mb: 2 }} />
+          <PostHeader
+            post={post}
+            sx={{ mb: 2 }}
+            onClickEditButton={onClickEditButton}
+            onClickDeleteButton={onClickDeleteButton}
+            isLoading={isLoading}
+          />
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.body}</ReactMarkdown>
           <SelectDialog
             open={isOpenDeleteDialog}
