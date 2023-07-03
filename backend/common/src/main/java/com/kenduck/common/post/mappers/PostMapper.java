@@ -10,6 +10,8 @@ import org.mybatis.dynamic.sql.select.SelectDSLCompleter;
 
 import java.util.Optional;
 
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
+
 @Mapper
 public interface PostMapper extends GeneratedPostMapper {
 
@@ -22,6 +24,14 @@ public interface PostMapper extends GeneratedPostMapper {
     default Posts selectAll() {
         SelectDSLCompleter completer = select ->
                 select.orderBy(GeneratedPostDynamicSqlSupport.id.descending());
+        return new Posts(select(completer));
+    }
+
+    default Posts selectPublished() {
+        SelectDSLCompleter completer = select ->
+                select
+                        .where(GeneratedPostDynamicSqlSupport.isDraft, isEqualTo(false))
+                        .orderBy(GeneratedPostDynamicSqlSupport.id.descending());
         return new Posts(select(completer));
     }
 }

@@ -1,6 +1,7 @@
 package com.kenduck.api.post.requests;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -16,4 +17,6 @@ public class CreatePostRequest {
     @NotBlank
     private String body;
 
+    @NotNull
+    private Boolean isDraft;
 }

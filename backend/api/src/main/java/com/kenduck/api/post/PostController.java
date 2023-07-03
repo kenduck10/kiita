@@ -1,8 +1,9 @@
 package com.kenduck.api.post;
 
-import com.kenduck.api.auth.LoginUser;
+import com.kenduck.api.auth.LoginMember;
 import com.kenduck.api.post.dtos.CreateComment;
 import com.kenduck.api.post.dtos.CreatePost;
+import com.kenduck.api.post.dtos.DeletePost;
 import com.kenduck.api.post.dtos.UpdatePost;
 import com.kenduck.api.post.requests.CreateCommentRequest;
 import com.kenduck.api.post.requests.CreatePostRequest;
@@ -79,17 +80,17 @@ public class PostController {
     /**
      * 記事作成
      *
-     * @param request   作成内容
-     * @param loginUser ログインユーザー
+     * @param request     作成内容
+     * @param loginMember ログインユーザー
      * @return 記事ID
      */
     @PostMapping("")
     ResponseEntity<Integer> createPost(
             @RequestBody @Validated CreatePostRequest request,
-            @AuthenticationPrincipal LoginUser loginUser
+            @AuthenticationPrincipal LoginMember loginMember
     ) {
         int postId = createPostService.createPost(
-                new CreatePost(request)
+                new CreatePost(request, loginMember)
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(postId);
     }
@@ -97,19 +98,19 @@ public class PostController {
     /**
      * 記事更新
      *
-     * @param postId    記事ID
-     * @param request   更新内容
-     * @param loginUser ログインユーザー
+     * @param postId      記事ID
+     * @param request     更新内容
+     * @param loginMember ログインユーザー
      * @return レスポンスボディなし
      */
     @PatchMapping("/{postId}")
     ResponseEntity<Void> updatePost(
             @PathVariable("postId") int postId,
             @RequestBody @Validated UpdatePostRequest request,
-            @AuthenticationPrincipal LoginUser loginUser
+            @AuthenticationPrincipal LoginMember loginMember
     ) {
         updatePostService.updatePost(
-                new UpdatePost(postId, request)
+                new UpdatePost(postId, request, loginMember)
         );
         return ResponseEntity.ok().build();
     }
@@ -117,16 +118,16 @@ public class PostController {
     /**
      * 記事削除
      *
-     * @param postId    記事ID
-     * @param loginUser ログインユーザー
+     * @param postId      記事ID
+     * @param loginMember ログインユーザー
      * @return レスポンスボディなし
      */
     @DeleteMapping("/{postId}")
     ResponseEntity<Void> deletePost(
             @PathVariable("postId") int postId,
-            @AuthenticationPrincipal LoginUser loginUser
+            @AuthenticationPrincipal LoginMember loginMember
     ) {
-        deletePostService.deletePost(postId);
+        deletePostService.deletePost(new DeletePost(postId, loginMember));
         return ResponseEntity.ok().build();
     }
 
@@ -145,16 +146,16 @@ public class PostController {
     /**
      * 指定したIDの記事のコメント作成
      *
-     * @param postId    記事ID
-     * @param request   コメント内容
-     * @param loginUser ログインユーザー
+     * @param postId      記事ID
+     * @param request     コメント内容
+     * @param loginMember ログインユーザー
      * @return コメントID
      */
     @PostMapping("/{postId}/comments")
     ResponseEntity<Integer> createComment(
             @PathVariable("postId") int postId,
             @RequestBody @Validated CreateCommentRequest request,
-            @AuthenticationPrincipal LoginUser loginUser
+            @AuthenticationPrincipal LoginMember loginMember
     ) {
         int createdCommentId = createCommentService.createComment(
                 new CreateComment(postId, request)

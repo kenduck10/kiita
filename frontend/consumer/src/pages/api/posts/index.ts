@@ -10,6 +10,9 @@ export type GetPostsResponse = {
 export type GetPostsResponseElement = {
   postId: number;
   title: string;
+  authorId: number;
+  authorName: string;
+  firstPublishedAt: string;
 };
 
 export const handler = async (request: NextApiRequest, response: NextApiResponse) => {

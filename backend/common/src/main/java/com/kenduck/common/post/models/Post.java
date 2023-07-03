@@ -13,6 +13,8 @@ public class Post extends GeneratedPost {
         super(
                 generatedPost.getId(),
                 generatedPost.getTitle(),
+                generatedPost.getIsDraft(),
+                generatedPost.getAuthorId(),
                 generatedPost.getBody()
         );
     }
@@ -21,6 +23,8 @@ public class Post extends GeneratedPost {
         super(
                 null,
                 createPost.getTitle(),
+                createPost.isDraft(),
+                createPost.getAuthorId(),
                 createPost.getBody()
         );
     }
@@ -29,6 +33,8 @@ public class Post extends GeneratedPost {
         super(
                 updatePost.getPostId(),
                 updatePost.getTitle(),
+                updatePost.isDraft(),
+                updatePost.getAuthorId(),
                 updatePost.getBody()
         );
     }

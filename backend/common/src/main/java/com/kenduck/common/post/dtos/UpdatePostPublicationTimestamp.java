@@ -7,11 +7,11 @@ import lombok.Getter;
 @Getter
 @EqualsAndHashCode
 @AllArgsConstructor
-public class UpdatePost {
+public class UpdatePostPublicationTimestamp {
+
+    private final int id;
 
     private final int postId;
-
-    private final String title;
 
     private final boolean isDraft;
 

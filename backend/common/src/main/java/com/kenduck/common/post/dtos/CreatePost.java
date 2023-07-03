@@ -11,5 +11,10 @@ public class CreatePost {
 
     private final String title;
 
+    private final boolean isDraft;
+
+    private int authorId;
+
     private final String body;
+
 }

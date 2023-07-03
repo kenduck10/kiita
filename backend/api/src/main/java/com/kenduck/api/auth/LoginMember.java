@@ -9,7 +9,7 @@ import lombok.Getter;
  * JWTのclaimにJSON形式で書き込まれる
  */
 @Getter
-public class LoginUser {
+public class LoginMember {
 
     private final Integer id;
 
@@ -22,7 +22,7 @@ public class LoginUser {
      *
      * @param myUserDetails {@link MyUserDetails}
      */
-    public LoginUser(MyUserDetails myUserDetails) {
+    public LoginMember(MyUserDetails myUserDetails) {
         this.id = myUserDetails.getMember().getId();
         this.name = myUserDetails.getMember().getName();
         this.mailAddress = myUserDetails.getMember().getMailAddress();
@@ -36,7 +36,7 @@ public class LoginUser {
      * @param mailAddress メールアドレス
      */
     @JsonCreator
-    public LoginUser(
+    public LoginMember(
             @JsonProperty("id")
             int id,
             @JsonProperty("name")

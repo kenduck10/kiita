@@ -55,13 +55,13 @@ public class MyOncePerRequestFilter extends OncePerRequestFilter {
                 .build()
                 .verify(token);
         String loginUserJson = decodedJWT.getClaim("loginUser").toString();
-        LoginUser loginUser = new ObjectMapper().readValue(
+        LoginMember loginMember = new ObjectMapper().readValue(
                 toReadableJson(loginUserJson),
-                LoginUser.class
+                LoginMember.class
         );
         SecurityContextHolder.getContext().setAuthentication(
                 // ここで詰めた情報がコントローラから参照できる
-                new UsernamePasswordAuthenticationToken(loginUser, null, new ArrayList<>())
+                new UsernamePasswordAuthenticationToken(loginMember, null, new ArrayList<>())
         );
         filterChain.doFilter(request, response);
     }

@@ -55,18 +55,14 @@ public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuth
             Date expiresAt = new Date(issuedAt.getTime() + EXPIRATION_TIME);
 
             ObjectMapper mapper = new ObjectMapper();
-            LoginUser loginUser = new LoginUser(myUserDetails);
-            String json = mapper.writeValueAsString(loginUser);
-            LoginUser loginUser1 = mapper.readValue(
-                    json,
-                    LoginUser.class
-            );
+            LoginMember loginMember = new LoginMember(myUserDetails);
+            String json = mapper.writeValueAsString(loginMember);
 
             String token = JWT.create()
                     .withIssuedAt(issuedAt)
                     .withNotBefore(notBefore)
                     .withExpiresAt(expiresAt)
-                    .withClaim("loginUser", new ObjectMapper().writeValueAsString(new LoginUser(myUserDetails)))
+                    .withClaim("loginUser", new ObjectMapper().writeValueAsString(new LoginMember(myUserDetails)))
                     .sign(Algorithm.HMAC256("secret"));
             response.setHeader("x-auth-token", token);
             response.setStatus(HttpStatus.OK.value());

@@ -7,6 +7,7 @@ import { FRONTEND_API_PATH_BUILDER } from '@/utils/consts/api';
 export type PostUpdateBody = {
   title: string;
   body: string;
+  isDraft: boolean;
 };
 export const usePostUpdate = (postId: number, onSuccess: () => void) => {
   const [isLoading, setIsLoading] = useState(false);

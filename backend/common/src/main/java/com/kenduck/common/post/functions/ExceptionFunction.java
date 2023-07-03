@@ -1,6 +1,7 @@
 package com.kenduck.common.post.functions;
 
 import com.kenduck.common.post.exceptions.PostNotFoundException;
+import com.kenduck.common.post.exceptions.PostPublicationTimestampNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.function.Supplier;
@@ -22,6 +23,15 @@ public class ExceptionFunction {
             String message = String.format("target post (id=%d) is not found", postId);
             log.warn(message);
             return new PostNotFoundException(postId, message);
+        };
+    }
+
+    public static Supplier<PostPublicationTimestampNotFoundException>
+    postPublicationTimestampNotFoundExceptionSupplier(int postId) {
+        return () -> {
+            String message = String.format("target post publication timestamp (postId=%d) is not found.", postId);
+            log.warn(message);
+            return new PostPublicationTimestampNotFoundException(postId, message);
         };
     }
 }

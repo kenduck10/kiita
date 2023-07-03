@@ -28,6 +28,7 @@ export const PostNew = () => {
     defaultValues: {
       title: '',
       body: '',
+      isDraft: false,
     },
     resolver: yupResolver(errorSchema),
   });

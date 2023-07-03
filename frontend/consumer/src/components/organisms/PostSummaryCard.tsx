@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardContent, Link, SxProps, Theme } from '@mui/material';
+import { Box, Card, CardActionArea, CardContent, Link, SxProps, Theme, Typography } from '@mui/material';
 import React from 'react';
 import PostSummary from '@/features/post/models/PostSummary';
 import styled from '@emotion/styled';
@@ -29,9 +29,15 @@ export const PostSummaryCard = ({ postSummary, sx }: { postSummary: PostSummary;
     <Card variant={'outlined'} sx={mergedSx}>
       <StyledCardActionArea onClick={onClickCard} disableRipple>
         <StyledCardContent>
-          <Link href={postDetailPath} variant={'h6'} fontWeight={'bold'} underline={'hover'} color={'inherit'}>
-            {postSummary.title}
-          </Link>
+          <Box>
+            <Typography>{`@${postSummary.authorName}`}</Typography>
+            <Typography variant={'inherit'}>{postSummary.publishedAt}</Typography>
+          </Box>
+          <Box mt={1}>
+            <Link href={postDetailPath} variant={'h6'} fontWeight={'bold'} underline={'hover'} color={'inherit'}>
+              {postSummary.title}
+            </Link>
+          </Box>
         </StyledCardContent>
       </StyledCardActionArea>
     </Card>

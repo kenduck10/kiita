@@ -43,6 +43,16 @@
             <ignoreColumn column="updated_at"/>
         </table>
 
+        <table schema="kiita" tableName="post_publication_timestamps"
+               mapperName="GeneratedPostPublicationTimestampMapper">
+            <property name="dynamicSqlSupportClassName" value="GeneratedPostPublicationTimestampDynamicSqlSupport"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <domainObjectRenamingRule searchString="PostPublicationTimestamps"
+                                      replaceString="GeneratedPostPublicationTimestamp"/>
+            <ignoreColumn column="created_at"/>
+            <ignoreColumn column="updated_at"/>
+        </table>
+
         <table schema="kiita" tableName="comments" mapperName="GeneratedCommentMapper">
             <property name="dynamicSqlSupportClassName" value="GeneratedCommentDynamicSqlSupport"/>
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
