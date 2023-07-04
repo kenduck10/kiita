@@ -8,8 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 
 @Getter
 @ToString
@@ -30,7 +29,7 @@ public class FindPostResponse {
 
     private final Boolean isRePublished;
 
-    public FindPostResponse(FoundPost foundPost) {
+    public FindPostResponse(FoundPost foundPost, ZoneId zoneId) {
         Post post = foundPost.getPost();
         this.title = post.getTitle();
         this.body = post.getBody();
@@ -42,8 +41,15 @@ public class FindPostResponse {
         PostPublicationTimestamp timestamp = foundPost.getPostPublicationTimestamp();
         LocalDateTime firstPublishedAt = timestamp.getFirstPublishedAt();
         LocalDateTime lastPublishedAt = timestamp.getLastPublishedAt();
-        this.firstPublishedAt = firstPublishedAt.toLocalDate();
-        this.lastPublishedAt = lastPublishedAt.toLocalDate();
+        this.firstPublishedAt = toZonedDateTime(firstPublishedAt, zoneId).toLocalDate();
+        this.lastPublishedAt = toZonedDateTime(lastPublishedAt, zoneId).toLocalDate();
         this.isRePublished = !firstPublishedAt.isEqual(lastPublishedAt);
+    }
+
+    private ZonedDateTime toZonedDateTime(LocalDateTime localDateTime, ZoneId zoneId) {
+        return OffsetDateTime
+                .of(localDateTime, ZoneOffset.UTC)
+                .toZonedDateTime()
+                .withZoneSameInstant(zoneId);
     }
 }

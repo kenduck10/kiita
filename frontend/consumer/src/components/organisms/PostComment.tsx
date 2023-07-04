@@ -24,6 +24,16 @@ export const PostComment = ({ comment, onDeleteComment }: { comment: Comment; on
     doDelete().then();
   };
 
+  const formatCommentedAt = (date: Date) => {
+    console.log(date);
+    const year = date.getFullYear().toString().padStart(4, '0');
+    const month = date.getMonth().toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hour = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${year}-${month}-${day} ${hour}:${minutes}`;
+  };
+
   return (
     <>
       <Box display={'flex'} justifyContent={'flex-end'}>
@@ -31,7 +41,7 @@ export const PostComment = ({ comment, onDeleteComment }: { comment: Comment; on
           <Typography>{`@${comment.commenterName}`}</Typography>
         </Box>
         <Box>
-          <Typography>{comment.commentedAt}</Typography>
+          <Typography>{formatCommentedAt(comment.commentedAt)}</Typography>
         </Box>
       </Box>
       <Box mt={1}>

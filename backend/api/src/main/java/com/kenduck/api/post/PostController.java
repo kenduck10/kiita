@@ -21,12 +21,15 @@ import com.kenduck.common.post.services.DeletePostService;
 import com.kenduck.common.post.services.FindPostService;
 import com.kenduck.common.post.services.UpdatePostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.ZoneId;
 
 /**
  * 記事コントローラ
@@ -35,6 +38,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
 public class PostController {
+
+    @Value("${timezone.id}")
+    private ZoneId zoneId;
 
     @NonNull
     private final FindPostService findPostService;
@@ -62,7 +68,7 @@ public class PostController {
     @GetMapping("")
     ResponseEntity<FindPostSummariesResponse> findPostSummaries() {
         FoundPostSummaries foundPostSummaries = findPostService.findPostSummaries();
-        return ResponseEntity.ok(new FindPostSummariesResponse(foundPostSummaries));
+        return ResponseEntity.ok(new FindPostSummariesResponse(foundPostSummaries, zoneId));
     }
 
     /**
@@ -74,7 +80,7 @@ public class PostController {
     @GetMapping("/{postId}")
     ResponseEntity<FindPostResponse> findPost(@PathVariable("postId") int postId) {
         FoundPost foundPost = findPostService.findPostById(postId);
-        return ResponseEntity.ok(new FindPostResponse(foundPost));
+        return ResponseEntity.ok(new FindPostResponse(foundPost, zoneId));
     }
 
     /**
@@ -140,7 +146,7 @@ public class PostController {
     @GetMapping("/{postId}/comments")
     ResponseEntity<FindCommentsResponse> findComments(@PathVariable("postId") int postId) {
         FoundComments foundComments = findCommentService.findCommentsByPostId(postId);
-        return ResponseEntity.ok(new FindCommentsResponse(foundComments));
+        return ResponseEntity.ok(new FindCommentsResponse(foundComments, zoneId));
     }
 
     /**

@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDate;
+import java.time.*;
 import java.util.List;
 
 @Getter
@@ -19,11 +19,11 @@ public class FindPostSummariesResponse {
 
     private final List<PostSummary> posts;
 
-    public FindPostSummariesResponse(FoundPostSummaries foundPostSummaries) {
+    public FindPostSummariesResponse(FoundPostSummaries foundPostSummaries, ZoneId zoneId) {
         this.posts = foundPostSummaries
                 .getValue()
                 .stream()
-                .map(PostSummary::new)
+                .map((foundPostSummary -> new PostSummary(foundPostSummary, zoneId)))
                 .toList();
     }
 
@@ -42,7 +42,7 @@ public class FindPostSummariesResponse {
 
         private final LocalDate firstPublishedAt;
 
-        private PostSummary(FoundPostSummary foundPostSummary) {
+        private PostSummary(FoundPostSummary foundPostSummary, ZoneId zoneId) {
             Post post = foundPostSummary.getPost();
             Member author = foundPostSummary.getAuthor();
             PostPublicationTimestamp timestamp = foundPostSummary.getPostPublicationTimestamp();
@@ -51,7 +51,14 @@ public class FindPostSummariesResponse {
             this.title = post.getTitle();
             this.authorId = author.getId();
             this.authorName = author.getName();
-            this.firstPublishedAt = timestamp.getFirstPublishedAt().toLocalDate();
+            this.firstPublishedAt = toZonedDateTime(timestamp.getFirstPublishedAt(), zoneId).toLocalDate();
+        }
+
+        private ZonedDateTime toZonedDateTime(LocalDateTime localDateTime, ZoneId zoneId) {
+            return OffsetDateTime
+                    .of(localDateTime, ZoneOffset.UTC)
+                    .toZonedDateTime()
+                    .withZoneSameInstant(zoneId);
         }
     }
 }

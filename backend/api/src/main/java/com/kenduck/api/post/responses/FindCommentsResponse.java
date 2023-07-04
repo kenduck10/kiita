@@ -7,7 +7,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Getter
@@ -17,11 +20,11 @@ public class FindCommentsResponse {
 
     private final List<Comment> comments;
 
-    public FindCommentsResponse(FoundComments foundComments) {
+    public FindCommentsResponse(FoundComments foundComments, ZoneId zoneId) {
         this.comments = foundComments
                 .getValue()
                 .stream()
-                .map(Comment::new)
+                .map((foundComment) -> new Comment(foundComment, zoneId))
                 .toList();
     }
 
@@ -40,18 +43,21 @@ public class FindCommentsResponse {
 
         private final String body;
 
-        private final LocalDateTime commentedAt;
+        private final ZonedDateTime commentedAt;
 
         private final boolean isDeleted;
 
-        private Comment(FoundComment foundComment) {
+        private Comment(FoundComment foundComment, ZoneId zoneId) {
             com.kenduck.common.comment.models.Comment comment = foundComment.getComment();
             Member commenter = foundComment.getCommenter();
             this.commentId = comment.getId();
             this.commenterId = comment.getCommenterId();
             this.commenterName = commenter.getName();
             this.body = comment.getIsDeleted() ? DELETED_COMMENT_BODY : comment.getBody();
-            this.commentedAt = comment.getCommentedAt();
+            this.commentedAt = OffsetDateTime
+                    .of(comment.getCommentedAt(), ZoneOffset.UTC)
+                    .toZonedDateTime()
+                    .withZoneSameInstant(zoneId);
             this.isDeleted = comment.getIsDeleted();
         }
     }

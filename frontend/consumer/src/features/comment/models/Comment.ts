@@ -5,7 +5,7 @@ class Comment {
   readonly commenterId: number;
   readonly commenterName: string;
   readonly body: string;
-  readonly commentedAt: string;
+  readonly commentedAt: Date;
   readonly isDeleted: boolean;
 
   constructor(element: GetCommentsResponseElement) {
@@ -13,7 +13,7 @@ class Comment {
     this.commenterId = element.commenterId;
     this.commenterName = element.commenterName;
     this.body = element.body;
-    this.commentedAt = element.commentedAt;
+    this.commentedAt = new Date(element.commentedAt);
     this.isDeleted = element.deleted;
   }
 }
